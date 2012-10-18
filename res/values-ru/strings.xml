@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Фото дня</string>
+    <string name="wallpaper_description">Обои с изображением Фото дня с сервиса Яндекс.Фотки</string>
+    <string name="download">Загрузка фотографии...</string>
+    <string name="error">Ошибка!</string>
+    <string name="isOffline">Передача данных отключена.</string>
+    <string name="sources">Источники обоев</string>
+    <string name="sourcesSummary">Выберите один из источников обоев</string>
+    <string name="tagPhotoEnable">Включить теги</string>
+    <string name="tagPhotoEnableSummary">Будет производиться поиск фотографии по тегу</string>
+    <string name="tagPhotoValue">Тег</string>
+    <string name="tagPhotoValueSummary">Введите ключевое слово. Только для Flickr и Yandex.</string>
+    <string name="downloadEveryUpdate">Обновлять периодически</string>
+    <string name="downloadEveryUpdateSummary">Только в режиме работы по тегам. Фотография будет обновляться каждый час.</string>
+    <string name="wifiOnly">Только через Wi-FI</string>
+    <string name="wifiOnlySummary">Скачивать только через Wi-Fi</string>
+    <string name="sourcesSettings">Настройки источников обоев</string>
+    <string name="networkSettings">Сетевые настройки</string>
+    <string name="updateStarted">Процесс загрузки фотографии запущен</string>
+    <string name="setupDescription">"Выберите 'Фото дня'\r\n в списке программ"</string>
+</resources>

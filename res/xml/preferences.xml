@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  	<PreferenceCategory android:title="@string/sourcesSettings">
+       <ListPreference android:key="sources" 
+       		android:title="@string/sources" 
+       		android:summary="@string/sourcesSummary" 
+       		android:entries="@array/sourcesArray" 
+       		android:entryValues="@array/sourcesValues"
+       		android:defaultValue="1">
+       </ListPreference>
+       <CheckBoxPreference android:key="tagPhotoEnable" 
+       		android:summary="@string/tagPhotoEnableSummary" 
+       		android:title="@string/tagPhotoEnable">
+       </CheckBoxPreference>
+       <EditTextPreference android:key="tagPhotoValue" 
+       		android:title="@string/tagPhotoValue" 
+       		android:summary="@string/tagPhotoValueSummary" 
+       		android:dependency="tagPhotoEnable">
+       </EditTextPreference>
+       <CheckBoxPreference android:key="downloadEveryUpdate"
+       		android:dependency="tagPhotoEnable" android:summary="@string/downloadEveryUpdateSummary" android:title="@string/downloadEveryUpdate">
+       </CheckBoxPreference>
+       
+    </PreferenceCategory>
+	<PreferenceCategory android:title="@string/networkSettings">
+		<CheckBoxPreference android:key="wifiOnly" 
+			android:summary="@string/wifiOnlySummary" android:title="@string/wifiOnly">
+		</CheckBoxPreference>
+	</PreferenceCategory>
+    
+</PreferenceScreen>

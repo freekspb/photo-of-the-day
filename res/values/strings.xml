@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Photo of the day</string>
+    <string name="wallpaper_description">Live wallpaper that displays photo of the day from Flickr and Fotki.Yandex</string>
+    <string name="download">Download image...</string>
+    <string name="error">Error!</string>
+    <string name="isOffline">Data communication off.</string>
+    <string name="sources">Sources of wallpaper</string>
+    <string name="sourcesSummary">Select one of several sources wallpaper</string>
+    <string name="tagPhotoEnable">Enable tags</string>
+    <string name="tagPhotoEnableSummary">Enable tags. Flickr and Yandex only.</string>
+    <string name="tagPhotoValue">Tag</string>
+    <string name="tagPhotoValueSummary">Set up tag</string>
+    <string name="downloadEveryUpdate">Download periodically</string>
+    <string name="downloadEveryUpdateSummary">For tags mode only. Download image every hour.</string>
+    <string name="wifiOnly">Download Wi-Fi only</string>
+    <string name="wifiOnlySummary">Download Wi-Fi only</string>
+    <string name="sourcesSettings">Sources settings</string>
+    <string name="networkSettings">Network settings</string>
+    <string name="updateStarted">Download image started.</string>
+    <string name="setupDescription">"Choose 'Photo of the day'\r\n from the list."</string>
+</resources>
