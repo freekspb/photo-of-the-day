@@ -20,13 +20,8 @@
     <string name="updateStarted">Download image started.</string>
     <string name="setupDescription">"Choose 'Photo of the day'\r\n from the list."</string>
     <!-- ============================ -->
-    <!--  AppWidget examples strings     -->
+    <!--  AppWidget strings           -->
     <!-- ============================ -->
-
-    <string name="appwidget_configure_instructions">This text will be shown before the date in our example widget.</string>
-    <string name="appwidget_prefix_default">Oh hai</string>
-    <string name="appwidget_text_format">oH HAI</string>
-    <!-- <string name="appwidget_text_format"><xliff:g id="prefix">%1$s</xliff:g>: <xliff:g id="time">%2$s</xliff:g></string> -->
     <string name="errorSaveFileToSD">Error writing data to SD card</string>
     <string name="saveFileToSD">Image has been saved</string> 
     

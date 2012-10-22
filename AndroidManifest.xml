@@ -42,7 +42,7 @@
         <!--      APPWIDGET                        -->
         <!-- ************************************* -->
 
-        <receiver android:name=".appwidget.ExampleAppWidgetProvider">
+        <receiver android:name=".appwidget.SdSaverAppWidgetProvider">
             <meta-data android:name="android.appwidget.provider"
                     android:resource="@xml/appwidget_provider" />
             <intent-filter>
