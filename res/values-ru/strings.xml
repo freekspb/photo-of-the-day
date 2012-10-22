@@ -19,4 +19,6 @@
     <string name="networkSettings">Сетевые настройки</string>
     <string name="updateStarted">Процесс загрузки фотографии запущен</string>
     <string name="setupDescription">"Выберите 'Фото дня'\r\n в списке программ"</string>
+    <string name="errorSaveFileToSD">Ошибка сохранения файла</string>
+    <string name="saveFileToSD">Изображение сохранено на SD</string>
 </resources>
