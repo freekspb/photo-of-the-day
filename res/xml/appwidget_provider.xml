@@ -13,7 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<!-- 
+
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="60dp"
     android:minHeight="30dp"
@@ -22,8 +22,7 @@
     >
 </appwidget-provider>
 
- -->
-
+<!-- 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="60dp"
     android:minHeight="30dp"
@@ -32,7 +31,7 @@
     android:configure="hram.android.PhotoOfTheDay.appwidget.ExampleAppWidgetConfigure"
     >
 </appwidget-provider>
-
+ -->
 
 <!-- 86400000 is the value of AlarmManager.INTERVAL_DAY - or once per day. -->
 

@@ -106,16 +106,6 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
     */
     
     @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        Log.d(TAG, "onDeleted");
-        // When the user deletes the widget, delete the preference associated with it.
-        final int N = appWidgetIds.length;
-        for (int i=0; i<N; i++) {
-            ExampleAppWidgetConfigure.deleteTitlePref(context, appWidgetIds[i]);
-        }
-    }
-
-    @Override
     public void onEnabled(Context context) {
         Log.d(TAG, "onEnabled");
         // When the first widget is created, register for the TIMEZONE_CHANGED and TIME_CHANGED
@@ -139,25 +129,6 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
                 new ComponentName("hram.android.PhotoOfTheDay", ".appwidget.ExampleBroadcastReceiver"),
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
-    }
-
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-            int appWidgetId, String titlePrefix) {
-        Log.d(TAG, "updateAppWidget appWidgetId=" + appWidgetId + " titlePrefix=" + titlePrefix);
-        // Getting the string this way allows the string to be localized.  The format
-        // string is filled in using java.util.Formatter-style format strings.
-        CharSequence text = context.getString(R.string.appwidget_text_format,
-                ExampleAppWidgetConfigure.loadTitlePref(context, appWidgetId),
-                "0x" + Long.toHexString(SystemClock.elapsedRealtime()));
-
-        // Construct the RemoteViews object.  It takes the package name (in our case, it's our
-        // package, but it needs this because on the other side it's the widget host inflating
-        // the layout from our package).
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.appwidget_provider);
-        views.setTextViewText(R.id.appwidget_text, text);
-
-        // Tell the widget manager
-        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 }
 
