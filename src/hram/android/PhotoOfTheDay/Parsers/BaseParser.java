@@ -11,4 +11,6 @@ public abstract class BaseParser
 	public abstract String GetUrl() throws IOException;
 	
 	public abstract boolean IsTagSupported();
+	
+	public abstract String getImageNamePrefix();
 }

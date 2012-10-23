@@ -40,4 +40,10 @@ public class NationalGeographic extends BaseParser
 	{
 		return false;
 	}
+	
+	@Override
+	public String getImageNamePrefix()
+	{
+		return "NG";
+	}
 }

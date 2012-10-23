@@ -39,4 +39,10 @@ public class Nasa extends BaseParser
 	{
 		return false;
 	}
+	
+	@Override
+	public String getImageNamePrefix()
+	{
+		return "Nasa";
+	}
 }

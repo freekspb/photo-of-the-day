@@ -209,6 +209,10 @@ public class Wallpaper extends WallpaperService
 		return parser.GetUrl();
     }
 	
+	public String getImageNamePrefix() {
+		return parser.getImageNamePrefix();
+	}
+	
 	/**
 	 * Создает экземпляр выбранного парсера
 	 * @param value номер парсера

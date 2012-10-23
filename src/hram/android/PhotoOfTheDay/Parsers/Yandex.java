@@ -118,4 +118,10 @@ public class Yandex extends BaseParser
 	{
 		return true;
 	}
+	
+	@Override
+	public String getImageNamePrefix()
+	{
+		return "Yandex";
+	}
 }

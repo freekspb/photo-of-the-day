@@ -6,8 +6,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import android.content.ContentValues;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
 public class SDHelper {
@@ -61,6 +67,33 @@ public class SDHelper {
 		return fileName;
 	}
 	
+	/**
+	 * Возвращает префикс файла по префиксу парсера
+	 * @param parserPrefix Префикс картинки из текущего парсера
+	 * @return parserPrefix_yyyy_MM_dd_
+	 */
+	private static String getFilenamePrefix(String parserPrefix) {
+		String prefix = "";
+		if (parserPrefix == null) {
+			Log.e(TAG, "Ошибка определения префикса файла: parserPrefix == null");
+		}
+		else {
+			prefix = parserPrefix + "_";
+		}
+			
+		
+		Calendar c = Calendar.getInstance();
+
+		SimpleDateFormat df = new SimpleDateFormat("yyyy_MM_dd_");
+		String formattedDate = df.format(c.getTime());
+		return prefix + formattedDate;
+	}
+
+	/**
+	 * Сохраняет текущее изображение обоев на SD карту
+	 * @param wp Сервис обоев
+	 * @return Результат сохранения для отображения пользователю
+	 */
 	public static String saveImage(Wallpaper wp) {
 		if (isExternalStorageWritable()) {
 			try {
@@ -74,15 +107,16 @@ public class SDHelper {
 				String filename = getFilename(wp.GetCurrentUrl());
 				if (filename == null) {
 					return wp.getString(R.string.errorSaveFileToSD);
-					
 				}
 								
 				//File file = new File(getAlbumStorageDir(FOLDER).getPath(), filename);
-				File file = new File(getAlbumStorageDir(FOLDER) + File.separator + filename);
+				File file = new File(getAlbumStorageDir(FOLDER) + File.separator + getFilenamePrefix(wp.getImageNamePrefix()) + filename);
 				file.createNewFile();
 				//write the bytes in file
 				FileOutputStream fo = new FileOutputStream(file);
 				fo.write(bytes.toByteArray());
+				
+				addImageGallery(wp, file );
 				
 			} catch (IOException e) {
 				Log.e(TAG, "Ошибка сохранения файла: " + e.getLocalizedMessage());
@@ -91,5 +125,17 @@ public class SDHelper {
 		}
 		
 		return wp.getString(R.string.saveFileToSD);
+	}
+	
+	/**
+	 * Добавляет в галерею запись о добавленном файле(не надо сканировать всю память)
+	 * @param contect
+	 * @param file
+	 */
+	private static void addImageGallery(Context contect, File file ) {
+	    ContentValues values = new ContentValues();
+	    values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+	    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg"); // setar isso
+	    contect.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 	}
 }

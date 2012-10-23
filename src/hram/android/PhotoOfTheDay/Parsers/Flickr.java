@@ -135,4 +135,10 @@ public class Flickr extends BaseParser
 	{
 		return true;
 	}
+	
+	@Override
+	public String getImageNamePrefix()
+	{
+		return "Flickr";
+	}
 }
