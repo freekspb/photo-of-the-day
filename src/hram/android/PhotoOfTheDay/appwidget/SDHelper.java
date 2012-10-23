@@ -6,8 +6,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import android.content.ContentValues;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
 public class SDHelper {
@@ -84,6 +88,8 @@ public class SDHelper {
 				FileOutputStream fo = new FileOutputStream(file);
 				fo.write(bytes.toByteArray());
 				
+				addImageGallery(wp, file );
+				
 			} catch (IOException e) {
 				Log.e(TAG, "Ошибка сохранения файла: " + e.getLocalizedMessage());
 				return wp.getString(R.string.errorSaveFileToSD);
@@ -91,5 +97,17 @@ public class SDHelper {
 		}
 		
 		return wp.getString(R.string.saveFileToSD);
+	}
+	
+	/**
+	 * Добавляет в галерею запись о добавленном файле(не надо сканировать всю память)
+	 * @param contect
+	 * @param file
+	 */
+	private static void addImageGallery(Context contect, File file ) {
+	    ContentValues values = new ContentValues();
+	    values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+	    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg"); // setar isso
+	    contect.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 	}
 }
