@@ -39,7 +39,8 @@ public class SdSaverAppWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
          //Создаем новый RemoteViews
-         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.appwidget_provider);
+         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
+         remoteViews.setImageViewResource(R.id.img_bluetooth, R.drawable.icon);
 
          //Подготавливаем Intent для Broadcast
          Intent active = new Intent(WidgetBroadcastEnum.SAVE_ACTION);
@@ -49,7 +50,7 @@ public class SdSaverAppWidgetProvider extends AppWidgetProvider {
          PendingIntent actionPendingIntent = PendingIntent.getBroadcast(context, 0, active, 0);
 
          //регистрируем наше событие
-         remoteViews.setOnClickPendingIntent(R.id.save_button, actionPendingIntent);
+         remoteViews.setOnClickPendingIntent(R.id.btn_bluetooth, actionPendingIntent);
 
          //обновляем виджет
          appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
