@@ -7,6 +7,8 @@ import hram.android.PhotoOfTheDay.Parsers.Nasa;
 import hram.android.PhotoOfTheDay.Parsers.NationalGeographic;
 import hram.android.PhotoOfTheDay.Parsers.Wikipedia;
 import hram.android.PhotoOfTheDay.Parsers.Yandex;
+import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastEnum;
+import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastReceiver;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -20,6 +22,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,7 +42,7 @@ import android.view.SurfaceHolder;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-public class Wallpaper extends WallpaperService 
+public class Wallpaper extends WallpaperService  
 {
 	public static final String TAG = "Wallpaper";
 	private final Handler mHandler = new Handler();
@@ -77,8 +80,9 @@ public class Wallpaper extends WallpaperService
 	public void onDestroy()
 	{
 		//Log.i(TAG, "Удаление сервиса.");
+		//unregisterReceiver(widgetReceiver);
 	}
-
+	
 	@Override
 	public Engine onCreateEngine() 
 	{
@@ -445,7 +449,7 @@ public class Wallpaper extends WallpaperService
     	//Log.d(TAG, "Таймер создан и запущен");
     }
 	
-	class MyEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener
+	public class MyEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener 
 	{
 		private final Paint mPaint = new Paint();
         private int mPixels;
@@ -458,6 +462,7 @@ public class Wallpaper extends WallpaperService
         private boolean mHorizontal;
         private Bitmap download;
         private SharedPreferences preferences;
+        final WidgetBroadcastReceiver widgetReceiver;
 
         private final Runnable drawRunner = new Runnable() {
             public void run() {
@@ -486,6 +491,7 @@ public class Wallpaper extends WallpaperService
             
         	wp = service;
         	download = BitmapFactory.decodeResource(getResources(),  R.drawable.download);
+            widgetReceiver = new WidgetBroadcastReceiver(wp);
         }
         
         @Override
@@ -497,6 +503,7 @@ public class Wallpaper extends WallpaperService
             //Log.d(TAG, "Вызов MyEngine.onCreate()");
             
             netUpdates();
+    		registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.SAVE_ACTION));            
         }
 
         @Override
@@ -512,6 +519,7 @@ public class Wallpaper extends WallpaperService
         	{
         		preferences.unregisterOnSharedPreferenceChangeListener(this);
         	}
+        	unregisterReceiver(widgetReceiver);
             super.onDestroy();
         }
         

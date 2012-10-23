@@ -19,4 +19,10 @@
     <string name="networkSettings">Network settings</string>
     <string name="updateStarted">Download image started.</string>
     <string name="setupDescription">"Choose 'Photo of the day'\r\n from the list."</string>
+    <!-- ============================ -->
+    <!--  AppWidget strings           -->
+    <!-- ============================ -->
+    <string name="errorSaveFileToSD">Error writing data to SD card</string>
+    <string name="saveFileToSD">Image has been saved</string> 
+    
 </resources>
