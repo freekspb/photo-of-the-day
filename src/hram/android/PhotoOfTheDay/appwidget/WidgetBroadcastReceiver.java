@@ -31,6 +31,6 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
             	Log.e("Error", e.getLocalizedMessage());
             }
             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-        } 
+        }
    }	
 }

@@ -40,7 +40,8 @@ public class SdSaverAppWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
          //Создаем новый RemoteViews
          RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
-         remoteViews.setImageViewResource(R.id.img_bluetooth, R.drawable.icon);
+         remoteViews.setImageViewResource(R.id.img_bluetooth, R.drawable.widget_download_image);
+         remoteViews.setImageViewResource(R.id.img_wifi, R.drawable.widget_open_gallery);
 
          //Подготавливаем Intent для Broadcast
          Intent active = new Intent(WidgetBroadcastEnum.SAVE_ACTION);
