@@ -19,7 +19,7 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent) {
     	Log.i(TAG, "onReceive");
-        //Ловим наш Broadcast, проверяем и выводим сообщение
+        //Р›РѕРІРёРј РЅР°С€ Broadcast, РїСЂРѕРІРµСЂСЏРµРј Рё РІС‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ
         final String action = intent.getAction();
         if (action.equals(WidgetBroadcastEnum.SAVE_ACTION)) {
         	Log.i(TAG, "onReceive - SAVE_ACTION");

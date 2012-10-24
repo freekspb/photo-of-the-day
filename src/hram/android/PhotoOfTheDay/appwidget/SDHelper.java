@@ -51,31 +51,31 @@ public class SDHelper {
 	    return file;
 	}
 
-	/* Определяет имя файла из текущего url */
+	/* РћРїСЂРµРґРµР»СЏРµС‚ РёРјСЏ С„Р°Р№Р»Р° РёР· С‚РµРєСѓС‰РµРіРѕ url */
 	private static String getFilename(String url) {
 		if (url == null) {
-			Log.e(TAG, "Ошибка сохранения файла: CurrentUrl == null");
+			Log.e(TAG, "РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»Р°: CurrentUrl == null");
 			return null;
 		}
 		String fileName = null;
 		try {
 			fileName = url.substring( url.lastIndexOf('/')+1, url.length() );	
 		} catch (Exception e) {
-			Log.e(TAG, "Ошибка определения имени файла из url");
+			Log.e(TAG, "РћС€РёР±РєР° РѕРїСЂРµРґРµР»РµРЅРёСЏ РёРјРµРЅРё С„Р°Р№Р»Р° РёР· url");
 			return null;
 		}
 		return fileName;
 	}
 	
 	/**
-	 * Возвращает префикс файла по префиксу парсера
-	 * @param parserPrefix Префикс картинки из текущего парсера
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ РїСЂРµС„РёРєСЃ С„Р°Р№Р»Р° РїРѕ РїСЂРµС„РёРєСЃСѓ РїР°СЂСЃРµСЂР°
+	 * @param parserPrefix РџСЂРµС„РёРєСЃ РєР°СЂС‚РёРЅРєРё РёР· С‚РµРєСѓС‰РµРіРѕ РїР°СЂСЃРµСЂР°
 	 * @return parserPrefix_yyyy_MM_dd_
 	 */
 	private static String getFilenamePrefix(String parserPrefix) {
 		String prefix = "";
 		if (parserPrefix == null) {
-			Log.e(TAG, "Ошибка определения префикса файла: parserPrefix == null");
+			Log.e(TAG, "РћС€РёР±РєР° РѕРїСЂРµРґРµР»РµРЅРёСЏ РїСЂРµС„РёРєСЃР° С„Р°Р№Р»Р°: parserPrefix == null");
 		}
 		else {
 			prefix = parserPrefix + "_";
@@ -90,9 +90,9 @@ public class SDHelper {
 	}
 
 	/**
-	 * Сохраняет текущее изображение обоев на SD карту
-	 * @param wp Сервис обоев
-	 * @return Результат сохранения для отображения пользователю
+	 * РЎРѕС…СЂР°РЅСЏРµС‚ С‚РµРєСѓС‰РµРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ РѕР±РѕРµРІ РЅР° SD РєР°СЂС‚Сѓ
+	 * @param wp РЎРµСЂРІРёСЃ РѕР±РѕРµРІ
+	 * @return Р РµР·СѓР»СЊС‚Р°С‚ СЃРѕС…СЂР°РЅРµРЅРёСЏ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЋ
 	 */
 	public static String saveImage(Wallpaper wp) {
 		if (isExternalStorageWritable()) {
@@ -119,7 +119,7 @@ public class SDHelper {
 				addImageGallery(wp, file );
 				
 			} catch (IOException e) {
-				Log.e(TAG, "Ошибка сохранения файла: " + e.getLocalizedMessage());
+				Log.e(TAG, "РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»Р°: " + e.getLocalizedMessage());
 				return wp.getString(R.string.errorSaveFileToSD);
 			}
 		}
@@ -128,7 +128,7 @@ public class SDHelper {
 	}
 	
 	/**
-	 * Добавляет в галерею запись о добавленном файле(не надо сканировать всю память)
+	 * Р”РѕР±Р°РІР»СЏРµС‚ РІ РіР°Р»РµСЂРµСЋ Р·Р°РїРёСЃСЊ Рѕ РґРѕР±Р°РІР»РµРЅРЅРѕРј С„Р°Р№Р»Рµ(РЅРµ РЅР°РґРѕ СЃРєР°РЅРёСЂРѕРІР°С‚СЊ РІСЃСЋ РїР°РјСЏС‚СЊ)
 	 * @param contect
 	 * @param file
 	 */

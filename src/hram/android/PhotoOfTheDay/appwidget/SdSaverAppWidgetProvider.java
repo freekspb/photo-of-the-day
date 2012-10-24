@@ -30,7 +30,7 @@ import android.widget.RemoteViews;
 import hram.android.PhotoOfTheDay.R;
 
 /**
- * Виджет отправляющий в Wallpaper событие необходимости сохранения текущих обоев.
+ * Р’РёРґР¶РµС‚ РѕС‚РїСЂР°РІР»СЏСЋС‰РёР№ РІ Wallpaper СЃРѕР±С‹С‚РёРµ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё СЃРѕС…СЂР°РЅРµРЅРёСЏ С‚РµРєСѓС‰РёС… РѕР±РѕРµРІ.
  */
 public class SdSaverAppWidgetProvider extends AppWidgetProvider {
     // log tag
@@ -38,22 +38,22 @@ public class SdSaverAppWidgetProvider extends AppWidgetProvider {
    
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-         //Создаем новый RemoteViews
+         //РЎРѕР·РґР°РµРј РЅРѕРІС‹Р№ RemoteViews
          RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
          remoteViews.setImageViewResource(R.id.img_bluetooth, R.drawable.widget_download_image);
          remoteViews.setImageViewResource(R.id.img_wifi, R.drawable.widget_open_gallery);
 
-         //Подготавливаем Intent для Broadcast
+         //РџРѕРґРіРѕС‚Р°РІР»РёРІР°РµРј Intent РґР»СЏ Broadcast
          Intent active = new Intent(WidgetBroadcastEnum.SAVE_ACTION);
-         active.putExtra("msg", "Картинка сохранена");
+         active.putExtra("msg", "РљР°СЂС‚РёРЅРєР° СЃРѕС…СЂР°РЅРµРЅР°");
 
-         //создаем наше событие
+         //СЃРѕР·РґР°РµРј РЅР°С€Рµ СЃРѕР±С‹С‚РёРµ
          PendingIntent actionPendingIntent = PendingIntent.getBroadcast(context, 0, active, 0);
 
-         //регистрируем наше событие
+         //СЂРµРіРёСЃС‚СЂРёСЂСѓРµРј РЅР°С€Рµ СЃРѕР±С‹С‚РёРµ
          remoteViews.setOnClickPendingIntent(R.id.btn_bluetooth, actionPendingIntent);
 
-         //обновляем виджет
+         //РѕР±РЅРѕРІР»СЏРµРј РІРёРґР¶РµС‚
          appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
     }
   

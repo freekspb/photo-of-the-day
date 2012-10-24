@@ -63,9 +63,9 @@ public class Wallpaper extends WallpaperService
 	@Override
 	public void onCreate() 
 	{
-		//Log.i(TAG, "Создание сервиса.");
+		//Log.i(TAG, "РЎРѕР·РґР°РЅРёРµ СЃРµСЂРІРёСЃР°.");
 		
-		// настройки
+		// РЅР°СЃС‚СЂРѕР№РєРё
 		preferences = getSharedPreferences(Constants.SETTINGS_NAME, 0);
 		
 		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
@@ -79,7 +79,7 @@ public class Wallpaper extends WallpaperService
 	@Override
 	public void onDestroy()
 	{
-		//Log.i(TAG, "Удаление сервиса.");
+		//Log.i(TAG, "РЈРґР°Р»РµРЅРёРµ СЃРµСЂРІРёСЃР°.");
 		//unregisterReceiver(widgetReceiver);
 	}
 	
@@ -90,8 +90,8 @@ public class Wallpaper extends WallpaperService
 	}
 	
 	/**
-	 * Регистрирует рисовальщик, добавляет в список, 
-	 * после обновления фото рисовальщики оповещаются из этого списка
+	 * Р РµРіРёСЃС‚СЂРёСЂСѓРµС‚ СЂРёСЃРѕРІР°Р»СЊС‰РёРє, РґРѕР±Р°РІР»СЏРµС‚ РІ СЃРїРёСЃРѕРє, 
+	 * РїРѕСЃР»Рµ РѕР±РЅРѕРІР»РµРЅРёСЏ С„РѕС‚Рѕ СЂРёСЃРѕРІР°Р»СЊС‰РёРєРё РѕРїРѕРІРµС‰Р°СЋС‚СЃСЏ РёР· СЌС‚РѕРіРѕ СЃРїРёСЃРєР°
 	 * @param object
 	 */
 	public void RegEngine(MyEngine object)
@@ -100,7 +100,7 @@ public class Wallpaper extends WallpaperService
 	}
 	
 	/**
-	 * Отменяет регистрацию рисовальщика
+	 * РћС‚РјРµРЅСЏРµС‚ СЂРµРіРёСЃС‚СЂР°С†РёСЋ СЂРёСЃРѕРІР°Р»СЊС‰РёРєР°
 	 * @param object
 	 */
 	public void UnregEngine(MyEngine object)
@@ -109,17 +109,17 @@ public class Wallpaper extends WallpaperService
 	}
 	
 	/**
-	 * Сохраняет указатель на картинку
+	 * РЎРѕС…СЂР°РЅСЏРµС‚ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РєР°СЂС‚РёРЅРєСѓ
 	 * @param value
 	 */
 	public void SetBitmap(Bitmap value)
 	{
-		//Log.d(TAG, "Сохранение указателя картинки");
+		//Log.d(TAG, "РЎРѕС…СЂР°РЅРµРЅРёРµ СѓРєР°Р·Р°С‚РµР»СЏ РєР°СЂС‚РёРЅРєРё");
 		bm = value;
 	}
 	
 	/**
-	 * Возвращает указатель на картинку
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РєР°СЂС‚РёРЅРєСѓ
 	 * @return
 	 */
 	public Bitmap GetBitmap()
@@ -128,20 +128,20 @@ public class Wallpaper extends WallpaperService
 	}
 	
 	/**
-	 * Сохраняет текущий день
+	 * РЎРѕС…СЂР°РЅСЏРµС‚ С‚РµРєСѓС‰РёР№ РґРµРЅСЊ
 	 * @param value
 	 */
 	public void SetCurrentDay(int value)
 	{
-		// для отладки обновления
+		// РґР»СЏ РѕС‚Р»Р°РґРєРё РѕР±РЅРѕРІР»РµРЅРёСЏ
 		//value -= 1;
 		
-		//Log.d(TAG, String.format("Текущее число: %d", value));
+		//Log.d(TAG, String.format("РўРµРєСѓС‰РµРµ С‡РёСЃР»Рѕ: %d", value));
 		currDay = value;
 	}
 	
 	/**
-	 * Возвращает текущий день
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РµРєСѓС‰РёР№ РґРµРЅСЊ
 	 * @return
 	 */
 	public int GetCurrentDay()
@@ -150,17 +150,17 @@ public class Wallpaper extends WallpaperService
 	}
 	
 	/**
-	 * Сохраняет URL текущей картинки
+	 * РЎРѕС…СЂР°РЅСЏРµС‚ URL С‚РµРєСѓС‰РµР№ РєР°СЂС‚РёРЅРєРё
 	 * @param value
 	 */
 	public void SetCurrentUrl(String value)
 	{
-		//Log.d(TAG, String.format("Текущий URL: %s", value));
+		//Log.d(TAG, String.format("РўРµРєСѓС‰РёР№ URL: %s", value));
 		currentUrl = value;
 	}
 	
 	/**
-	 * Возвращает URL текущей картинки
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ URL С‚РµРєСѓС‰РµР№ РєР°СЂС‚РёРЅРєРё
 	 * @return
 	 */
 	public String GetCurrentUrl()
@@ -169,12 +169,12 @@ public class Wallpaper extends WallpaperService
 	}
 	
 	/**
-	 * Возвращает статус услуги передачи данных
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃС‚Р°С‚СѓСЃ СѓСЃР»СѓРіРё РїРµСЂРµРґР°С‡Рё РґР°РЅРЅС‹С…
 	 * @return
 	 */
 	public boolean IsOnline() 
 	{
-		//Log.d(TAG, "Вызов isOnline()");
+		//Log.d(TAG, "Р’С‹Р·РѕРІ isOnline()");
 		
 		try
 		{
@@ -182,7 +182,7 @@ public class Wallpaper extends WallpaperService
 			return cm.getActiveNetworkInfo().isConnectedOrConnecting();
 		}
 	    catch(Exception e) {
-	    	//Log.d(TAG, "Ошибка проверки online");
+	    	//Log.d(TAG, "РћС€РёР±РєР° РїСЂРѕРІРµСЂРєРё online");
 	    }
 		
 		return false;
@@ -192,19 +192,19 @@ public class Wallpaper extends WallpaperService
 	{
 		boolean wifiOnly = preferences.getBoolean(Constants.WIFI_ONLY, false);
 		
-		//Log.d(TAG, String.format("Только через WiFi %s", wifiOnly ? "Вкл" : "Откл"));
+		//Log.d(TAG, String.format("РўРѕР»СЊРєРѕ С‡РµСЂРµР· WiFi %s", wifiOnly ? "Р’РєР»" : "РћС‚РєР»"));
 		
 		return wifiOnly ? mWifi.isConnected() : true;
 	}
 	
 	/**
-	 * Возвращает урл картинки дня
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ СѓСЂР» РєР°СЂС‚РёРЅРєРё РґРЅСЏ
 	 * @return
 	 * @throws IOException
 	 */
 	public String GetUrl() throws IOException
     {
-		//Log.d(TAG, "Получение URL картинки");
+		//Log.d(TAG, "РџРѕР»СѓС‡РµРЅРёРµ URL РєР°СЂС‚РёРЅРєРё");
 		
 		return parser.GetUrl();
     }
@@ -214,8 +214,8 @@ public class Wallpaper extends WallpaperService
 	}
 	
 	/**
-	 * Создает экземпляр выбранного парсера
-	 * @param value номер парсера
+	 * РЎРѕР·РґР°РµС‚ СЌРєР·РµРјРїР»СЏСЂ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РїР°СЂСЃРµСЂР°
+	 * @param value РЅРѕРјРµСЂ РїР°СЂСЃРµСЂР°
 	 * @return
 	 */
 	public boolean SetCurrentParser(int value)
@@ -250,7 +250,7 @@ public class Wallpaper extends WallpaperService
 			parser = new Wikipedia();
 			break;
 		default:
-			//Log.i(TAG, "Создание парсера по умолчанию");
+			//Log.i(TAG, "РЎРѕР·РґР°РЅРёРµ РїР°СЂСЃРµСЂР° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ");
 			parser = new Yandex(this, preferences);
 			break;
 		}
@@ -260,7 +260,7 @@ public class Wallpaper extends WallpaperService
 	}
 	
 	/**
-	 * Сброс настроек для того чтоб отрисовывалась картинка загрузки
+	 * РЎР±СЂРѕСЃ РЅР°СЃС‚СЂРѕРµРє РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР± РѕС‚СЂРёСЃРѕРІС‹РІР°Р»Р°СЃСЊ РєР°СЂС‚РёРЅРєР° Р·Р°РіСЂСѓР·РєРё
 	 */
 	public void ResetBitmap()
 	{
@@ -270,11 +270,11 @@ public class Wallpaper extends WallpaperService
 	}
 	
 	/**
-	 * Чтение сохраненной картинки из файла
+	 * Р§С‚РµРЅРёРµ СЃРѕС…СЂР°РЅРµРЅРЅРѕР№ РєР°СЂС‚РёРЅРєРё РёР· С„Р°Р№Р»Р°
 	 */
 	public void ReadFile()
 	{
-		//Log.d(TAG, "Чтение картинки из файла");
+		//Log.d(TAG, "Р§С‚РµРЅРёРµ РєР°СЂС‚РёРЅРєРё РёР· С„Р°Р№Р»Р°");
 		
 		FileInputStream stream = null;
 		try 
@@ -292,16 +292,16 @@ public class Wallpaper extends WallpaperService
 			{
 				stream = openFileInput(Constants.FILE_NAME);
 				bm = BitmapFactory.decodeStream(stream);
-				//Log.d(TAG, "Считана картинка из файла");
+				//Log.d(TAG, "РЎС‡РёС‚Р°РЅР° РєР°СЂС‚РёРЅРєР° РёР· С„Р°Р№Р»Р°");
 				
 				currentHeight = bm.getHeight();
 				currentWidth = bm.getWidth();
-				//Log.d(TAG, String.format("Ширина: %d, Высота: %d", currentWidth, currentHeight));
+				//Log.d(TAG, String.format("РЁРёСЂРёРЅР°: %d, Р’С‹СЃРѕС‚Р°: %d", currentWidth, currentHeight));
 			}
 				
 		}
 		catch (Exception e) {
-			//Log.d(TAG, "Не известная ошибка");
+			//Log.d(TAG, "РќРµ РёР·РІРµСЃС‚РЅР°СЏ РѕС€РёР±РєР°");
 			ResetBitmap();
 		}
 		finally {
@@ -313,13 +313,13 @@ public class Wallpaper extends WallpaperService
 	}
 	
 	/**
-	 * Сохранение картинки в файл
+	 * РЎРѕС…СЂР°РЅРµРЅРёРµ РєР°СЂС‚РёРЅРєРё РІ С„Р°Р№Р»
 	 * @param bm
 	 * @param url
 	 */
 	public void SaveFile(Bitmap bm, String url)
 	{
-		//Log.d(TAG, "Сохранение картинки в файл");
+		//Log.d(TAG, "РЎРѕС…СЂР°РЅРµРЅРёРµ РєР°СЂС‚РёРЅРєРё РІ С„Р°Р№Р»");
 		try 
 		{
 			FileOutputStream fos = openFileOutput(Constants.FILE_NAME, Context.MODE_PRIVATE);
@@ -328,7 +328,7 @@ public class Wallpaper extends WallpaperService
 			
 			long now = System.currentTimeMillis(); 
 			
-			// сохранение времени последнего обновления
+			// СЃРѕС…СЂР°РЅРµРЅРёРµ РІСЂРµРјРµРЅРё РїРѕСЃР»РµРґРЅРµРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ
             SharedPreferences.Editor editor = preferences.edit();
             editor.putLong(Constants.LAST_UPDATE, now);
             editor.putString(Constants.LAST_URL, url);
@@ -338,12 +338,12 @@ public class Wallpaper extends WallpaperService
             SetCurrentUrl(url);
 
 		} catch (IOException e) {
-			//Log.d(TAG, "Ошибка сохранения картинки");
+			//Log.d(TAG, "РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ РєР°СЂС‚РёРЅРєРё");
 		}
 	}
 	
 	/**
-	 * Создание и запуск потока обновления
+	 * РЎРѕР·РґР°РЅРёРµ Рё Р·Р°РїСѓСЃРє РїРѕС‚РѕРєР° РѕР±РЅРѕРІР»РµРЅРёСЏ
 	 */
 	public void StartUpdate()
     {
@@ -355,40 +355,40 @@ public class Wallpaper extends WallpaperService
     }
 	
 	/**
-	 * Проверка условий ибновления и в случае выполнения загрузка фото,
-	 * установка его текущим и сохранение в файл
+	 * РџСЂРѕРІРµСЂРєР° СѓСЃР»РѕРІРёР№ РёР±РЅРѕРІР»РµРЅРёСЏ Рё РІ СЃР»СѓС‡Р°Рµ РІС‹РїРѕР»РЅРµРЅРёСЏ Р·Р°РіСЂСѓР·РєР° С„РѕС‚Рѕ,
+	 * СѓСЃС‚Р°РЅРѕРІРєР° РµРіРѕ С‚РµРєСѓС‰РёРј Рё СЃРѕС…СЂР°РЅРµРЅРёРµ РІ С„Р°Р№Р»
 	 */
 	public void update()
     {
-    	//Log.d(TAG, "Вызов MyEngine.update()");
+    	//Log.d(TAG, "Р’С‹Р·РѕРІ MyEngine.update()");
     	
     	try 
     	{
     		if(IsOnline() == false)
     		{
-    			throw new ConnectionException("Нет интернет соединения.");
+    			throw new ConnectionException("РќРµС‚ РёРЅС‚РµСЂРЅРµС‚ СЃРѕРµРґРёРЅРµРЅРёСЏ.");
     		}
     		
         	String url = GetUrl();
         	if(url == null)
         	{
-        		throw new ConnectionException("Ошибка получения URL картинки");
+        		throw new ConnectionException("РћС€РёР±РєР° РїРѕР»СѓС‡РµРЅРёСЏ URL РєР°СЂС‚РёРЅРєРё");
         	}
         	
         	if(url.equals(GetCurrentUrl()))
         	{
-        		//Log.d(TAG, "URL совпадает, еще не обновили");
+        		//Log.d(TAG, "URL СЃРѕРІРїР°РґР°РµС‚, РµС‰Рµ РЅРµ РѕР±РЅРѕРІРёР»Рё");
         		return;
         	}
         	
-        	//Log.d(TAG, "Загрузка картинки по адресу: " + url);
+        	//Log.d(TAG, "Р—Р°РіСЂСѓР·РєР° РєР°СЂС‚РёРЅРєРё РїРѕ Р°РґСЂРµСЃСѓ: " + url);
         	Bitmap bm = imageDownloader.downloadBitmap(url);
         	if(bm == null)
         	{
-        		throw new ConnectionException("Ошибка загрузки киртинки");
+        		throw new ConnectionException("РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё РєРёСЂС‚РёРЅРєРё");
         	}
         	
-    		//Log.d(TAG, "Картинка успешно загружена");
+    		//Log.d(TAG, "РљР°СЂС‚РёРЅРєР° СѓСЃРїРµС€РЅРѕ Р·Р°РіСЂСѓР¶РµРЅР°");
     		currentHeight = -1;
     		currentWidth = -1;
     		SetBitmap(bm);
@@ -396,29 +396,29 @@ public class Wallpaper extends WallpaperService
     		
     		for (MyEngine info : engines)
     		{
-    			//Log.d(TAG, "Вызов drawFrame()");
+    			//Log.d(TAG, "Р’С‹Р·РѕРІ drawFrame()");
     			info.drawFrame();
     		}
     	} 
 	    catch (IOException e) {
-	    	//Log.w(TAG, String.format("Ошибка получения URL: %s. Запуск проверяльщика", e.getLocalizedMessage()));
+	    	//Log.w(TAG, String.format("РћС€РёР±РєР° РїРѕР»СѓС‡РµРЅРёСЏ URL: %s. Р—Р°РїСѓСЃРє РїСЂРѕРІРµСЂСЏР»СЊС‰РёРєР°", e.getLocalizedMessage()));
 	    	CheckOnline();
 		}
     	catch(ConnectionException e){
-    		//Log.w(TAG, String.format("%s. Запуск проверяльщика", e.getMessage()));
+    		//Log.w(TAG, String.format("%s. Р—Р°РїСѓСЃРє РїСЂРѕРІРµСЂСЏР»СЊС‰РёРєР°", e.getMessage()));
     		CheckOnline();
     	}
 	    catch(Exception e) {
-	    	//Log.e(TAG, "Неизвестная ошибка обновления: " + e.getLocalizedMessage());
+	    	//Log.e(TAG, "РќРµРёР·РІРµСЃС‚РЅР°СЏ РѕС€РёР±РєР° РѕР±РЅРѕРІР»РµРЅРёСЏ: " + e.getLocalizedMessage());
 	    }
     }
 
 	/**
-	 * Создание и запуск таймера проверки наличия услуги передачи данных
+	 * РЎРѕР·РґР°РЅРёРµ Рё Р·Р°РїСѓСЃРє С‚Р°Р№РјРµСЂР° РїСЂРѕРІРµСЂРєРё РЅР°Р»РёС‡РёСЏ СѓСЃР»СѓРіРё РїРµСЂРµРґР°С‡Рё РґР°РЅРЅС‹С…
 	 */
 	private void CheckOnline()
     {
-		//Log.d(TAG, "Создание таймера");
+		//Log.d(TAG, "РЎРѕР·РґР°РЅРёРµ С‚Р°Р№РјРµСЂР°");
 		
 		try
 		{
@@ -427,30 +427,30 @@ public class Wallpaper extends WallpaperService
 				@Override
 				public void run() 
 				{
-					//Log.d(TAG, "Запуск проверки соединения");
+					//Log.d(TAG, "Р—Р°РїСѓСЃРє РїСЂРѕРІРµСЂРєРё СЃРѕРµРґРёРЅРµРЅРёСЏ");
 					if(IsOnline() == false)
 					{
-						//Log.d(TAG, "Передача данных отключена");
+						//Log.d(TAG, "РџРµСЂРµРґР°С‡Р° РґР°РЅРЅС‹С… РѕС‚РєР»СЋС‡РµРЅР°");
 						return;
 					}
 					
-					//Log.d(TAG, "Передача данных включена. Остановка таймера проверки соединения");
+					//Log.d(TAG, "РџРµСЂРµРґР°С‡Р° РґР°РЅРЅС‹С… РІРєР»СЋС‡РµРЅР°. РћСЃС‚Р°РЅРѕРІРєР° С‚Р°Р№РјРµСЂР° РїСЂРѕРІРµСЂРєРё СЃРѕРµРґРёРЅРµРЅРёСЏ");
 					if(cancel())
 					{
-						//Log.d(TAG, "Таймер успешно остановлен");
+						//Log.d(TAG, "РўР°Р№РјРµСЂ СѓСЃРїРµС€РЅРѕ РѕСЃС‚Р°РЅРѕРІР»РµРЅ");
 					}
 					
-					//Log.d(TAG, "Запуск обновления");
+					//Log.d(TAG, "Р—Р°РїСѓСЃРє РѕР±РЅРѕРІР»РµРЅРёСЏ");
 					StartUpdate();
 				}
 				
 			}, 10000, 10000);
 		}
 		catch(Exception e) {
-	    	//Log.e(TAG, "Неизвестная ошибка: " + e.getLocalizedMessage());
+	    	//Log.e(TAG, "РќРµРёР·РІРµСЃС‚РЅР°СЏ РѕС€РёР±РєР°: " + e.getLocalizedMessage());
 	    }
     	
-    	//Log.d(TAG, "Таймер создан и запущен");
+    	//Log.d(TAG, "РўР°Р№РјРµСЂ СЃРѕР·РґР°РЅ Рё Р·Р°РїСѓС‰РµРЅ");
     }
 	
 	public class MyEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener 
@@ -477,12 +477,12 @@ public class Wallpaper extends WallpaperService
         private boolean mVisible;
 
 		/**
-		 * Конструктор рисовальщика
-		 * @param service ссылка на сервис обоев
+		 * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЂРёСЃРѕРІР°Р»СЊС‰РёРєР°
+		 * @param service СЃСЃС‹Р»РєР° РЅР° СЃРµСЂРІРёСЃ РѕР±РѕРµРІ
 		 */
         MyEngine(Wallpaper service) 
         {
-        	//Log.i(TAG, "Создание Engine");
+        	//Log.i(TAG, "РЎРѕР·РґР°РЅРёРµ Engine");
         	
         	final Paint paint = mPaint;
             paint.setColor(0xffffffff);
@@ -504,7 +504,7 @@ public class Wallpaper extends WallpaperService
             super.onCreate(surfaceHolder);
 
             wp.RegEngine(this);
-            //Log.d(TAG, "Вызов MyEngine.onCreate()");
+            //Log.d(TAG, "Р’С‹Р·РѕРІ MyEngine.onCreate()");
             
             netUpdates();
     		registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.SAVE_ACTION));            
@@ -513,7 +513,7 @@ public class Wallpaper extends WallpaperService
         @Override
         public void onDestroy() 
         {
-        	//Log.i(TAG, "Удаление Engine");
+        	//Log.i(TAG, "РЈРґР°Р»РµРЅРёРµ Engine");
         	
         	wp.UnregEngine(this);
         	
@@ -528,12 +528,12 @@ public class Wallpaper extends WallpaperService
         }
         
 		/**
-		 * Таймер обновления фотографии. Проверяет смену дня. 
-		 * В случае если наступил след. день запускает обновление.
+		 * РўР°Р№РјРµСЂ РѕР±РЅРѕРІР»РµРЅРёСЏ С„РѕС‚РѕРіСЂР°С„РёРё. РџСЂРѕРІРµСЂСЏРµС‚ СЃРјРµРЅСѓ РґРЅСЏ. 
+		 * Р’ СЃР»СѓС‡Р°Рµ РµСЃР»Рё РЅР°СЃС‚СѓРїРёР» СЃР»РµРґ. РґРµРЅСЊ Р·Р°РїСѓСЃРєР°РµС‚ РѕР±РЅРѕРІР»РµРЅРёРµ.
 		 */
         private void netUpdates()
     	{
-        	//Log.d(TAG, "Создание таймера обновлений");
+        	//Log.d(TAG, "РЎРѕР·РґР°РЅРёРµ С‚Р°Р№РјРµСЂР° РѕР±РЅРѕРІР»РµРЅРёР№");
         	try
 			{
 				timer.scheduleAtFixedRate(new TimerTask() 
@@ -541,34 +541,34 @@ public class Wallpaper extends WallpaperService
 					@Override
 					public void run() 
 					{
-						//Log.d(TAG, "Сработал таймер обновления");
+						//Log.d(TAG, "РЎСЂР°Р±РѕС‚Р°Р» С‚Р°Р№РјРµСЂ РѕР±РЅРѕРІР»РµРЅРёСЏ");
 						if(IsNeedDownloadEveryUpdate())
 						{
-							//Log.d(TAG, "Запуск периодического обновления");
+							//Log.d(TAG, "Р—Р°РїСѓСЃРє РїРµСЂРёРѕРґРёС‡РµСЃРєРѕРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ");
 							wp.StartUpdate();
 							return;
 						}
 
-						//Log.d(TAG, "Проверка времени последнего обновления");
+						//Log.d(TAG, "РџСЂРѕРІРµСЂРєР° РІСЂРµРјРµРЅРё РїРѕСЃР»РµРґРЅРµРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ");
 						int now = new Date(System.currentTimeMillis()).getDate();
 						if(wp.GetCurrentDay() != now)
 						{
-							//Log.d(TAG, "Запуск обновления");
+							//Log.d(TAG, "Р—Р°РїСѓСЃРє РѕР±РЅРѕРІР»РµРЅРёСЏ");
 							wp.StartUpdate();
 						}
 						else
 						{
-							//Log.d(TAG, String.format("Обновление не нужно. Сейчас: %d, текущий: %d", now, wp.GetCurrentDay()));
+							//Log.d(TAG, String.format("РћР±РЅРѕРІР»РµРЅРёРµ РЅРµ РЅСѓР¶РЅРѕ. РЎРµР№С‡Р°СЃ: %d, С‚РµРєСѓС‰РёР№: %d", now, wp.GetCurrentDay()));
 						}
 					}
 					
 				}, 0, Constants.UPDATE_INTERVAL);
 			}
 			catch(Exception e) {
-				//Log.e(TAG, "Неизвестная ошибка: " + e.getLocalizedMessage());
+				//Log.e(TAG, "РќРµРёР·РІРµСЃС‚РЅР°СЏ РѕС€РёР±РєР°: " + e.getLocalizedMessage());
 			}
     		
-    		//Log.d(TAG, "Таймер обновлений запущен");
+    		//Log.d(TAG, "РўР°Р№РјРµСЂ РѕР±РЅРѕРІР»РµРЅРёР№ Р·Р°РїСѓС‰РµРЅ");
     	}
        
         
@@ -576,39 +576,39 @@ public class Wallpaper extends WallpaperService
         {
         	try
         	{
-	        	//Log.d(TAG, "если это превью то не обновляем по таймеру");
+	        	//Log.d(TAG, "РµСЃР»Рё СЌС‚Рѕ РїСЂРµРІСЊСЋ С‚Рѕ РЅРµ РѕР±РЅРѕРІР»СЏРµРј РїРѕ С‚Р°Р№РјРµСЂСѓ");
 	        	if(isPreview())
 	        	{
-	        		//Log.d(TAG, "это превью не обновляем по таймеру");
+	        		//Log.d(TAG, "СЌС‚Рѕ РїСЂРµРІСЊСЋ РЅРµ РѕР±РЅРѕРІР»СЏРµРј РїРѕ С‚Р°Р№РјРµСЂСѓ");
 	        		return false;
 	        	}
 	        	
-	        	//Log.d(TAG, "если парсер не поддерживает"); 
+	        	//Log.d(TAG, "РµСЃР»Рё РїР°СЂСЃРµСЂ РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚"); 
 	        	if(parser.IsTagSupported() == false)
 	        	{
-	        		//Log.d(TAG, "парсер не поддерживает");
+	        		//Log.d(TAG, "РїР°СЂСЃРµСЂ РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚");
 	        		return false;
 	        	}
 	        	
-	        	//Log.d(TAG, "если не включена работа по тегам");
+	        	//Log.d(TAG, "РµСЃР»Рё РЅРµ РІРєР»СЋС‡РµРЅР° СЂР°Р±РѕС‚Р° РїРѕ С‚РµРіР°Рј");
 	        	if(preferences.getBoolean("tagPhotoEnable", false) == false)
 	    		{
-	        		//Log.d(TAG, "не включена работа по тегам");
+	        		//Log.d(TAG, "РЅРµ РІРєР»СЋС‡РµРЅР° СЂР°Р±РѕС‚Р° РїРѕ С‚РµРіР°Рј");
 	        		return false;
 	    		}
 	        	
-	        	//Log.d(TAG, "если опция периодического обновления не включена"); 
+	        	//Log.d(TAG, "РµСЃР»Рё РѕРїС†РёСЏ РїРµСЂРёРѕРґРёС‡РµСЃРєРѕРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ РЅРµ РІРєР»СЋС‡РµРЅР°"); 
 	        	if(preferences.getBoolean("downloadEveryUpdate", false) == false)
 	        	{
-	        		//Log.d(TAG, "опция периодического обновления не включена");
+	        		//Log.d(TAG, "РѕРїС†РёСЏ РїРµСЂРёРѕРґРёС‡РµСЃРєРѕРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ РЅРµ РІРєР»СЋС‡РµРЅР°");
 	        		return false;
 	        	}
 	        	
-	        	//Log.d(TAG, "если тег не введен");
+	        	//Log.d(TAG, "РµСЃР»Рё С‚РµРі РЅРµ РІРІРµРґРµРЅ");
 	        	String tag = preferences.getString("tagPhotoValue", "");
 	        	if(tag.length() == 0)
 	        	{
-	        		//Log.d(TAG, "тег не введен");
+	        		//Log.d(TAG, "С‚РµРі РЅРµ РІРІРµРґРµРЅ");
 	        		return false;
 	        	}
         	}
@@ -618,14 +618,14 @@ public class Wallpaper extends WallpaperService
         		return false;
         	}
         	
-        	//Log.d(TAG, "надо обновлять");
+        	//Log.d(TAG, "РЅР°РґРѕ РѕР±РЅРѕРІР»СЏС‚СЊ");
         	return true;
         }
         
         @Override
         public void onVisibilityChanged(boolean visible) 
         {
-        	//Log.d(TAG, "Вызов MyEngine.onVisibilityChanged()");
+        	//Log.d(TAG, "Р’С‹Р·РѕРІ MyEngine.onVisibilityChanged()");
         	
             mVisible = visible;
             if (visible) {
@@ -640,7 +640,7 @@ public class Wallpaper extends WallpaperService
         {
             super.onSurfaceChanged(holder, format, width, height);
             
-            //Log.d(TAG, "Вызов MyEngine.onSurfaceChanged()");
+            //Log.d(TAG, "Р’С‹Р·РѕРІ MyEngine.onSurfaceChanged()");
             
             mHeight = height;
             mWidth = width;
@@ -663,7 +663,7 @@ public class Wallpaper extends WallpaperService
         @Override
         public void onOffsetsChanged(float xOffset, float yOffset, float xStep, float yStep, int xPixels, int yPixels) 
         {
-        	//Log.d(TAG, "Вызов MyEngine.onOffsetsChanged()");
+        	//Log.d(TAG, "Р’С‹Р·РѕРІ MyEngine.onOffsetsChanged()");
         	//Log.d(TAG, String.format("xStep: %f, xPixels: %d", xStep, xPixels));
         	
         	mXStep = xStep;
@@ -678,7 +678,7 @@ public class Wallpaper extends WallpaperService
          */
         void drawFrame() 
         {
-        	//Log.d(TAG, "Процедура отрисовки");
+        	//Log.d(TAG, "РџСЂРѕС†РµРґСѓСЂР° РѕС‚СЂРёСЃРѕРІРєРё");
         	
             final SurfaceHolder holder = getSurfaceHolder();
 
@@ -691,7 +691,7 @@ public class Wallpaper extends WallpaperService
                 {
                 	if(bm == null)
                 	{
-                		//Log.d(TAG, "Картинки нет рисуем загрузку");
+                		//Log.d(TAG, "РљР°СЂС‚РёРЅРєРё РЅРµС‚ СЂРёСЃСѓРµРј Р·Р°РіСЂСѓР·РєСѓ");
                 		double rescaling = (double)mWidth / download.getWidth();
                 		int width = (int)(download.getWidth() * rescaling);
                 		int offset = (mHeight / 2) - (width / 2);
@@ -711,7 +711,7 @@ public class Wallpaper extends WallpaperService
                 	
                 	if(mHeight != currentHeight || mWidth != currentWidth)
                 	{
-                		//Log.d(TAG, String.format("Изменились размеры, изменяем размер: %d->%d, %d->%d", currentHeight, mHeight, currentWidth, mWidth));
+                		//Log.d(TAG, String.format("РР·РјРµРЅРёР»РёСЃСЊ СЂР°Р·РјРµСЂС‹, РёР·РјРµРЅСЏРµРј СЂР°Р·РјРµСЂ: %d->%d, %d->%d", currentHeight, mHeight, currentWidth, mWidth));
                 		double rescaling = (double)mHeight / bm.getHeight();
                 		if(mHorizontal)
                 		{
@@ -779,7 +779,7 @@ public class Wallpaper extends WallpaperService
 				return;
 			}
 			
-			//Log.d(TAG, "Изменено " +  arg1);
+			//Log.d(TAG, "РР·РјРµРЅРµРЅРѕ " +  arg1);
 			String tag = prefs.getString("tagPhotoValue", "");
 			if(arg1.equals("tagPhotoEnable") && parser.IsTagSupported())
 			{
@@ -816,7 +816,7 @@ public class Wallpaper extends WallpaperService
 			
 			wp.ResetBitmap();
 			
-			// сброс времени последнего обновления
+			// СЃР±СЂРѕСЃ РІСЂРµРјРµРЅРё РїРѕСЃР»РµРґРЅРµРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ
 	        SharedPreferences.Editor editor = preferences.edit();
 	        editor.putLong(Constants.LAST_UPDATE, 0);
 	        editor.putString(Constants.LAST_URL, "");
