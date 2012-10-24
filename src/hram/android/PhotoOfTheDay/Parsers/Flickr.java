@@ -1,4 +1,4 @@
-﻿package hram.android.PhotoOfTheDay.Parsers;
+package hram.android.PhotoOfTheDay.Parsers;
 
 import hram.android.PhotoOfTheDay.Wallpaper;
 
