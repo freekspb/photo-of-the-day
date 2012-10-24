@@ -11,7 +11,7 @@ public class Nasa extends BaseParser
 
 	public Nasa()
 	{
-		//Log.i(TAG, "Создание парсера Nasa");
+		//Log.i(TAG, "РЎРѕР·РґР°РЅРёРµ РїР°СЂСЃРµСЂР° Nasa");
 	}
 	
 	@Override

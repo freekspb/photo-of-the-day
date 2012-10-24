@@ -23,7 +23,7 @@ public class SetUpLiveWallpaper extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.set_up_live_wallpaper);
         
-        //Log.d(TAG, "Старт окна выбора живых обоев");
+        //Log.d(TAG, "РЎС‚Р°СЂС‚ РѕРєРЅР° РІС‹Р±РѕСЂР° Р¶РёРІС‹С… РѕР±РѕРµРІ");
         
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_set_up_layout, (ViewGroup) findViewById(R.id.toast_layout_root));

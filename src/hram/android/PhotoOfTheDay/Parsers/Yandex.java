@@ -18,7 +18,7 @@ public class Yandex extends BaseParser
 	
 	public Yandex(Wallpaper wp, SharedPreferences preferences)
 	{
-		//Log.i(TAG, "Создание парсера Yandex");
+		//Log.i(TAG, "РЎРѕР·РґР°РЅРёРµ РїР°СЂСЃРµСЂР° Yandex");
 		this.wp = wp;
 		this.preferences = preferences;
 	}
@@ -29,7 +29,7 @@ public class Yandex extends BaseParser
 		if(preferences.getBoolean("tagPhotoEnable", false))
 		{
 			String tag = preferences.getString("tagPhotoValue", "");
-			//Log.d(TAG, "Поиск фото по тэгу " + tag);
+			//Log.d(TAG, "РџРѕРёСЃРє С„РѕС‚Рѕ РїРѕ С‚СЌРіСѓ " + tag);
 			if(tag.length() > 0)
 			{
 				return GetUrlByTag(tag);
@@ -102,11 +102,11 @@ public class Yandex extends BaseParser
 				//Log.i(TAG, "src: " + str);
 				if(wp.GetCurrentUrl() != null && wp.GetCurrentUrl().equals(str))
 				{
-					//Log.i(TAG, "исчем дальше");
+					//Log.i(TAG, "РёСЃС‡РµРј РґР°Р»СЊС€Рµ");
 					continue;
 				}
 				
-				//Log.i(TAG, "нашли: " + str);
+				//Log.i(TAG, "РЅР°С€Р»Рё: " + str);
 				return str;
 			}
 		}

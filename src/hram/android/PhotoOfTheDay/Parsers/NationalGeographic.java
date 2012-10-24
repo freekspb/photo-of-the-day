@@ -11,7 +11,7 @@ public class NationalGeographic extends BaseParser
 
 	public NationalGeographic()
 	{
-		//Log.i(TAG, "Создание парсера NationalGeographic");
+		//Log.i(TAG, "РЎРѕР·РґР°РЅРёРµ РїР°СЂСЃРµСЂР° NationalGeographic");
 	}
 	
 	@Override

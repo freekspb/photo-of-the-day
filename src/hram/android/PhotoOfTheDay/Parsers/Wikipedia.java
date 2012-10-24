@@ -10,7 +10,7 @@ public class Wikipedia extends BaseParser {
 	
 	public Wikipedia()
 	{
-		//Log.i(TAG, "Создание парсера Wikipedia");
+		//Log.i(TAG, "РЎРѕР·РґР°РЅРёРµ РїР°СЂСЃРµСЂР° Wikipedia");
 	}
 
 	@Override
