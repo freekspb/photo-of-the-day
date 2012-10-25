@@ -508,6 +508,7 @@ public class Wallpaper extends WallpaperService
             
             netUpdates();
     		registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.SAVE_ACTION));            
+    		registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.OPEN_GALLERY_ACTION));
         }
 
         @Override

@@ -41,16 +41,26 @@ public class SDHelper {
 	}
 	*/
 	
-	public static File getAlbumStorageDir(String albumName) {
+	private static File getAlbumStorageDir(String albumName) {
 	    // Get the directory for the user's public pictures directory. 
 	    File file = new File(Environment.getExternalStoragePublicDirectory(
 	            Environment.DIRECTORY_PICTURES), albumName);
+	    if (file.exists()) {
+	    	return file;
+	    }
 	    if (!file.mkdirs()) {
 	        Log.e(TAG, "Directory not created");
 	    }
 	    return file;
 	}
 
+	public static File getAlbumStorageDir() {
+	    // Get the directory for the user's public pictures directory. 
+	    File file = new File(Environment.getExternalStoragePublicDirectory(
+	            Environment.DIRECTORY_PICTURES), FOLDER);
+	    return file;
+	}
+	
 	/* Определяет имя файла из текущего url */
 	private static String getFilename(String url) {
 		if (url == null) {
@@ -108,9 +118,12 @@ public class SDHelper {
 				if (filename == null) {
 					return wp.getString(R.string.errorSaveFileToSD);
 				}
-								
+
 				//File file = new File(getAlbumStorageDir(FOLDER).getPath(), filename);
 				File file = new File(getAlbumStorageDir(FOLDER) + File.separator + getFilenamePrefix(wp.getImageNamePrefix()) + filename);
+				if (file.exists()) {
+					return wp.getString(R.string.saveFileToSD);
+				}
 				file.createNewFile();
 				//write the bytes in file
 				FileOutputStream fo = new FileOutputStream(file);
