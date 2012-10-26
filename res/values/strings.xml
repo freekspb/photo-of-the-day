@@ -24,5 +24,5 @@
     <!-- ============================ -->
     <string name="errorSaveFileToSD">Error writing data to SD card</string>
     <string name="saveFileToSD">Image has been saved</string> 
-    
+    <string name="noImages">No images</string>
 </resources>

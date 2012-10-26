@@ -16,8 +16,6 @@
 
 package hram.android.PhotoOfTheDay.appwidget;
 
-import java.io.File;
-
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -25,7 +23,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
 // Need the following import to get access to the app resources, since this
@@ -96,10 +93,10 @@ public class SdSaverAppWidgetProvider extends AppWidgetProvider {
                 new ComponentName("hram.android.PhotoOfTheDay", ".appwidget.WidgetBroadcastReceiver"),
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
-//        pm.setComponentEnabledSetting(
-//                new ComponentName("hram.android.PhotoOfTheDay", ".appwidget.SdSaverAppWidgetProvider"),
-//                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-//                PackageManager.DONT_KILL_APP);
+        pm.setComponentEnabledSetting(
+                new ComponentName("hram.android.PhotoOfTheDay", ".appwidget.SdSaverAppWidgetProvider"),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
 //	@Override

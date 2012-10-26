@@ -1,14 +1,9 @@
 package hram.android.PhotoOfTheDay.appwidget;
 
-import java.io.File;
-
 import hram.android.PhotoOfTheDay.Wallpaper;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -39,7 +34,14 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
         }
         else if (action.equals(WidgetBroadcastEnum.OPEN_GALLERY_ACTION)) {
         	try {
-              	File dir = SDHelper.getAlbumStorageDir();
+        		Intent myIntent = new Intent(context, SDImagesScaner.class);
+    			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    			myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+    			context.startActivity(myIntent);
+        		return;
+        		
+/*
+        		File dir = SDHelper.getAlbumStorageDir();
     			if (!dir.exists()) {
     				return;
     			}
@@ -50,9 +52,15 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
 //    			intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*"); 
 //    			galleryIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //    			context.startActivity(galleryIntent);
+
+//    			Intent intent = new Intent();
+//    			intent.setAction(Intent.ACTION_VIEW);
+//    			intent.setDataAndType(Uri.parse(str), "image/*");
+//    			startActivity(intent);
     			
-    			Intent myIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    			myIntent.setType("image/*");
+    			String str = "file:/" + dir.getAbsolutePath() + File.separator;
+    			Intent myIntent = new Intent();
+    			myIntent.setDataAndType(Uri.parse(str), "image/*");
     			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     			myIntent.setAction(Intent.ACTION_VIEW);
 //    			Intent myIntent2 = Intent.createChooser(myIntent, "Select Picture");
@@ -62,6 +70,8 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
 //    			Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
 //    			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //    			context.startActivity(myIntent);
+ * 
+ */
 			} catch (Exception e) {
 				int a = 1;
 			}
