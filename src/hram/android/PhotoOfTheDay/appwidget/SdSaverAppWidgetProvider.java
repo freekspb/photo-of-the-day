@@ -16,6 +16,8 @@
 
 package hram.android.PhotoOfTheDay.appwidget;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -25,6 +27,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 import android.widget.RemoteViews;
+import hram.android.PhotoOfTheDay.Constants;
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 import hram.android.PhotoOfTheDay.R;
@@ -68,6 +71,9 @@ public class SdSaverAppWidgetProvider extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         Log.d(TAG, "onEnabled");
+        
+        BugSenseHandler.initAndStartSession(context, Constants.BUG_SENSE_APIKEY);
+
         // When the first widget is created, register for
         // broadcasts.  We don't want to be listening for these if nobody has our widget active.
         // This setting is sticky across reboots, but that doesn't matter, because this will

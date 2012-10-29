@@ -21,6 +21,8 @@ import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -64,6 +66,7 @@ public class Wallpaper extends WallpaperService
 	public void onCreate() 
 	{
 		//Log.i(TAG, "Создание сервиса.");
+		BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
 		
 		// настройки
 		preferences = getSharedPreferences(Constants.SETTINGS_NAME, 0);
@@ -71,7 +74,14 @@ public class Wallpaper extends WallpaperService
 		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 		mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		
-		SetCurrentParser(Integer.decode(preferences.getString(Constants.SOURCES_NAME, "1")));
+		try {
+			SetCurrentParser(Integer.decode(preferences.getString(Constants.SOURCES_NAME, "1")));
+		} catch (Exception e) {
+			BugSenseHandler.sendException(e);
+			preferences.edit().putString(Constants.SOURCES_NAME, "1").commit();
+			SetCurrentParser(1);
+		}
+		
 		
 		ReadFile();
 	}
