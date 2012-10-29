@@ -76,7 +76,7 @@ public class Wallpaper extends WallpaperService {
 		try {
 			SetCurrentParser(Integer.decode(preferences.getString(Constants.SOURCES_NAME, "1")));
 		} catch (Exception e) {
-			BugSenseHandler.sendException(e);
+			BugSenseHandler.sendExceptionMessage("SOURCES_NAME", preferences.getString(Constants.SOURCES_NAME, "1"), e);
 			preferences.edit().putString(Constants.SOURCES_NAME, "1").commit();
 			SetCurrentParser(1);
 		}
@@ -506,6 +506,8 @@ public class Wallpaper extends WallpaperService {
 					WidgetBroadcastEnum.OPEN_GALLERY_ACTION));
 			registerReceiver(widgetReceiver, new IntentFilter(
 					WidgetBroadcastEnum.NEXT_PARSER_ACTION));
+			registerReceiver(widgetReceiver, new IntentFilter(
+					WidgetBroadcastEnum.SETTINGS_ACTION));
 		}
 
 		@Override
