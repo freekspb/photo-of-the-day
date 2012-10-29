@@ -46,6 +46,7 @@ public class SdSaverAppWidgetProvider extends AppWidgetProvider {
          remoteViews.setImageViewResource(R.id.img_bluetooth, R.drawable.ic_widget_download_image);
          remoteViews.setImageViewResource(R.id.img_wifi, R.drawable.ic_widget_open_gallery);
          remoteViews.setImageViewResource(R.id.img_gps, R.drawable.ic_widget_next_parser);
+         remoteViews.setImageViewResource(R.id.img_sync, R.drawable.ic_widget_settings);
 
          //Подготавливаем Intent для Broadcast
          Intent active = new Intent(WidgetBroadcastEnum.SAVE_ACTION);
@@ -67,6 +68,13 @@ public class SdSaverAppWidgetProvider extends AppWidgetProvider {
          PendingIntent nextParserPendingIntent = PendingIntent.getBroadcast(context, 0, nextParser, 0);
          //регистрируем наше событие
          remoteViews.setOnClickPendingIntent(R.id.btn_gps, nextParserPendingIntent);
+
+         //Подготавливаем Intent для Broadcast
+         Intent openSttings = new Intent(WidgetBroadcastEnum.SETTINGS_ACTION);
+         //создаем наше событие
+         PendingIntent openSttingsPendingIntent = PendingIntent.getBroadcast(context, 0, openSttings, 0);
+         //регистрируем наше событие
+         remoteViews.setOnClickPendingIntent(R.id.btn_sync, openSttingsPendingIntent);
 
          //обновляем виджет
          appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);

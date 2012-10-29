@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import hram.android.PhotoOfTheDay.Constants;
-import hram.android.PhotoOfTheDay.R.string;
+import hram.android.PhotoOfTheDay.Settings;
 import hram.android.PhotoOfTheDay.Wallpaper;
-import android.R;
-import android.R.integer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,15 +33,20 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
         //Ловим наш Broadcast, проверяем и выводим сообщение
         final String action = intent.getAction();
         if (action.equals(WidgetBroadcastEnum.SAVE_ACTION)) {
-        	Log.i(TAG, "onReceive - SAVE_ACTION");
-
-            String msg = "null";
-            try {
-            	msg = SDHelper.saveImage(wp);
-            } catch (Exception e) {
-            	Log.e(TAG, "onReceive" + e.getLocalizedMessage());
-            }
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+        	try {
+	        	Log.i(TAG, "onReceive - SAVE_ACTION");
+	
+	            String msg = "null";
+	            try {
+	            	msg = SDHelper.saveImage(wp);
+	            } catch (Exception e) {
+	            	Log.e(TAG, "onReceive" + e.getLocalizedMessage());
+	            }
+	            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+			} catch (Exception e) {
+				BugSenseHandler.sendException(e);
+				Log.e(TAG, "onReceive" + e.getLocalizedMessage());
+			}            
         }
         else if (action.equals(WidgetBroadcastEnum.OPEN_GALLERY_ACTION)) {
         	try {
@@ -84,7 +89,8 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
  * 
  */
 			} catch (Exception e) {
-            	Log.e(TAG, "onReceive" + e.getLocalizedMessage());
+				BugSenseHandler.sendException(e);
+				Log.e(TAG, "onReceive" + e.getLocalizedMessage());
 			}
         }
         else if (action.equals(WidgetBroadcastEnum.NEXT_PARSER_ACTION)) {
@@ -92,13 +98,27 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
         		return;
         	}
         	
-        	int nextParser = getNextParser(wp.getCurrentParser());
-        	SharedPreferences.Editor editor = wp.preferences.edit();
-            editor.putInt(Constants.SOURCES_NAME, nextParser);
-            editor.commit();
-            wp.SetCurrentParser(nextParser);
-            wp.StartUpdate();
+        	try {
+	        	int nextParser = getNextParser(wp.getCurrentParser());
+	        	SharedPreferences.Editor editor = wp.preferences.edit();
+	            editor.putInt(Constants.SOURCES_NAME, nextParser);
+	            editor.commit();
+	            wp.SetCurrentParser(nextParser);
+	            wp.StartUpdate();
+			} catch (Exception e) {
+				BugSenseHandler.sendException(e);
+			}
         }        
+        else if (action.equals(WidgetBroadcastEnum.SETTINGS_ACTION)) {
+        	try {
+        		Intent myIntent = new Intent(context, Settings.class);
+    			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    			context.startActivity(myIntent);
+			} catch (Exception e) {
+				BugSenseHandler.sendException(e);
+            	Log.e(TAG, "onReceive" + e.getLocalizedMessage());
+			}
+        }
     }
     
     private int getNextParser(int currentParser) {
