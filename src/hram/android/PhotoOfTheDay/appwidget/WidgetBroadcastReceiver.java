@@ -101,7 +101,7 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
         	try {
 	        	int nextParser = getNextParser(wp.getCurrentParser());
 	        	SharedPreferences.Editor editor = wp.preferences.edit();
-	            editor.putInt(Constants.SOURCES_NAME, nextParser);
+	            editor.putString(Constants.SOURCES_NAME, "" + nextParser);
 	            editor.commit();
 	            wp.SetCurrentParser(nextParser);
 	            wp.StartUpdate();

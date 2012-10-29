@@ -75,12 +75,10 @@ public class Wallpaper extends WallpaperService {
 		
 		try {
 			SetCurrentParser(Integer.decode(preferences.getString(Constants.SOURCES_NAME, "1")));
-		} catch (Exception e) {;
-			BugSenseHandler.sendException(new Exception(String.format("%s = %s", Constants.SOURCES_NAME, preferences.getString(Constants.SOURCES_NAME, "1"))));
+		} catch (Exception e) {
 			preferences.edit().putString(Constants.SOURCES_NAME, "1").commit();
 			SetCurrentParser(1);
 		}
-		
 		
 		ReadFile();
 	}
