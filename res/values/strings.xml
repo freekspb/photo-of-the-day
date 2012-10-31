@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Photo of the day</string>
+    <string name="app_name_gallery">Photo of the day - gallery</string>
     <string name="wallpaper_description">Live wallpaper that displays photo of the day from Flickr and Fotki.Yandex</string>
     <string name="download">Download image...</string>
     <string name="error">Error!</string>

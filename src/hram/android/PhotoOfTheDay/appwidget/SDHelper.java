@@ -69,7 +69,10 @@ public class SDHelper {
 		}
 		String fileName = null;
 		try {
-			fileName = url.substring( url.lastIndexOf('/')+1, url.length() );	
+			fileName = url.substring( url.lastIndexOf('/')+1, url.length() );
+			if (!fileName.toLowerCase().endsWith(".jpg")) {
+				fileName += ".jpg";
+			}
 		} catch (Exception e) {
 			Log.e(TAG, "Ошибка определения имени файла из url");
 			return null;
