@@ -18,6 +18,7 @@ import android.util.Log;
 
 public class SDHelper {
 	public static final String TAG = "SDHelper";
+	public static final String MEDIA_TAG = "hram.android.PhotoOfTheDay";
 	private static final String FOLDER = "PhotoOfTheDay";
 
 	/* Checks if external storage is available for read and write */
@@ -59,6 +60,10 @@ public class SDHelper {
 	    File file = new File(Environment.getExternalStoragePublicDirectory(
 	            Environment.DIRECTORY_PICTURES), FOLDER);
 	    return file;
+	}
+	
+	public static String getAlbumStorageDirPath() {
+		return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + FOLDER;
 	}
 	
 	/* Определяет имя файла из текущего url */
@@ -152,6 +157,7 @@ public class SDHelper {
 	    ContentValues values = new ContentValues();
 	    values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
 	    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg"); // setar isso
+	    values.put(MediaStore.Images.Media.DESCRIPTION, MEDIA_TAG);
 	    contect.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 	}
 }

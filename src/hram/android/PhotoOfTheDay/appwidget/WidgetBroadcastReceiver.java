@@ -1,5 +1,6 @@
 package hram.android.PhotoOfTheDay.appwidget;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,15 +10,20 @@ import com.bugsense.trace.BugSenseHandler;
 import hram.android.PhotoOfTheDay.Constants;
 import hram.android.PhotoOfTheDay.Settings;
 import hram.android.PhotoOfTheDay.Wallpaper;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
 public class WidgetBroadcastReceiver extends BroadcastReceiver 
 {
+	//YOU CAN EDIT THIS TO WHATEVER YOU WANT
+    private static final int SELECT_PICTURE = 1;
+    
 	private Wallpaper wp;
 	public static final String TAG = "WidgetBroadcastReceiver";
 	private List<Integer> parsers;
@@ -43,15 +49,24 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
 	            	Log.e(TAG, "onReceive" + e.getLocalizedMessage());
 	            }
 	            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+	            return;
 			} catch (Exception e) {
 				BugSenseHandler.sendException(e);
 			}            
         }
         else if (action.equals(WidgetBroadcastEnum.OPEN_GALLERY_ACTION)) {
         	try {
-        		Intent myIntent = new Intent(context, ImagesGallery.class);
+//        		File dir = SDHelper.getAlbumStorageDir();
+//        		String str = "content:/" + dir.getAbsolutePath() + File.separator;
+//        	    Intent myIntent = new Intent();
+//        	    myIntent.setDataAndType(Uri.parse(str), "image/*");
+//                myIntent.setType("image/*");
+//        		myIntent.setAction(Intent.ACTION_GET_CONTENT);
+//                context.startActivity(Intent.createChooser(myIntent,
+//                        "Select Picture"));
+                
+        		Intent myIntent = new Intent(context, AndroidCustomGalleryActivity.class);
     			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    			myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
     			context.startActivity(myIntent);
         		return;
 			} catch (Exception e) {
@@ -70,6 +85,7 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
 	            editor.commit();
 	            wp.SetCurrentParser(nextParser);
 	            wp.StartUpdate();
+	            return;
 			} catch (Exception e) {
 				BugSenseHandler.sendException(e);
 			}
@@ -79,6 +95,7 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
         		Intent myIntent = new Intent(context, Settings.class);
     			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     			context.startActivity(myIntent);
+    			return;
 			} catch (Exception e) {
 				BugSenseHandler.sendException(e);
 			}
