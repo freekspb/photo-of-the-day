@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent">
+	
 	<GridView android:id="@+id/PhoneImageGrid"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:numColumns="auto_fit" android:verticalSpacing="10dp"
-		android:horizontalSpacing="10dp" android:columnWidth="90dp"
-		android:stretchMode="columnWidth" android:gravity="center"/>
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		android:numColumns="2" 
+		android:verticalSpacing="5dp"
+		android:horizontalSpacing="5dp" 
+		android:stretchMode="columnWidth" 
+		android:gravity="center"/>
+	
 </RelativeLayout>
