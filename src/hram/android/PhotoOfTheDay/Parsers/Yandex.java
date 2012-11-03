@@ -3,6 +3,7 @@ package hram.android.PhotoOfTheDay.Parsers;
 import hram.android.PhotoOfTheDay.Wallpaper;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -69,7 +70,7 @@ public class Yandex extends BaseParser
 	{
 		int minIndex = rnd.nextInt(20);
 		int index = 0;
-		String str = java.net.URLEncoder.encode(tag);
+		String str = URLEncoder.encode(tag, "UTF-8").replace("+", "%20"); // java.net.URLEncoder.encode(tag) is deprecated
 		String url = String.format("http://fotki.yandex.ru/tag/%s/", str);
 		Document doc = Jsoup.connect(url).get();
 		

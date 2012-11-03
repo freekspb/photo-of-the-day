@@ -4,7 +4,8 @@ import hram.android.PhotoOfTheDay.Wallpaper;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
+import java.net.URLEncoder;
+import java.util.Calendar;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,7 +17,6 @@ import org.jsoup.nodes.Element;
 import org.xml.sax.SAXException;
 
 import android.content.SharedPreferences;
-//import android.util.Log;
 
 public class Flickr extends BaseParser 
 {	
@@ -44,10 +44,18 @@ public class Flickr extends BaseParser
 		
 		String str;
 		String imageUrl = null;
-		long now = System.currentTimeMillis(); 
-		Date date = new Date(now);
 		
-		String url = String.format("http://www.flickr.com/explore/interesting/%d/%02d/%02d/", date.getYear() + 1900, date.getMonth() + 1, date.getDate());
+		// старый способ получения даты is deprecated
+		//long now = System.currentTimeMillis();
+		//Date date = new Date(now);
+		//String url = String.format("http://www.flickr.com/explore/interesting/%d/%02d/%02d/", date.getYear() + 1900, date.getMonth() + 1, date.getDate());
+		
+		// новый способ получения даты
+		Calendar c = Calendar.getInstance();
+		String url = String.format("http://www.flickr.com/explore/interesting/%d/%02d/%02d/", c.get(Calendar.YEAR) + 1900, c.get(Calendar.MONTH) + 1, c.get(Calendar.DATE));
+		
+		//Log.d(TAG, "Старый урл = " + url);
+		//Log.d(TAG, "Новый урл = " + url);
 		
 		Document doc = Jsoup.connect(url).get();
 		
@@ -80,7 +88,7 @@ public class Flickr extends BaseParser
 	{
 		int minIndex = rnd.nextInt(10);
 		int index = 0;
-		String str = java.net.URLEncoder.encode(tag);
+		String str = URLEncoder.encode(tag, "UTF-8").replace("+", "%20"); // java.net.URLEncoder.encode(tag) is deprecated
 		String url = String.format("http://api.flickr.com/services/feeds/photos_public.gne?tags=%s", str);
 		
 		final URL feedUrl = new URL(url);
