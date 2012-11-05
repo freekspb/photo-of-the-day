@@ -5,7 +5,9 @@ import hram.android.PhotoOfTheDay.Wallpaper;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,29 +47,15 @@ public class Flickr extends BaseParser
 		String str;
 		String imageUrl = null;
 		
-		// старый способ получения даты is deprecated
-		//long now = System.currentTimeMillis();
-		//Date date = new Date(now);
-		//String url = String.format("http://www.flickr.com/explore/interesting/%d/%02d/%02d/", date.getYear() + 1900, date.getMonth() + 1, date.getDate());
-		
 		// новый способ получения даты
 		Calendar c = Calendar.getInstance();
-		String url = String.format("http://www.flickr.com/explore/interesting/%d/%02d/%02d/", c.get(Calendar.YEAR) + 1900, c.get(Calendar.MONTH) + 1, c.get(Calendar.DATE));
-		
-		//Log.d(TAG, "Старый урл = " + url);
-		//Log.d(TAG, "Новый урл = " + url);
+		String url = String.format("http://www.flickr.com/explore/interesting/%d/%02d/%02d/", c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DATE));
 		
 		Document doc = Jsoup.connect(url).get();
 		
 		Element table = doc.select("table[class=DayView]").first();
 		for(Element ite: table.select("td"))
 		{
-			str = ite.toString();
-			if(str == null || ite.childNodes().size() == 0)
-			{
-				continue;
-			}
-			
 			Element href = ite.select("a[href]").first();
 			Element src = ite.select("img[src]").first();
 			if(href == null || src == null)
@@ -86,13 +74,26 @@ public class Flickr extends BaseParser
 	
 	public String GetUrlByTag(String tag) throws IOException
 	{
-		int minIndex = rnd.nextInt(10);
-		int index = 0;
-		String str = URLEncoder.encode(tag, "UTF-8").replace("+", "%20"); // java.net.URLEncoder.encode(tag) is deprecated
-		String url = String.format("http://api.flickr.com/services/feeds/photos_public.gne?tags=%s", str);
+		rnd = new Random(System.currentTimeMillis());
+		
+		String url = "http://api.flickr.com/services/feeds/photos_public.gne?tags=";
+		boolean first = true;
+		for(String str: tag.split(" "))
+		{
+			if(first)
+			{
+				url += URLEncoder.encode(str, "UTF-8");
+				first = false;
+			}
+			else
+			{
+				url += "," + URLEncoder.encode(str, "UTF-8");
+			}
+		}
 		
 		final URL feedUrl = new URL(url);
 		
+		ArrayList<String> urls = new ArrayList<String>(); 
 		try {
 			// Создаем фабрику для создания постоителя документов.
 	        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -112,11 +113,6 @@ public class Flickr extends BaseParser
 	        		String imageUrl = link.getAttribute("href");
 	        		if(imageUrl.length() > 0)
 	        		{
-	        			if(index++ < minIndex)
-	    				{
-	    					continue;
-	    				}
-	        			
 	        			imageUrl = imageUrl.substring(0,imageUrl.length() - 5) + "z.jpg";
 	        			
 	        			//Log.i(TAG, "src: " + imageUrl);
@@ -127,10 +123,17 @@ public class Flickr extends BaseParser
 	    				}
 	    				
 	    				//Log.i(TAG, "нашли: " + imageUrl);
-	    				return imageUrl;
+	    				urls.add(imageUrl);
 	        		}
 	        	}
 	        }
+	        
+	        if(urls.size() == 0)
+	        {
+	        	return null;
+	        }
+	        
+	        return urls.get(rnd.nextInt(urls.size()));
 		} 
 		catch (SAXException e) {
 		}catch (ParserConfigurationException e) {

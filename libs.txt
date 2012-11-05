@@ -1,1 +1,2 @@
 bugsense - 3.0.5
+jsoup    - 1.7.1

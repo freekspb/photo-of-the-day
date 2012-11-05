@@ -1,6 +1,7 @@
 package hram.android.PhotoOfTheDay;
 
 import hram.android.PhotoOfTheDay.Exceptions.ConnectionException;
+import hram.android.PhotoOfTheDay.ImageDownloader.FlushedInputStream;
 import hram.android.PhotoOfTheDay.Parsers.BaseParser;
 import hram.android.PhotoOfTheDay.Parsers.Flickr;
 import hram.android.PhotoOfTheDay.Parsers.Nasa;
@@ -13,6 +14,7 @@ import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastReceiver;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -20,6 +22,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.bugsense.trace.BugSenseHandler;
 
@@ -34,9 +43,11 @@ import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.http.AndroidHttpClient;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.util.DisplayMetrics;
+import android.util.Log;
 //import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -381,7 +392,7 @@ public class Wallpaper extends WallpaperService {
 			}
 
 			// Log.d(TAG, "Загрузка картинки по адресу: " + url);
-			Bitmap bm = imageDownloader.downloadBitmap(url);
+			Bitmap bm = ImageDownloader.loadImageFromUrl(url);
 			if (bm == null) {
 				throw new ConnectionException("Ошибка загрузки киртинки");
 			}
@@ -410,7 +421,7 @@ public class Wallpaper extends WallpaperService {
 			// e.getLocalizedMessage());
 		}
 	}
-
+	
 	/**
 	 * Создание и запуск таймера проверки наличия услуги передачи данных
 	 */
