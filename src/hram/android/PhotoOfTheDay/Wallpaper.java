@@ -31,6 +31,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.bugsense.trace.BugSenseHandler;
+import com.novoda.imageloader.core.util.DirectLoader;
 
 import android.content.Context;
 import android.content.IntentFilter;
@@ -392,7 +393,8 @@ public class Wallpaper extends WallpaperService {
 			}
 
 			// Log.d(TAG, "Загрузка картинки по адресу: " + url);
-			Bitmap bm = ImageDownloader.loadImageFromUrl(url);
+			//Bitmap bm = ImageDownloader.loadImageFromUrl(url);
+			Bitmap bm = new DirectLoader().download(url);
 			if (bm == null) {
 				throw new ConnectionException("Ошибка загрузки киртинки");
 			}
