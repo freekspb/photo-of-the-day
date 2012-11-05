@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.http.HttpEntity;
@@ -72,7 +73,8 @@ public class ImageDownloader
         return null;
     }
     
-    public static Bitmap loadImageFromUrl(String url) {
+    public static Bitmap loadImageFromUrl(String url) 
+    {
         InputStream inputStream;
         try {
             inputStream = new URL(url).openStream();
@@ -93,6 +95,17 @@ public class ImageDownloader
 				}
             }
         }
+    }
+    
+    public static Bitmap loadImageFromUrl2(String url) 
+    {
+        try {
+			return BitmapFactory.decodeStream(new URL(url).openConnection().getInputStream());
+		} catch (MalformedURLException e) {
+			return null;
+		} catch (IOException e) {
+			return null;
+		}
     }
     
     private Bitmap decodeFile(File f)
