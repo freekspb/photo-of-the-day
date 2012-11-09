@@ -537,6 +537,8 @@ public class Wallpaper extends WallpaperService {
 			catch(java.lang.IllegalArgumentException e){
 				BugSenseHandler.sendExceptionMessage("error/67667495", "После исправления", e);
 			}
+			catch(Exception e){
+			}
 			super.onDestroy();
 		}
 
@@ -718,12 +720,22 @@ public class Wallpaper extends WallpaperService {
 							rescaling *= 1.5;
 						}
 
-						bm = Bitmap.createScaledBitmap(bm,
-								(int) (bm.getWidth() * rescaling),
-								(int) (bm.getHeight() * rescaling), true);
-						wp.SetBitmap(bm);
-						currentHeight = mHeight;
-						currentWidth = mWidth;
+						try
+						{
+							bm = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth() * rescaling), (int) (bm.getHeight() * rescaling), true);
+							wp.SetBitmap(bm);
+							currentHeight = mHeight;
+							currentWidth = mWidth;
+						}catch (OutOfMemoryError e) {
+							try{
+								String msg = String.format("URL: %s, Width: %d, Height: %d, mWidth: %d, mHeight: %d, rescaling: %f", GetCurrentUrl(), bm.getWidth(), bm.getHeight(), mWidth, mHeight, (float)rescaling);
+								BugSenseHandler.sendExceptionMessage("createScaledBitmap", msg, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+							}catch (Exception e2){
+							}finally{
+								ResetBitmap();
+							}
+							return;
+						}
 					}
 
 					if (isPreview() == false) {
