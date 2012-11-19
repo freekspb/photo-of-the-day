@@ -6,6 +6,8 @@
     <string name="download">Загрузка фотографии...</string>
     <string name="error">Ошибка!</string>
     <string name="isOffline">Передача данных отключена.</string>
+    <string name="isOutOfMemory1">Недостаточно памяти,</string>
+    <string name="isOutOfMemory2">закройте несколько программ :(</string>
     <string name="sources">Источники обоев</string>
     <string name="sourcesSummary">Выберите один из источников обоев</string>
     <string name="tagPhotoEnable">Включить теги</string>

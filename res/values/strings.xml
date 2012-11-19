@@ -6,6 +6,8 @@
     <string name="download">Download image...</string>
     <string name="error">Error!</string>
     <string name="isOffline">Data communication off.</string>
+    <string name="isOutOfMemory1">Memory full,</string>
+    <string name="isOutOfMemory2">please close some apps :(</string>
     <string name="sources">Sources of wallpaper</string>
     <string name="sourcesSummary">Select one of several sources wallpaper</string>
     <string name="tagPhotoEnable">Enable tags</string>
