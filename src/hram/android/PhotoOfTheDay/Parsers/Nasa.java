@@ -11,7 +11,7 @@ public class Nasa extends BaseParser
 
 	public Nasa()
 	{
-		//Log.i(TAG, "Создание парсера Nasa");
+		//Log.i(TAG, "РЎРѕР·РґР°РЅРёРµ РїР°СЂСЃРµСЂР° Nasa");
 	}
 	
 	@Override
@@ -38,5 +38,11 @@ public class Nasa extends BaseParser
 	public boolean IsTagSupported() 
 	{
 		return false;
+	}
+	
+	@Override
+	public String getImageNamePrefix()
+	{
+		return "Nasa";
 	}
 }

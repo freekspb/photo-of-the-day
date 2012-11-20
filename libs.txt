@@ -1,0 +1,2 @@
+bugsense - 3.0.5
+acra     - 4.4.0
