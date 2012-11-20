@@ -18,6 +18,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.xml.sax.SAXException;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.content.SharedPreferences;
 
 public class Flickr extends BaseParser 
@@ -51,23 +53,35 @@ public class Flickr extends BaseParser
 		Calendar c = Calendar.getInstance();
 		String url = String.format("http://www.flickr.com/explore/interesting/%d/%02d/%02d/", c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DATE));
 		
-		Document doc = Jsoup.connect(url).get();
-		
-		Element table = doc.select("table[class=DayView]").first();
-		for(Element ite: table.select("td"))
-		{
-			Element href = ite.select("a[href]").first();
-			Element src = ite.select("img[src]").first();
-			if(href == null || src == null)
+		try{
+			// чистка памяти
+    		System.gc(); 
+    		
+			Document doc = Jsoup.connect(url).get();
+			
+			Element table = doc.select("table[class=DayView]").first();
+			for(Element ite: table.select("td"))
 			{
-				continue;
+				Element href = ite.select("a[href]").first();
+				Element src = ite.select("img[src]").first();
+				if(href == null || src == null)
+				{
+					continue;
+				}
+				
+				str = href.attr("href");
+				imageUrl = src.attr("src");
+				imageUrl = imageUrl.substring(0,imageUrl.length() - 5) + "z.jpg";
+				break;
 			}
 			
-			str = href.attr("href");
-			imageUrl = src.attr("src");
-			imageUrl = imageUrl.substring(0,imageUrl.length() - 5) + "z.jpg";
-			break;
+		}catch (OutOfMemoryError e) { // https://www.bugsense.com/dashboard/project/ab3f3ed5#error/68931299
+			try{
+				BugSenseHandler.sendExceptionMessage("Flickr.GetUrl", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			}catch (Exception e2) {}
+			return null;
 		}
+	
 		
 		return imageUrl;
 	}
