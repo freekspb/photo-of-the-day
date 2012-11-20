@@ -1,6 +1,7 @@
 package hram.android.PhotoOfTheDay;
 
 import hram.android.PhotoOfTheDay.Exceptions.ConnectionException;
+import hram.android.PhotoOfTheDay.ImageDownloader.FlushedInputStream;
 import hram.android.PhotoOfTheDay.Parsers.BaseParser;
 import hram.android.PhotoOfTheDay.Parsers.Flickr;
 import hram.android.PhotoOfTheDay.Parsers.Nasa;
@@ -13,15 +14,24 @@ import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastReceiver;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import com.bugsense.trace.BugSenseHandler;
+import com.novoda.imageloader.core.util.DirectLoader;
 
 import android.content.Context;
 import android.content.IntentFilter;
@@ -34,9 +44,11 @@ import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.http.AndroidHttpClient;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.util.DisplayMetrics;
+import android.util.Log;
 //import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -45,7 +57,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 public class Wallpaper extends WallpaperService {
-	public static final String TAG = "Wallpaper";
+	public static final String TAG = Constants.TAG;
 	private final Handler mHandler = new Handler();
 	private final ImageDownloader imageDownloader = new ImageDownloader();
 	private List<MyEngine> engines = new ArrayList<MyEngine>();
@@ -288,7 +300,10 @@ public class Wallpaper extends WallpaperService {
 			}
 
 			SetCurrentUrl(preferences.getString(Constants.LAST_URL, ""));
-			SetCurrentDay(new Date(lastUpdate).getDate());
+			
+			Calendar c = Calendar.getInstance();
+			c.setTimeInMillis(lastUpdate);
+			SetCurrentDay(c.get(Calendar.DATE));
 
 			if (GetCurrentUrl().length() > 0) {
 				stream = openFileInput(Constants.FILE_NAME);
@@ -336,7 +351,7 @@ public class Wallpaper extends WallpaperService {
 			editor.putString(Constants.LAST_URL, url);
 			editor.commit();
 
-			SetCurrentDay(new Date(now).getDate());
+			SetCurrentDay(Calendar.getInstance().get(Calendar.DATE));
 			SetCurrentUrl(url);
 
 		} catch (IOException e) {
@@ -378,7 +393,8 @@ public class Wallpaper extends WallpaperService {
 			}
 
 			// Log.d(TAG, "Загрузка картинки по адресу: " + url);
-			Bitmap bm = imageDownloader.downloadBitmap(url);
+			//Bitmap bm = ImageDownloader.loadImageFromUrl(url);
+			Bitmap bm = new DirectLoader().download(url);
 			if (bm == null) {
 				throw new ConnectionException("Ошибка загрузки киртинки");
 			}
@@ -407,7 +423,7 @@ public class Wallpaper extends WallpaperService {
 			// e.getLocalizedMessage());
 		}
 	}
-
+	
 	/**
 	 * Создание и запуск таймера проверки наличия услуги передачи данных
 	 */
@@ -442,8 +458,7 @@ public class Wallpaper extends WallpaperService {
 		// Log.d(TAG, "Таймер создан и запущен");
 	}
 
-	public class MyEngine extends Engine implements
-			SharedPreferences.OnSharedPreferenceChangeListener {
+	public class MyEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener {
 		private final Paint mPaint = new Paint();
 		private int mPixels;
 		private float mXStep;
@@ -480,13 +495,11 @@ public class Wallpaper extends WallpaperService {
 			paint.setAntiAlias(true);
 			paint.setTextAlign(Align.CENTER);
 
-			preferences = Wallpaper.this.getSharedPreferences(
-					Constants.SETTINGS_NAME, 0);
+			preferences = Wallpaper.this.getSharedPreferences(Constants.SETTINGS_NAME, 0);
 			preferences.registerOnSharedPreferenceChangeListener(this);
 
 			wp = service;
-			download = BitmapFactory.decodeResource(getResources(),
-					R.drawable.download);
+			download = BitmapFactory.decodeResource(getResources(), R.drawable.download);
 			widgetReceiver = new WidgetBroadcastReceiver(wp);
 		}
 
@@ -498,14 +511,10 @@ public class Wallpaper extends WallpaperService {
 			// Log.d(TAG, "Вызов MyEngine.onCreate()");
 
 			netUpdates();
-			registerReceiver(widgetReceiver, new IntentFilter(
-					WidgetBroadcastEnum.SAVE_ACTION));
-			registerReceiver(widgetReceiver, new IntentFilter(
-					WidgetBroadcastEnum.OPEN_GALLERY_ACTION));
-			registerReceiver(widgetReceiver, new IntentFilter(
-					WidgetBroadcastEnum.NEXT_PARSER_ACTION));
-			registerReceiver(widgetReceiver, new IntentFilter(
-					WidgetBroadcastEnum.SETTINGS_ACTION));
+			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.SAVE_ACTION));
+			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.OPEN_GALLERY_ACTION));
+			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.NEXT_PARSER_ACTION));
+			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.SETTINGS_ACTION));
 		}
 
 		@Override
@@ -519,7 +528,15 @@ public class Wallpaper extends WallpaperService {
 			if (preferences != null) {
 				preferences.unregisterOnSharedPreferenceChangeListener(this);
 			}
-			unregisterReceiver(widgetReceiver);
+			
+			// https://www.bugsense.com/dashboard/project/ab3f3ed5#error/67667495
+			try
+			{ 
+				unregisterReceiver(widgetReceiver);
+			}
+			catch(java.lang.IllegalArgumentException e){
+				BugSenseHandler.sendExceptionMessage("error/67667495", "После исправления", e);
+			}
 			super.onDestroy();
 		}
 
@@ -541,9 +558,7 @@ public class Wallpaper extends WallpaperService {
 						}
 
 						// Log.d(TAG, "Проверка времени последнего обновления");
-						int now = new Date(System.currentTimeMillis())
-								.getDate();
-						if (wp.GetCurrentDay() != now) {
+						if (wp.GetCurrentDay() != Calendar.getInstance().get(Calendar.DATE)) {
 							// Log.d(TAG, "Запуск обновления");
 							wp.StartUpdate();
 						} else {
