@@ -51,11 +51,6 @@ public class ImageAdapter extends BaseAdapter
 			imageView = (ImageView)convertView;
 		}
 		
-		if (getCount() == 0)
-		{
-			return imageView;
-		}
-		
 		cursor.moveToPosition(position);
 		int _id = cursor.getInt(_idColumnIndex);
 		imageView.setImageBitmap(MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(), _id, MediaStore.Images.Thumbnails.MINI_KIND, null));
