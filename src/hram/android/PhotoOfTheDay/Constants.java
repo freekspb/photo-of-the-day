@@ -2,6 +2,8 @@ package hram.android.PhotoOfTheDay;
 
 public abstract class Constants 
 {
+	public static final String TAG = "PhotoOfTheDay";
+	
 	public static final String FILE_NAME = "wallpaper.jpg";
 	public static final String SETTINGS_NAME = "settings";
 	public static final String LAST_UPDATE = "last_update";
@@ -10,4 +12,6 @@ public abstract class Constants
 	public static final String WIFI_ONLY = "wifiOnly";
 	
 	public static final long UPDATE_INTERVAL = 60 * 60 * 1000;
+	
+	public static final String BUG_SENSE_APIKEY = "ab3f3ed5";
 }

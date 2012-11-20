@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Фото дня</string>
+	<string name="app_name_gallery">Фото дня - галерея</string>
     <string name="wallpaper_description">Обои с изображением Фото дня с сервиса Яндекс.Фотки</string>
     <string name="download">Загрузка фотографии...</string>
     <string name="error">Ошибка!</string>
@@ -19,4 +20,7 @@
     <string name="networkSettings">Сетевые настройки</string>
     <string name="updateStarted">Процесс загрузки фотографии запущен</string>
     <string name="setupDescription">"Выберите 'Фото дня'\r\n в списке программ"</string>
+    <string name="errorSaveFileToSD">Ошибка сохранения файла</string>
+    <string name="saveFileToSD">Изображение сохранено на SD</string>
+    <string name="noImages">Нет изображений</string>
 </resources>

@@ -25,7 +25,7 @@ public class Flickr extends BaseParser
 	
 	public Flickr(Wallpaper wp, SharedPreferences preferences)
 	{
-		//Log.i(TAG, "Создание парсера Flickr");
+		//Log.i(TAG, "РЎРѕР·РґР°РЅРёРµ РїР°СЂСЃРµСЂР° Flickr");
 		this.wp = wp;
 		this.preferences = preferences;
 	}
@@ -86,11 +86,11 @@ public class Flickr extends BaseParser
 		final URL feedUrl = new URL(url);
 		
 		try {
-			// Создаем фабрику для создания постоителя документов.
+			// РЎРѕР·РґР°РµРј С„Р°Р±СЂРёРєСѓ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ РїРѕСЃС‚РѕРёС‚РµР»СЏ РґРѕРєСѓРјРµРЅС‚РѕРІ.
 	        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	        // Непосредственно постоитель
+	        // РќРµРїРѕСЃСЂРµРґСЃС‚РІРµРЅРЅРѕ РїРѕСЃС‚РѕРёС‚РµР»СЊ
 	        DocumentBuilder builder = factory.newDocumentBuilder();
-			// Собственно наш документ
+			// РЎРѕР±СЃС‚РІРµРЅРЅРѕ РЅР°С€ РґРѕРєСѓРјРµРЅС‚
 	        org.w3c.dom.Document doc = builder.parse(feedUrl.openConnection().getInputStream());
 	        
 	        org.w3c.dom.Element root = doc.getDocumentElement();
@@ -114,11 +114,11 @@ public class Flickr extends BaseParser
 	        			//Log.i(TAG, "src: " + imageUrl);
 	    				if(wp.GetCurrentUrl() != null && wp.GetCurrentUrl().equals(imageUrl))
 	    				{
-	    					//Log.i(TAG, "исчем дальше");
+	    					//Log.i(TAG, "РёСЃС‡РµРј РґР°Р»СЊС€Рµ");
 	    					continue;
 	    				}
 	    				
-	    				//Log.i(TAG, "нашли: " + imageUrl);
+	    				//Log.i(TAG, "РЅР°С€Р»Рё: " + imageUrl);
 	    				return imageUrl;
 	        		}
 	        	}
@@ -134,5 +134,11 @@ public class Flickr extends BaseParser
 	public boolean IsTagSupported() 
 	{
 		return true;
+	}
+	
+	@Override
+	public String getImageNamePrefix()
+	{
+		return "Flickr";
 	}
 }

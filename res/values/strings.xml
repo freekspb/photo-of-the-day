@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Photo of the day</string>
+    <string name="app_name_gallery">Photo of the day - gallery</string>
     <string name="wallpaper_description">Live wallpaper that displays photo of the day from Flickr and Fotki.Yandex</string>
     <string name="download">Download image...</string>
     <string name="error">Error!</string>
@@ -19,4 +20,10 @@
     <string name="networkSettings">Network settings</string>
     <string name="updateStarted">Download image started.</string>
     <string name="setupDescription">"Choose 'Photo of the day'\r\n from the list."</string>
+    <!-- ============================ -->
+    <!--  AppWidget strings           -->
+    <!-- ============================ -->
+    <string name="errorSaveFileToSD">Error writing data to SD card</string>
+    <string name="saveFileToSD">Image has been saved</string> 
+    <string name="noImages">No images</string>
 </resources>

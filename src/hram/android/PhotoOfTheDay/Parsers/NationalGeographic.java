@@ -11,7 +11,7 @@ public class NationalGeographic extends BaseParser
 
 	public NationalGeographic()
 	{
-		//Log.i(TAG, "Создание парсера NationalGeographic");
+		//Log.i(TAG, "РЎРѕР·РґР°РЅРёРµ РїР°СЂСЃРµСЂР° NationalGeographic");
 	}
 	
 	@Override
@@ -39,5 +39,11 @@ public class NationalGeographic extends BaseParser
 	public boolean IsTagSupported() 
 	{
 		return false;
+	}
+	
+	@Override
+	public String getImageNamePrefix()
+	{
+		return "NG";
 	}
 }
