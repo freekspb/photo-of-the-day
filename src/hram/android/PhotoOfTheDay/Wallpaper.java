@@ -490,7 +490,7 @@ public class Wallpaper extends WallpaperService
 
 			wp = service;
 			download = BitmapFactory.decodeResource(getResources(), R.drawable.download);
-			widgetReceiver = new WidgetBroadcastReceiver(wp);
+			widgetReceiver = new WidgetBroadcastReceiver(wp, this);
 		}
 
 		@Override
@@ -505,6 +505,7 @@ public class Wallpaper extends WallpaperService
 			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.OPEN_GALLERY_ACTION));
 			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.NEXT_PARSER_ACTION));
 			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.SETTINGS_ACTION));
+			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.CHANGE_SETTINGS_ACTION));
 		}
 
 		@Override
@@ -804,6 +805,27 @@ public class Wallpaper extends WallpaperService
 			}
 		}
 
+		public void onPreferenceChanged(String key) {
+			// Log.d(TAG, "Изменено " + key);
+			String tag = preferences.getString("tagPhotoValue", "");
+			if (key.equals("tagPhotoEnable") && createCurrentParser().IsTagSupported()) {
+				if (preferences.getBoolean(key, false) && tag.length() == 0) {
+					return;
+				}
+
+				StartUpdate();
+			}
+			if (key.equals("tagPhotoValue") && createCurrentParser().IsTagSupported() && tag.length() > 0) {
+				StartUpdate();
+			} else if (key.equals("sources")) {
+				String value = preferences.getString(key, "0");
+
+				if (SetCurrentParser(Integer.decode(value))) {
+					StartUpdate();
+				}
+			}
+		}
+		
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String arg1) 
 		{
 			if (isPreview() == false) {
