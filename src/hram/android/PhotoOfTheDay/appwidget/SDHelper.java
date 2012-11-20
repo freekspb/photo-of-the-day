@@ -136,6 +136,7 @@ public class SDHelper {
 				//write the bytes in file
 				FileOutputStream fo = new FileOutputStream(file);
 				fo.write(bytes.toByteArray());
+				fo.close();
 				
 				addImageGallery(wp, file );
 				

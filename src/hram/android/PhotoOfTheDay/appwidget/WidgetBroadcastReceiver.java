@@ -1,6 +1,5 @@
 package hram.android.PhotoOfTheDay.appwidget;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,22 +7,17 @@ import java.util.List;
 import com.bugsense.trace.BugSenseHandler;
 
 import hram.android.PhotoOfTheDay.Constants;
-import hram.android.PhotoOfTheDay.Settings;
+import hram.android.PhotoOfTheDay.SetUpLiveWallpaper;
 import hram.android.PhotoOfTheDay.Wallpaper;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
 public class WidgetBroadcastReceiver extends BroadcastReceiver 
 {
-	//YOU CAN EDIT THIS TO WHATEVER YOU WANT
-    private static final int SELECT_PICTURE = 1;
-    
 	private Wallpaper wp;
 	public static final String TAG = "WidgetBroadcastReceiver";
 	private List<Integer> parsers;
@@ -92,7 +86,7 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
         }        
         else if (action.equals(WidgetBroadcastEnum.SETTINGS_ACTION)) {
         	try {
-        		Intent myIntent = new Intent(context, Settings.class);
+        		Intent myIntent = new Intent(context, SetUpLiveWallpaper.class);
     			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     			context.startActivity(myIntent);
     			return;
