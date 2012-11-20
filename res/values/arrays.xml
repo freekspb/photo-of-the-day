@@ -5,13 +5,11 @@
         <item>fotki.yandex.ru</item>
         <item>flickr.com</item>
         <item>nationalgeographic.com</item>
-        <item>test</item>
     </string-array>
 
     <string-array name="sourcesValues">
         <item>1</item>
         <item>2</item>
         <item>3</item>
-        <item>6</item>
     </string-array>
 </resources>

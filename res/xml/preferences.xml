@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
+  	<PreferenceCategory android:title="@string/catAbout">
+		<Preference android:title="@string/howToUse"
+            android:summary="@string/howToUseDescr"
+            android:key="howToUsePref" />
+		<Preference android:title="@string/softwareVersion"
+            android:summary="@string/softwareVersionDescr"
+            android:key="softwareVersionPref" />
+	</PreferenceCategory>
   	<PreferenceCategory android:title="@string/sourcesSettings">
        <ListPreference android:key="sources" 
        		android:title="@string/sources" 
@@ -27,6 +35,5 @@
 		<CheckBoxPreference android:key="wifiOnly" 
 			android:summary="@string/wifiOnlySummary" android:title="@string/wifiOnly">
 		</CheckBoxPreference>
-	</PreferenceCategory>
-    
+	</PreferenceCategory>    
 </PreferenceScreen>
