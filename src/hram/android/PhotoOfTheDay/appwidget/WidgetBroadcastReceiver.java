@@ -7,8 +7,8 @@ import java.util.List;
 import com.bugsense.trace.BugSenseHandler;
 
 import hram.android.PhotoOfTheDay.Constants;
-import hram.android.PhotoOfTheDay.SetUpLiveWallpaper;
 import hram.android.PhotoOfTheDay.Wallpaper;
+import hram.android.PhotoOfTheDay.Wallpaper.MyEngine;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,11 +19,13 @@ import android.widget.Toast;
 public class WidgetBroadcastReceiver extends BroadcastReceiver 
 {
 	private Wallpaper wp;
+	private MyEngine eng;
 	public static final String TAG = "WidgetBroadcastReceiver";
 	private List<Integer> parsers;
 	
-	public WidgetBroadcastReceiver(Wallpaper wallpaper) {
+	public WidgetBroadcastReceiver(Wallpaper wallpaper, MyEngine engine) {
 		wp = wallpaper;
+		eng = engine;
 		parsers = getParsersInt(wp);
 	}
 
@@ -86,9 +88,19 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
         }        
         else if (action.equals(WidgetBroadcastEnum.SETTINGS_ACTION)) {
         	try {
-        		Intent myIntent = new Intent(context, SetUpLiveWallpaper.class);
+        		Intent myIntent = new Intent(context, FastSettings.class);
     			myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    			myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
     			context.startActivity(myIntent);
+    			return;
+			} catch (Exception e) {
+				BugSenseHandler.sendException(e);
+			}
+        }
+        else if (action.equals(WidgetBroadcastEnum.CHANGE_SETTINGS_ACTION)) {
+        	try {
+        		String key = intent.getExtras().getString(WidgetBroadcastEnum.SETTINGS_KEY);
+	            eng.onPreferenceChanged(key);
     			return;
 			} catch (Exception e) {
 				BugSenseHandler.sendException(e);

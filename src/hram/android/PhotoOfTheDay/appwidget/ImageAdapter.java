@@ -20,11 +20,15 @@ public class ImageAdapter extends BaseAdapter
 	{
 		this.context = context;
 		this.cursor = cursor;
+		if (cursor == null)
+		{
+			return;
+		}
 		_idColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
 	}
 	
 	public int getCount() {
-		return cursor.getCount();
+		return (cursor != null) ? cursor.getCount() : 0;
 	}
 
 	public Object getItem(int position) {
