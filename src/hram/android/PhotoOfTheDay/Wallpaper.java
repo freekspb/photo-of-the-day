@@ -1,11 +1,11 @@
 package hram.android.PhotoOfTheDay;
 
 import hram.android.PhotoOfTheDay.Exceptions.ConnectionException;
-import hram.android.PhotoOfTheDay.ImageDownloader.FlushedInputStream;
 import hram.android.PhotoOfTheDay.Parsers.BaseParser;
 import hram.android.PhotoOfTheDay.Parsers.Flickr;
 import hram.android.PhotoOfTheDay.Parsers.Nasa;
 import hram.android.PhotoOfTheDay.Parsers.NationalGeographic;
+import hram.android.PhotoOfTheDay.Parsers.TestParser;
 import hram.android.PhotoOfTheDay.Parsers.Wikipedia;
 import hram.android.PhotoOfTheDay.Parsers.Yandex;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastEnum;
@@ -14,7 +14,6 @@ import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastReceiver;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -22,13 +21,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.bugsense.trace.BugSenseHandler;
 import com.novoda.imageloader.core.util.DirectLoader;
@@ -44,11 +36,9 @@ import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.http.AndroidHttpClient;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.util.DisplayMetrics;
-import android.util.Log;
 //import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -56,10 +46,10 @@ import android.view.SurfaceHolder;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-public class Wallpaper extends WallpaperService {
+public class Wallpaper extends WallpaperService 
+{
 	public static final String TAG = Constants.TAG;
 	private final Handler mHandler = new Handler();
-	private final ImageDownloader imageDownloader = new ImageDownloader();
 	private List<MyEngine> engines = new ArrayList<MyEngine>();
 	private Lock l = new ReentrantLock();
 	private NetworkInfo mWifi;
@@ -68,7 +58,7 @@ public class Wallpaper extends WallpaperService {
 	private Bitmap bm;
 	public SharedPreferences preferences;
 	private String currentUrl;
-	private BaseParser parser;
+	//private BaseParser parser;
 	private int currentParser = -1;
 	private int currentHeight = -1;
 	private int currentWidth = -1;
@@ -221,18 +211,17 @@ public class Wallpaper extends WallpaperService {
 	public String GetUrl() throws IOException {
 		// Log.d(TAG, "Получение URL картинки");
 
-		return parser.GetUrl();
+		return createCurrentParser().GetUrl();
 	}
 
 	public String getImageNamePrefix() {
-		return parser.getImageNamePrefix();
+		return createCurrentParser().getImageNamePrefix();
 	}
 
 	/**
 	 * Создает экземпляр выбранного парсера
 	 * 
-	 * @param value
-	 *            номер парсера
+	 * @param value номер парсера
 	 * @return
 	 */
 	public boolean SetCurrentParser(int value) {
@@ -247,34 +236,34 @@ public class Wallpaper extends WallpaperService {
 			l.unlock();
 		}
 
-		switch (value) {
-		case 1:
-			parser = new Yandex(this, preferences);
-			break;
-		case 2:
-			parser = new Flickr(this, preferences);
-			break;
-		case 3:
-			parser = new NationalGeographic();
-			break;
-		case 4:
-			parser = new Nasa();
-			break;
-		case 5:
-			parser = new Wikipedia();
-			break;
-		default:
-			// Log.i(TAG, "Создание парсера по умолчанию");
-			parser = new Yandex(this, preferences);
-			break;
-		}
-
 		ResetBitmap();
 		return true;
 	}
 
 	public int getCurrentParser() {
 		return currentParser;
+	}
+	
+	public BaseParser createCurrentParser() 
+	{
+		switch (getCurrentParser()) 
+		{
+			case 1:
+				return new Yandex(this, preferences);
+			case 2:
+				return new Flickr(this, preferences);
+			case 3:
+				return new NationalGeographic();
+			case 4:
+				return new Nasa();
+			case 5:
+				return new Wikipedia();
+			case 6:
+				return new TestParser(this, preferences);
+			default:
+				// Log.i(TAG, "Создание парсера по умолчанию");
+				return new Yandex(this, preferences);
+		}
 	}
 
 	/**
@@ -338,8 +327,8 @@ public class Wallpaper extends WallpaperService {
 	public void SaveFile(Bitmap bm, String url) {
 		// Log.d(TAG, "Сохранение картинки в файл");
 		try {
-			FileOutputStream fos = openFileOutput(Constants.FILE_NAME,
-					Context.MODE_PRIVATE);
+			FileOutputStream fos = openFileOutput(Constants.FILE_NAME, Context.MODE_PRIVATE);
+			// PNG which is lossless, will ignore the quality setting
 			bm.compress(Bitmap.CompressFormat.PNG, 100, fos);
 			fos.close();
 
@@ -419,8 +408,9 @@ public class Wallpaper extends WallpaperService {
 			// e.getMessage()));
 			CheckOnline();
 		} catch (Exception e) {
-			// Log.e(TAG, "Неизвестная ошибка обновления: " +
-			// e.getLocalizedMessage());
+			try{
+				BugSenseHandler.sendExceptionMessage("Wallpaper.update", "" + getCurrentParser(), e);
+			}catch (Exception e2) {}
 		}
 	}
 	
@@ -500,7 +490,7 @@ public class Wallpaper extends WallpaperService {
 
 			wp = service;
 			download = BitmapFactory.decodeResource(getResources(), R.drawable.download);
-			widgetReceiver = new WidgetBroadcastReceiver(wp);
+			widgetReceiver = new WidgetBroadcastReceiver(wp, this);
 		}
 
 		@Override
@@ -515,6 +505,7 @@ public class Wallpaper extends WallpaperService {
 			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.OPEN_GALLERY_ACTION));
 			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.NEXT_PARSER_ACTION));
 			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.SETTINGS_ACTION));
+			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.CHANGE_SETTINGS_ACTION));
 		}
 
 		@Override
@@ -534,10 +525,11 @@ public class Wallpaper extends WallpaperService {
 			{ 
 				unregisterReceiver(widgetReceiver);
 			}
-			catch(java.lang.IllegalArgumentException e){
+			catch(java.lang.IllegalArgumentException e){ 
 				BugSenseHandler.sendExceptionMessage("error/67667495", "После исправления", e);
 			}
 			catch(Exception e){
+				BugSenseHandler.sendExceptionMessage("unregisterReceiver", "После исправления", e);
 			}
 			super.onDestroy();
 		}
@@ -548,17 +540,20 @@ public class Wallpaper extends WallpaperService {
 		 */
 		private void netUpdates() {
 			// Log.d(TAG, "Создание таймера обновлений");
-			try {
-				timer.scheduleAtFixedRate(new TimerTask() {
-					@Override
-					public void run() {
+			
+			timer.scheduleAtFixedRate(new TimerTask() 
+			{
+				@Override
+				public void run() 
+				{
+					try {
 						// Log.d(TAG, "Сработал таймер обновления");
 						if (IsNeedDownloadEveryUpdate()) {
 							// Log.d(TAG, "Запуск периодического обновления");
 							wp.StartUpdate();
 							return;
 						}
-
+	
 						// Log.d(TAG, "Проверка времени последнего обновления");
 						if (wp.GetCurrentDay() != Calendar.getInstance().get(Calendar.DATE)) {
 							// Log.d(TAG, "Запуск обновления");
@@ -568,17 +563,24 @@ public class Wallpaper extends WallpaperService {
 							// String.format("Обновление не нужно. Сейчас: %d, текущий: %d",
 							// now, wp.GetCurrentDay()));
 						}
+					} catch (Exception e) {
+						// Log.e(TAG, "Неизвестная ошибка: " + e.getLocalizedMessage());
 					}
+				}
 
-				}, 0, Constants.UPDATE_INTERVAL);
-			} catch (Exception e) {
-				// Log.e(TAG, "Неизвестная ошибка: " + e.getLocalizedMessage());
-			}
+			}, 0, Constants.UPDATE_INTERVAL);
 
 			// Log.d(TAG, "Таймер обновлений запущен");
 		}
 
-		private boolean IsNeedDownloadEveryUpdate() {
+		/**
+		 * Возвращает флаг того, что необходимо обновлять картинку при каждой проверке.
+		 * Флаг используется для того чтобы картинки обновлялись ежечастно по тегу 
+		 * если источник обоев поддерживает теги или для превью.  
+		 * @return true если необходимо обновлять при каждой проверке
+		 */
+		private boolean IsNeedDownloadEveryUpdate() 
+		{
 			try {
 				// Log.d(TAG, "если это превью то не обновляем по таймеру");
 				if (isPreview()) {
@@ -587,7 +589,7 @@ public class Wallpaper extends WallpaperService {
 				}
 
 				// Log.d(TAG, "если парсер не поддерживает");
-				if (parser.IsTagSupported() == false) {
+				if (createCurrentParser().IsTagSupported() == false) {
 					// Log.d(TAG, "парсер не поддерживает");
 					return false;
 				}
@@ -670,6 +672,35 @@ public class Wallpaper extends WallpaperService {
 			drawFrame();
 		}
 
+		// для тестирования вывода ошибки о том что мало памяти
+		/*
+		void drawFrameOutOf() {
+			// Log.d(TAG, "Процедура отрисовки");
+
+			final SurfaceHolder holder = getSurfaceHolder();
+
+			Canvas c = null;
+			try {
+				
+				c = holder.lockCanvas();
+				if (c != null) {
+					c.drawText(getText(R.string.error).toString(), mWidth / 2, mHeight / 2 - 50, mPaint);
+					c.drawText(getText(R.string.isOutOfMemory1).toString(), mWidth / 2, mHeight / 2, mPaint);
+					c.drawText(getText(R.string.isOutOfMemory2).toString(), mWidth / 2, mHeight / 2 + 50, mPaint);
+				}
+			} finally {
+				if (c != null)
+					holder.unlockCanvasAndPost(c);
+
+				// Reschedule the next redraw
+				mHandler.removeCallbacks(drawRunner);
+				if (mVisible) {
+					// mHandler.postDelayed(drawRunner, 1000);
+				}
+			}
+		}
+		*/	
+				
 		/**
 		 * Draw one frame of the animation. This method gets called repeatedly
 		 * by posting a delayed Runnable. You can do any drawing you want in
@@ -687,33 +718,22 @@ public class Wallpaper extends WallpaperService {
 				if (c != null) {
 					if (bm == null) {
 						// Log.d(TAG, "Картинки нет рисуем загрузку");
-						double rescaling = (double) mWidth
-								/ download.getWidth();
+						double rescaling = (double) mWidth / download.getWidth();
 						int width = (int) (download.getWidth() * rescaling);
 						int offset = (mHeight / 2) - (width / 2);
 						c.drawRect(new Rect(0, 0, mWidth, mHeight), new Paint());
-						c.drawBitmap(
-								Bitmap.createScaledBitmap(
-										download,
-										(int) (download.getWidth() * rescaling),
-										(int) (download.getHeight() * rescaling),
-										true), 0, offset, null);
+						c.drawBitmap(Bitmap.createScaledBitmap(download, (int) (download.getWidth() * rescaling), (int) (download.getHeight() * rescaling), true), 0, offset, null);
 						if (IsOnline()) {
-							c.drawText(getText(R.string.download).toString(),
-									mWidth / 2, 100, mPaint);
+							c.drawText(getText(R.string.download).toString(), mWidth / 2, 100, mPaint);
 						} else {
-							c.drawText(getText(R.string.error).toString(),
-									mWidth / 2, 100, mPaint);
-							c.drawText(getText(R.string.isOffline).toString(),
-									mWidth / 2, 150, mPaint);
+							c.drawText(getText(R.string.error).toString(), mWidth / 2, 100, mPaint);
+							c.drawText(getText(R.string.isOffline).toString(), mWidth / 2, 150, mPaint);
 						}
 						return;
 					}
 
 					if (mHeight != currentHeight || mWidth != currentWidth) {
-						// Log.d(TAG,
-						// String.format("Изменились размеры, изменяем размер: %d->%d, %d->%d",
-						// currentHeight, mHeight, currentWidth, mWidth));
+						// Log.d(TAG,String.format("Изменились размеры, изменяем размер: %d->%d, %d->%d", currentHeight, mHeight, currentWidth, mWidth));
 						double rescaling = (double) mHeight / bm.getHeight();
 						if (mHorizontal) {
 							rescaling = (double) mWidth / bm.getWidth();
@@ -727,13 +747,20 @@ public class Wallpaper extends WallpaperService {
 							currentHeight = mHeight;
 							currentWidth = mWidth;
 						}catch (OutOfMemoryError e) {
+							System.gc();
+							c.drawText(getText(R.string.error).toString(), mWidth / 2, 100, mPaint);
+							c.drawText(getText(R.string.isOutOfMemory1).toString(), mWidth / 2, 150, mPaint);
+							c.drawText(getText(R.string.isOutOfMemory2).toString(), mWidth / 2, 200, mPaint);
+							/*
 							try{
+								// логирование показало что картинки скачиваются нормальные (корректный URL) и нормально отображаются (проверено с пом. тестового парсера)
 								String msg = String.format("URL: %s, Width: %d, Height: %d, mWidth: %d, mHeight: %d, rescaling: %f", GetCurrentUrl(), bm.getWidth(), bm.getHeight(), mWidth, mHeight, (float)rescaling);
 								BugSenseHandler.sendExceptionMessage("createScaledBitmap", msg, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
 							}catch (Exception e2){
 							}finally{
 								ResetBitmap();
 							}
+							*/
 							return;
 						}
 					}
@@ -764,39 +791,57 @@ public class Wallpaper extends WallpaperService {
 
 		void initFrameParams() {
 			DisplayMetrics metrics = new DisplayMetrics();
-			Display display = ((WindowManager) getSystemService(WINDOW_SERVICE))
-					.getDefaultDisplay();
+			Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
 			display.getMetrics(metrics);
 
 			// mRectFrame = new Rect(0, 0, metrics.widthPixels,
 			// metrics.heightPixels);
 
 			int rotation = display.getOrientation();
-			if (rotation == Surface.ROTATION_0
-					|| rotation == Surface.ROTATION_180) {
+			if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
 				mHorizontal = false;
 			} else {
 				mHorizontal = true;
 			}
 		}
 
-		public void onSharedPreferenceChanged(SharedPreferences prefs,
-				String arg1) {
+		public void onPreferenceChanged(String key) {
+			// Log.d(TAG, "Изменено " + key);
+			String tag = preferences.getString("tagPhotoValue", "");
+			if (key.equals("tagPhotoEnable") && createCurrentParser().IsTagSupported()) {
+				if (preferences.getBoolean(key, false) && tag.length() == 0) {
+					return;
+				}
+
+				StartUpdate();
+			}
+			if (key.equals("tagPhotoValue") && createCurrentParser().IsTagSupported() && tag.length() > 0) {
+				StartUpdate();
+			} else if (key.equals("sources")) {
+				String value = preferences.getString(key, "0");
+
+				if (SetCurrentParser(Integer.decode(value))) {
+					StartUpdate();
+				}
+			}
+		}
+		
+		public void onSharedPreferenceChanged(SharedPreferences prefs, String arg1) 
+		{
 			if (isPreview() == false) {
 				return;
 			}
 
 			// Log.d(TAG, "Изменено " + arg1);
 			String tag = prefs.getString("tagPhotoValue", "");
-			if (arg1.equals("tagPhotoEnable") && parser.IsTagSupported()) {
+			if (arg1.equals("tagPhotoEnable") && createCurrentParser().IsTagSupported()) {
 				if (prefs.getBoolean(arg1, false) && tag.length() == 0) {
 					return;
 				}
 
 				StartUpdate();
 			}
-			if (arg1.equals("tagPhotoValue") && parser.IsTagSupported()
-					&& tag.length() > 0) {
+			if (arg1.equals("tagPhotoValue") && createCurrentParser().IsTagSupported() && tag.length() > 0) {
 				StartUpdate();
 			} else if (arg1.equals("sources")) {
 				String value = prefs.getString(arg1, "0");
@@ -807,13 +852,13 @@ public class Wallpaper extends WallpaperService {
 			}
 		}
 
-		private void StartUpdate() {
+		private void StartUpdate() 
+		{
 			if (wp.IsWiFiEnabled() == false) {
 				return;
 			}
 
-			Toast.makeText(wp, getString(R.string.updateStarted),
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(wp, getString(R.string.updateStarted), Toast.LENGTH_SHORT).show();
 
 			wp.ResetBitmap();
 

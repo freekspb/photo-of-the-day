@@ -42,8 +42,7 @@ public class SetUpLiveWallpaper extends Activity
         	intent.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
         	startActivity(intent);
         }
-        catch(Exception e)
-        {
+        catch(Exception e){
         	BugSenseHandler.sendExceptionMessage("error/67505696", "После исправления", e);
         }
         

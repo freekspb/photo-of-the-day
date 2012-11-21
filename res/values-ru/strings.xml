@@ -6,6 +6,8 @@
     <string name="download">Загрузка фотографии...</string>
     <string name="error">Ошибка!</string>
     <string name="isOffline">Передача данных отключена.</string>
+    <string name="isOutOfMemory1">Недостаточно памяти,</string>
+    <string name="isOutOfMemory2">закройте несколько программ :(</string>
     <string name="sources">Источники обоев</string>
     <string name="sourcesSummary">Выберите один из источников обоев</string>
     <string name="tagPhotoEnable">Включить теги</string>
@@ -18,9 +20,16 @@
     <string name="wifiOnlySummary">Скачивать только через Wi-Fi</string>
     <string name="sourcesSettings">Настройки источников обоев</string>
     <string name="networkSettings">Сетевые настройки</string>
+    
+    <!-- о программе -->
+    <string name="catAbout">О программе</string>
+    <string name="howToUse">Как пользоваться</string>
+    <string name="howToUseDescr">Описание программы на сайте разработчика</string>
+    <string name="softwareVersion">Версия программы</string>
+    
     <string name="updateStarted">Процесс загрузки фотографии запущен</string>
     <string name="setupDescription">"Выберите 'Фото дня'\r\n в списке программ"</string>
     <string name="errorSaveFileToSD">Ошибка сохранения файла</string>
     <string name="saveFileToSD">Изображение сохранено на SD</string>
-    <string name="noImages">Нет изображений</string>
+    <string name="noImages">Нет сохраненных изображений</string>
 </resources>

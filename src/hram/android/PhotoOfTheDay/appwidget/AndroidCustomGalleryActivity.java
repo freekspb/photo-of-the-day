@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
@@ -30,6 +31,11 @@ public class AndroidCustomGalleryActivity extends Activity
 		imageAdapter = new ImageAdapter(this, GetImages());
 		imagegrid = (GridView) findViewById(R.id.PhoneImageGrid);
 		imagegrid.setAdapter(imageAdapter);
+		
+		if (imageAdapter.getCount() == 0)
+		{
+			Toast.makeText(this, getString(R.string.noImages), Toast.LENGTH_SHORT).show();
+		}
 		
 		imagegrid.setOnItemClickListener(new OnItemClickListener() 
 		{

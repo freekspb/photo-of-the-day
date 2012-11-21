@@ -24,9 +24,6 @@ import android.content.SharedPreferences;
 
 public class Flickr extends BaseParser 
 {	
-	private SharedPreferences preferences;
-	private Wallpaper wp;
-	
 	public Flickr(Wallpaper wp, SharedPreferences preferences)
 	{
 		//Log.i(TAG, "Создание парсера Flickr");
@@ -35,7 +32,7 @@ public class Flickr extends BaseParser
 	}
 	
 	@Override
-	public String GetUrl() throws IOException 
+	public String GetUrl() throws IOException
 	{
 		if(preferences.getBoolean("tagPhotoEnable", false))
 		{
@@ -55,7 +52,7 @@ public class Flickr extends BaseParser
 		
 		try{
 			// чистка памяти
-    		System.gc(); 
+    		System.gc();
     		
 			Document doc = Jsoup.connect(url).get();
 			
@@ -75,10 +72,10 @@ public class Flickr extends BaseParser
 				break;
 			}
 			
-		}catch (OutOfMemoryError e) { // https://www.bugsense.com/dashboard/project/ab3f3ed5#error/68931299
-			try{
-				BugSenseHandler.sendExceptionMessage("Flickr.GetUrl", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
-			}catch (Exception e2) {}
+		}catch (OutOfMemoryError e) {
+			//try{
+			//	BugSenseHandler.sendExceptionMessage("Flickr.GetUrl", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			//}catch (Exception e2) {}
 			return null;
 		}
 	
@@ -148,9 +145,18 @@ public class Flickr extends BaseParser
 	        }
 	        
 	        return urls.get(rnd.nextInt(urls.size()));
-		} 
-		catch (SAXException e) {
+		}catch (SAXException e) {
+			try{
+				BugSenseHandler.sendExceptionMessage("Flickr.SAXException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			}catch (Exception e2) {}
 		}catch (ParserConfigurationException e) {
+			try{
+				BugSenseHandler.sendExceptionMessage("Flickr.ParserConfigurationException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			}catch (Exception e2) {}
+		}catch (OutOfMemoryError e) {
+			//try{
+			//	BugSenseHandler.sendExceptionMessage("Flickr.GetUrlByTag", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			//}catch (Exception e2) {}
 		}
 		return null;
 	}

@@ -6,6 +6,8 @@
     <string name="download">Download image...</string>
     <string name="error">Error!</string>
     <string name="isOffline">Data communication off.</string>
+    <string name="isOutOfMemory1">Memory full,</string>
+    <string name="isOutOfMemory2">please close some apps :(</string>
     <string name="sources">Sources of wallpaper</string>
     <string name="sourcesSummary">Select one of several sources wallpaper</string>
     <string name="tagPhotoEnable">Enable tags</string>
@@ -18,6 +20,14 @@
     <string name="wifiOnlySummary">Download Wi-Fi only</string>
     <string name="sourcesSettings">Sources settings</string>
     <string name="networkSettings">Network settings</string>
+    
+    <!-- о программе -->
+    <string name="catAbout">About</string>
+    <string name="howToUse">How to use</string>
+    <string name="howToUseDescr">Details about the app</string>
+    <string name="softwareVersion">Software wersion</string>
+    <string name="softwareVersionDescr">2.3</string>
+    
     <string name="updateStarted">Download image started.</string>
     <string name="setupDescription">"Choose 'Photo of the day'\r\n from the list."</string>
     <!-- ============================ -->

@@ -39,10 +39,10 @@ public class NationalGeographic extends BaseParser
 			}
 			
 			return src.attr("src");
-		}catch (OutOfMemoryError e) { // https://www.bugsense.com/dashboard/project/ab3f3ed5#error/68749526
-			try{
-				BugSenseHandler.sendExceptionMessage("NationalGeographic.GetUrl", "constant url", new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
-			}catch (Exception e2) {}
+		}catch (OutOfMemoryError e) {
+			//try{
+			//	BugSenseHandler.sendExceptionMessage("NationalGeographic.GetUrl", "constant url", new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			//}catch (Exception e2) {}
 			return null;
 		}
 	}
