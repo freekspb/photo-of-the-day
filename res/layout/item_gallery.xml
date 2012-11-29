@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:text="title"
         android:maxLines="1"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textStyle="bold"
         android:ellipsize="end"
          />

@@ -1,5 +1,8 @@
 package hram.android.PhotoOfTheDay.appwidget;
 
+import java.sql.Date;
+import java.text.DateFormat;
+
 import hram.android.PhotoOfTheDay.R;
 
 import android.content.Context;
@@ -17,6 +20,7 @@ public class ImageAdapter extends BaseAdapter
 	private Context context;
 	private Cursor cursor;
 	private int _idColumnIndex;
+	private int _dateColumnIndex;
 	LayoutInflater inflater;
 
 	public ImageAdapter(Context context, Cursor cursor) 
@@ -28,6 +32,7 @@ public class ImageAdapter extends BaseAdapter
 			return;
 		}
 		_idColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
+		_dateColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED);
 		inflater = LayoutInflater.from(context);
 	}
 	
@@ -67,9 +72,18 @@ public class ImageAdapter extends BaseAdapter
 			holder = (ViewHolder)convertView.getTag();
 		}
 		
+		// заполнение
 		cursor.moveToPosition(position);
+		// картинка
 		int _id = cursor.getInt(_idColumnIndex);
 		holder.image.setImageBitmap(MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(), _id, MediaStore.Images.Thumbnails.MINI_KIND, null));
+		// дата картинки
+		String date_added = cursor.getString(_dateColumnIndex);
+		Date d = new Date(Long.parseLong(date_added) * 1000);
+		DateFormat format = DateFormat.getDateInstance();
+		holder.tv1.setText(format.format(d));
+		holder.tv2.setText("");
+		
 		convertView.setTag(R.id.imageID, _id);
 		
 		return convertView;
