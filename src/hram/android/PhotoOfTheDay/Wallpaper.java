@@ -1,6 +1,7 @@
 package hram.android.PhotoOfTheDay;
 
 import hram.android.PhotoOfTheDay.Exceptions.ConnectionException;
+import hram.android.PhotoOfTheDay.Exceptions.IncorrectDataFormat;
 import hram.android.PhotoOfTheDay.Parsers.BaseParser;
 import hram.android.PhotoOfTheDay.Parsers.Flickr;
 import hram.android.PhotoOfTheDay.Parsers.Nasa;
@@ -208,7 +209,7 @@ public class Wallpaper extends WallpaperService
 	 * @return
 	 * @throws IOException
 	 */
-	public String GetUrl() throws IOException {
+	public String GetUrl() throws IOException, IncorrectDataFormat {
 		// Log.d(TAG, "Получение URL картинки");
 
 		return createCurrentParser().GetUrl();
@@ -407,6 +408,10 @@ public class Wallpaper extends WallpaperService
 			// Log.w(TAG, String.format("%s. Запуск проверяльщика",
 			// e.getMessage()));
 			CheckOnline();
+		}  catch (IncorrectDataFormat e) {
+			try{
+				BugSenseHandler.sendExceptionMessage("IncorrectDataFormat", "" + getCurrentParser(), e);
+			}catch (Exception e2) {}
 		} catch (Exception e) {
 			try{
 				BugSenseHandler.sendExceptionMessage("Wallpaper.update", "" + getCurrentParser(), e);
