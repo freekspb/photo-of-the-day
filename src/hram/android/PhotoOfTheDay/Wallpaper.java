@@ -10,6 +10,7 @@ import hram.android.PhotoOfTheDay.Parsers.Wikipedia;
 import hram.android.PhotoOfTheDay.Parsers.Yandex;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastEnum;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastReceiver;
+import hram.android.PhotoOfTheDay.help.HelpActivity;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,8 +27,11 @@ import com.bugsense.trace.BugSenseHandler;
 import com.novoda.imageloader.core.util.DirectLoader;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -37,6 +41,7 @@ import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
 import android.util.DisplayMetrics;
 //import android.util.Log;
@@ -83,6 +88,12 @@ public class Wallpaper extends WallpaperService
 		}
 		
 		ReadFile();
+		
+		try {
+			showHelpOnFirstLaunch();
+		} catch (Exception e) {
+			//BugSenseHandler.sendExceptionMessage("Wallpaper", "showHelpOnFirstLaunch", e);
+		}
 	}
 
 	@Override
@@ -96,6 +107,39 @@ public class Wallpaper extends WallpaperService
 		return new MyEngine(this);
 	}
 
+	/**
+	 * We want the help screen to be shown automatically the first time a new version of the app is
+	 * run. The easiest way to do this is to check android:versionCode from the manifest, and compare
+	 * it to a value stored as a preference.
+	 */
+	private boolean showHelpOnFirstLaunch() 
+	{
+		try 
+		{
+			PackageInfo info = getPackageManager().getPackageInfo(this.getPackageName(), 0);
+			int currentVersion = info.versionCode;
+			// Since we're paying to talk to the PackageManager anyway, it makes sense to cache the app
+			// version name here for display in the about box later.
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			int lastVersion = prefs.getInt(Constants.KEY_HELP_VERSION_SHOWN, 0);
+			if (currentVersion > lastVersion)
+			//if (true) 
+			{
+				prefs.edit().putInt(Constants.KEY_HELP_VERSION_SHOWN, currentVersion).commit();
+				Intent intent = new Intent(this, HelpActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				// Show the default page on a clean install, and the what's new page on an upgrade.
+				String page = lastVersion == 0 ? HelpActivity.DEFAULT_PAGE : HelpActivity.WHATS_NEW_PAGE;
+				//page = HelpActivity.DEFAULT_PAGE;
+				intent.putExtra(HelpActivity.REQUESTED_PAGE_KEY, page);
+				startActivity(intent);
+				return true;
+			}
+	    } catch (PackageManager.NameNotFoundException e) {
+	    }
+	    return false;
+	}
+	
 	/**
 	 * Регистрирует рисовальщик, добавляет в список, после обновления фото
 	 * рисовальщики оповещаются из этого списка
