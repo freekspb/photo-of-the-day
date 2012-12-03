@@ -3,6 +3,7 @@ package hram.android.PhotoOfTheDay;
 import hram.android.PhotoOfTheDay.Exceptions.ConnectionException;
 import hram.android.PhotoOfTheDay.Exceptions.IncorrectDataFormat;
 import hram.android.PhotoOfTheDay.Parsers.BaseParser;
+import hram.android.PhotoOfTheDay.Parsers.EarthShots;
 import hram.android.PhotoOfTheDay.Parsers.Flickr;
 import hram.android.PhotoOfTheDay.Parsers.Nasa;
 import hram.android.PhotoOfTheDay.Parsers.NationalGeographic;
@@ -305,6 +306,8 @@ public class Wallpaper extends WallpaperService
 				return new Wikipedia();
 			case 6:
 				return new TestParser(this, preferences);
+			case 7:
+				return new EarthShots();
 			default:
 				// Log.i(TAG, "Создание парсера по умолчанию");
 				return new Yandex(this, preferences);
