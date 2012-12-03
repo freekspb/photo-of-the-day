@@ -24,8 +24,8 @@
     <string name="catAbout">About</string>
     <string name="howToUse">How to use</string>
     <string name="howToUseDescr">Details about the app</string>
+    <string name="whatsNew">What\'s new?</string>
     <string name="softwareVersion">Software wersion</string>
-    <string name="softwareVersionDescr">2.4</string>
     <string name="updateStarted">Download image started.</string>
     <string name="setupDescription">"Choose 'Photo of the day'\r\n from the list."</string>
     <!-- ============================ -->
@@ -34,4 +34,6 @@
     <string name="errorSaveFileToSD">Error writing data to SD card</string>
     <string name="saveFileToSD">Image has been saved</string>
     <string name="noImages">No images</string>
+	<string name="button_back">Back</string>
+	<string name="button_done">Ok</string>
 </resources>

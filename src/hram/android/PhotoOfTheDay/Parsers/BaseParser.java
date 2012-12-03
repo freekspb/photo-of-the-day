@@ -2,6 +2,7 @@ package hram.android.PhotoOfTheDay.Parsers;
 
 import hram.android.PhotoOfTheDay.Constants;
 import hram.android.PhotoOfTheDay.Wallpaper;
+import hram.android.PhotoOfTheDay.Exceptions.IncorrectDataFormat;
 
 import java.io.IOException;
 import java.util.Random;
@@ -15,7 +16,7 @@ public abstract class BaseParser
 	protected SharedPreferences preferences;
 	protected Wallpaper wp;
 	
-	public abstract String GetUrl() throws IOException;
+	public abstract String GetUrl() throws IOException, IncorrectDataFormat;
 	
 	public abstract boolean IsTagSupported();
 	
