@@ -5,8 +5,8 @@
 		<Preference android:title="@string/howToUse"
             android:summary="@string/howToUseDescr"
             android:key="howToUsePref" />
-		<Preference android:title="@string/softwareVersion"
-            android:summary="@string/softwareVersionDescr"
+		<Preference android:title="@string/whatsNew"
+            android:summary="@string/softwareVersion"
             android:key="softwareVersionPref" />
 	</PreferenceCategory>
   	<PreferenceCategory android:title="@string/sourcesSettings">
