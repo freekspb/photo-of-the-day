@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="app_name">Фото дня</string>
-	<string name="app_name_gallery">Фото дня - галерея</string>
+    <string name="app_name_gallery">Фото дня - галерея</string>
     <string name="widget_name_dark">Фото дня - темный</string>
 	<string name="wallpaper_description">Обои с изображением Фото дня с сервиса Яндекс.Фотки</string>
     <string name="download">Загрузка фотографии...</string>
@@ -21,9 +21,18 @@
     <string name="wifiOnlySummary">Скачивать только через Wi-Fi</string>
     <string name="sourcesSettings">Настройки источников обоев</string>
     <string name="networkSettings">Сетевые настройки</string>
+    <!-- о программе -->
+    <string name="catAbout">О программе</string>
+    <string name="howToUse">Как пользоваться</string>
+    <string name="howToUseDescr">Описание программы на сайте разработчика</string>
+    <string name="whatsNew">Что нового?</string>
+    <string name="softwareVersion">Версия программы</string>
     <string name="updateStarted">Процесс загрузки фотографии запущен</string>
     <string name="setupDescription">"Выберите 'Фото дня'\r\n в списке программ"</string>
     <string name="errorSaveFileToSD">Ошибка сохранения файла</string>
     <string name="saveFileToSD">Изображение сохранено на SD</string>
     <string name="noImages">Нет сохраненных изображений</string>
+    <!-- Добро пожаловать -->
+	<string name="button_back">Назад</string>
+	<string name="button_done">Продолжить</string>
 </resources>

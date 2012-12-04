@@ -1,0 +1,18 @@
+body {
+  background-color: white;
+  color: black;
+  font-family: Arial sans-serif;
+  font-size: 12pt;
+}
+ul.touchable li {
+  padding-top:8px;
+  padding-bottom:8px;
+}
+.navigation {
+	list-style: none; /* прячем маркеры */
+}
+.navigation li {
+	display: inline; /* выстраиваем элементы списка в один ряд */
+	margin-right: 5px; /* делаем отступ чтобы пункты меню не сливались */
+}
+

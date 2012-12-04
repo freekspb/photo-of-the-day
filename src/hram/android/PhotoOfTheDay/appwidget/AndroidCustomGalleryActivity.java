@@ -57,10 +57,11 @@ public class AndroidCustomGalleryActivity extends Activity
 		});
 	}
 	
+	@SuppressWarnings("deprecation")
 	private Cursor GetImages() 
 	{
-		final String[] columns = { MediaStore.Images.Thumbnails._ID };
-		final String orderBy = MediaStore.Images.Media._ID;
+		final String[] columns = { MediaStore.Images.Thumbnails._ID,  MediaStore.Images.Media.DATE_ADDED };
+		final String orderBy = MediaStore.Images.Media.DATE_ADDED + " DESC";
 		
 		return managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
 				MediaStore.Images.Media.DESCRIPTION + " like ? ",

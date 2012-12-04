@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  	
+    <style name="GalleryItemShadowText">
+        <item name="android:padding">2dp</item>
+    	<item name="android:textSize">16sp</item>
+    	<item name="android:textStyle">bold</item>
+		<item name="android:textColor">@color/text_white</item>
+		<item name="android:shadowColor">@color/text_black</item>
+		<item name="android:shadowDx">1</item>
+		<item name="android:shadowDy">1</item>	
+		<item name="android:shadowRadius">2</item>
+  	</style>
+    
+</resources>

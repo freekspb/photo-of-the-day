@@ -1,6 +1,7 @@
 package hram.android.PhotoOfTheDay.Parsers;
 
 import hram.android.PhotoOfTheDay.Wallpaper;
+import hram.android.PhotoOfTheDay.Exceptions.IncorrectDataFormat;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,7 +33,7 @@ public class Flickr extends BaseParser
 	}
 	
 	@Override
-	public String GetUrl() throws IOException
+	public String GetUrl() throws IOException, IncorrectDataFormat
 	{
 		if(preferences.getBoolean("tagPhotoEnable", false))
 		{
@@ -57,6 +58,11 @@ public class Flickr extends BaseParser
 			Document doc = Jsoup.connect(url).get();
 			
 			Element table = doc.select("table[class=DayView]").first();
+			if(table == null)
+			{
+				throw new IncorrectDataFormat(doc.ownText());
+			}
+			
 			for(Element ite: table.select("td"))
 			{
 				Element href = ite.select("a[href]").first();
