@@ -38,15 +38,22 @@ import hram.android.PhotoOfTheDay.R;
 public class SdSaverAppWidgetProvider extends AppWidgetProvider {
     // log tag
     private static final String TAG = "SdSaverAppWidgetProvider";
-   
+
+    protected RemoteViews getRemoteViews(Context context)
+    {
+    	RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
+        remoteViews.setImageViewResource(R.id.img_bluetooth, R.drawable.ic_widget_download_image);
+        remoteViews.setImageViewResource(R.id.img_wifi, R.drawable.ic_widget_open_gallery);
+        remoteViews.setImageViewResource(R.id.img_gps, R.drawable.ic_widget_next_parser);
+        remoteViews.setImageViewResource(R.id.img_sync, R.drawable.ic_widget_settings);
+        
+        return remoteViews;
+    }
+    
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
          //Создаем новый RemoteViews
-         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
-         remoteViews.setImageViewResource(R.id.img_bluetooth, R.drawable.ic_widget_download_image);
-         remoteViews.setImageViewResource(R.id.img_wifi, R.drawable.ic_widget_open_gallery);
-         remoteViews.setImageViewResource(R.id.img_gps, R.drawable.ic_widget_next_parser);
-         remoteViews.setImageViewResource(R.id.img_sync, R.drawable.ic_widget_settings);
+         RemoteViews remoteViews = getRemoteViews(context);
 
          //Подготавливаем Intent для Broadcast
          Intent active = new Intent(WidgetBroadcastEnum.SAVE_ACTION);

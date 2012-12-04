@@ -57,7 +57,7 @@
         <!--      APPWIDGET                        -->
         <!-- ************************************* -->
 
-        <receiver android:name=".appwidget.SdSaverAppWidgetProvider">
+        <receiver android:name=".appwidget.SdSaverAppWidgetProvider" android:label="@string/app_name">
             <meta-data android:name="android.appwidget.provider"
                     android:resource="@xml/appwidget_provider" />
             <intent-filter>
@@ -65,6 +65,14 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".appwidget.SdSaverAppWidgetDarkProvider" android:label="@string/widget_name_dark">
+            <meta-data android:name="android.appwidget.provider"
+                    android:resource="@xml/appwidget_provider_dark" />
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+        </receiver>
+        
         <receiver android:name=".appwidget.WidgetBroadcastReceiver">
         <!-- 
             <intent-filter>
