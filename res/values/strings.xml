@@ -21,6 +21,7 @@
     <string name="wifiOnlySummary">Download Wi-Fi only</string>
     <string name="sourcesSettings">Sources settings</string>
     <string name="networkSettings">Network settings</string>
+    <string name="install_widget">Images can be saved using the widget Photo of the day</string>
     <!-- о программе -->
     <string name="catAbout">About</string>
     <string name="howToUse">How to use</string>
