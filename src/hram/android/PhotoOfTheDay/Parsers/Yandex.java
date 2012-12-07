@@ -1,6 +1,7 @@
 package hram.android.PhotoOfTheDay.Parsers;
 
 import hram.android.PhotoOfTheDay.Wallpaper;
+import hram.android.PhotoOfTheDay.Exceptions.IncorrectDataFormat;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -24,7 +25,7 @@ public class Yandex extends BaseParser
 	}
 	
 	@Override
-	public String GetUrl() throws IOException
+	public String GetUrl() throws IOException, IncorrectDataFormat
 	{
 		if(preferences.getBoolean("tagPhotoEnable", false))
 		{
@@ -45,6 +46,11 @@ public class Yandex extends BaseParser
 	        Document doc = Jsoup.connect("http://fotki.yandex.ru/calendar").get();
 				
 			Element table = doc.select("table[class=photos]").first();
+			if(table == null)
+			{
+				throw new IncorrectDataFormat(doc.ownText());
+			}
+						
 			for(Element ite: table.select("td"))
 			{
 				if(ite.getElementsByAttributeValue("class", "empty").isEmpty() == false)
