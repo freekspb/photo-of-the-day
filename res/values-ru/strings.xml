@@ -2,7 +2,8 @@
 <resources>
     <string name="app_name">Фото дня</string>
     <string name="app_name_gallery">Фото дня - галерея</string>
-    <string name="wallpaper_description">Обои с изображением Фото дня с сервиса Яндекс.Фотки</string>
+    <string name="widget_name_dark">Фото дня - темный</string>
+	<string name="wallpaper_description">Обои с изображением Фото дня с сервиса Яндекс.Фотки</string>
     <string name="download">Загрузка фотографии...</string>
     <string name="error">Ошибка!</string>
     <string name="isOffline">Передача данных отключена.</string>
@@ -20,6 +21,7 @@
     <string name="wifiOnlySummary">Скачивать только через Wi-Fi</string>
     <string name="sourcesSettings">Настройки источников обоев</string>
     <string name="networkSettings">Сетевые настройки</string>
+    <string name="install_widget">Изображения могут быть сохранены с помощью виджета Фото дня</string>
     <!-- о программе -->
     <string name="catAbout">О программе</string>
     <string name="howToUse">Как пользоваться</string>
