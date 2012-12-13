@@ -139,14 +139,14 @@ public class SDHelper {
 				fo.close();
 				
 				addImageGallery(wp, file );
+				return wp.getString(R.string.saveFileToSD);
 				
 			} catch (IOException e) {
 				Log.e(TAG, "Ошибка сохранения файла: " + e.getLocalizedMessage());
 				return wp.getString(R.string.errorSaveFileToSD);
 			}
 		}
-		
-		return wp.getString(R.string.saveFileToSD);
+		return null;
 	}
 	
 	/**
