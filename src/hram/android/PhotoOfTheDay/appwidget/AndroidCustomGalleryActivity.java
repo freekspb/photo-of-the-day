@@ -91,6 +91,8 @@ public class AndroidCustomGalleryActivity extends Activity
 
 	private Cursor getImages() 
 	{
+		return getContentResolver().query(imagesUri, imagesColumns, imagesQuery, new String[] {SDHelper.MEDIA_TAG}, imagesOrderBy);
+		/*
 		if (VERSION.SDK_INT < 11)
 		{
 			return managedQuery(imagesUri, imagesColumns, imagesQuery, new String[] {SDHelper.MEDIA_TAG}, imagesOrderBy);
@@ -99,6 +101,7 @@ public class AndroidCustomGalleryActivity extends Activity
 		{
 			return getImages_API_11();
 		}
+		*/
 	}
 
 	@TargetApi(11)
@@ -181,7 +184,8 @@ public class AndroidCustomGalleryActivity extends Activity
 		intent.setAction(Intent.ACTION_VIEW);
 		String[] columns = { MediaStore.Images.Media.DATA };
 		
-		Cursor imagecursor = null;
+		Cursor imagecursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, MediaStore.Images.Media._ID + " = " + id, null, MediaStore.Images.Media._ID);
+		/*
 		if (VERSION.SDK_INT < 11)
 		{
 			imagecursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, MediaStore.Images.Media._ID + " = " + id, null, MediaStore.Images.Media._ID);
@@ -190,10 +194,11 @@ public class AndroidCustomGalleryActivity extends Activity
 		{
 			imagecursor = getImageCursor_API_11(columns, id);
 		}
-		
+		*/
 		if (imagecursor != null && imagecursor.moveToFirst())
 		{
 			String path = imagecursor.getString(imagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
+			imagecursor.close();
 			intent.setDataAndType(Uri.fromFile(new File(path)),"image/*");
 			startActivity(intent);
 		}
