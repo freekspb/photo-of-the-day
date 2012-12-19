@@ -1,3 +1,3 @@
-bugsense 		- 3.0.7 https://www.bugsense.com/docs
+bugsense 		- 3.0.8 https://www.bugsense.com/docs
 jsoup    		- 1.7.1 http://jsoup.org/
 imageloader-core 	- 1.5.7 https://github.com/novoda/ImageLoader/
