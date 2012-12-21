@@ -33,16 +33,20 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
     public void onReceive(Context context, Intent intent) {
     	Log.i(TAG, "onReceive");
         //Ловим наш Broadcast, проверяем и выводим сообщение
-        final String action = intent.getAction();
+        String action = intent.getAction();
         if (action.equals(WidgetBroadcastEnum.SAVE_ACTION)) {
         	try {
 	        	Log.i(TAG, "onReceive - SAVE_ACTION");
 	
-	            String msg = "null";
+	            String msg = null;
 	            try {
 	            	msg = SDHelper.saveImage(wp);
 	            } catch (Exception e) {
 	            	Log.e(TAG, "onReceive" + e.getLocalizedMessage());
+	            }
+	            if (msg == null)
+	            {
+	            	return;
 	            }
 	            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 	            return;

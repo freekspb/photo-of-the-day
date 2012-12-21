@@ -120,33 +120,46 @@ public class SDHelper {
 				}
 				
 				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				wp.GetBitmap().compress(Bitmap.CompressFormat.JPEG, 80, bytes);
-				
-				String filename = getFilename(wp.GetCurrentUrl());
-				if (filename == null) {
-					return wp.getString(R.string.errorSaveFileToSD);
+				try
+				{
+					wp.GetBitmap().compress(Bitmap.CompressFormat.JPEG, 80, bytes);
+					
+					String filename = getFilename(wp.GetCurrentUrl());
+					if (filename == null) {
+						return wp.getString(R.string.errorSaveFileToSD);
+					}
+	
+					//File file = new File(getAlbumStorageDir(FOLDER).getPath(), filename);
+					File file = new File(getAlbumStorageDir(FOLDER) + File.separator + getFilenamePrefix(wp.getImageNamePrefix()) + filename);
+					if (file.exists()) {
+						return wp.getString(R.string.saveFileToSD);
+					}
+					file.createNewFile();
+					//write the bytes in file
+					FileOutputStream fo = new FileOutputStream(file);
+					try
+					{
+						fo.write(bytes.toByteArray());						
+					}
+					finally
+					{
+						fo.close();
+					}
+					addImageGallery(wp, file );
 				}
-
-				//File file = new File(getAlbumStorageDir(FOLDER).getPath(), filename);
-				File file = new File(getAlbumStorageDir(FOLDER) + File.separator + getFilenamePrefix(wp.getImageNamePrefix()) + filename);
-				if (file.exists()) {
-					return wp.getString(R.string.saveFileToSD);
+				finally
+				{
+					bytes.close();
 				}
-				file.createNewFile();
-				//write the bytes in file
-				FileOutputStream fo = new FileOutputStream(file);
-				fo.write(bytes.toByteArray());
-				fo.close();
 				
-				addImageGallery(wp, file );
+				return wp.getString(R.string.saveFileToSD);
 				
 			} catch (IOException e) {
 				Log.e(TAG, "Ошибка сохранения файла: " + e.getLocalizedMessage());
 				return wp.getString(R.string.errorSaveFileToSD);
 			}
 		}
-		
-		return wp.getString(R.string.saveFileToSD);
+		return null;
 	}
 	
 	/**
