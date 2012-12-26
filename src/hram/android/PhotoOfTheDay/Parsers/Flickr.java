@@ -7,13 +7,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -44,12 +44,8 @@ public class Flickr extends BaseParser
 			}
 		}
 		
-		String str;
 		String imageUrl = null;
-		
-		// новый способ получения даты
-		Calendar c = Calendar.getInstance();
-		String url = String.format("http://www.flickr.com/explore/interesting/%d/%02d/%02d/", c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DATE));
+		String url = "http://www.flickr.com/explore/";
 		
 		try{
 			// чистка памяти
@@ -57,34 +53,47 @@ public class Flickr extends BaseParser
     		
 			Document doc = Jsoup.connect(url).get();
 			
-			Element table = doc.select("table[class=DayView]").first();
+			Element table = doc.select("div[class=ju photo-display-container clearfix]").first();
 			if(table == null)
 			{
 				throw new IncorrectDataFormat(doc.ownText());
 			}
 			
-			for(Element ite: table.select("td"))
+			Element rows = table.select("div[class=row row-]").first();
+			if(rows == null)
 			{
-				Element href = ite.select("a[href]").first();
-				Element src = ite.select("img[src]").first();
-				if(href == null || src == null)
-				{
-					continue;
-				}
-				
-				str = href.attr("href");
-				imageUrl = src.attr("src");
-				imageUrl = imageUrl.substring(0,imageUrl.length() - 5) + "z.jpg";
-				break;
+				throw new IncorrectDataFormat(doc.ownText());
 			}
 			
+			Element item = rows.select("div[class=photo-display-item]").first();
+			if(item == null)
+			{
+				throw new IncorrectDataFormat(doc.ownText());
+			}
+
+			Element photo = item.select("span[class=photo_container pc_ju]").first();
+			if(photo == null)
+			{
+				throw new IncorrectDataFormat(doc.ownText());
+			}
+			
+			//Element href = photo.select("a[href]").first();
+			Element src = photo.select("img[data-defer-src]").first();
+			//if(href == null || src == null)
+			if(src == null)
+			{
+				throw new IncorrectDataFormat(doc.ownText());
+			}
+			
+			//str = href.attr("href");
+			imageUrl = src.attr("data-defer-src");
+			imageUrl = imageUrl.substring(0,imageUrl.length() - 5) + "b.jpg";
 		}catch (OutOfMemoryError e) {
 			//try{
 			//	BugSenseHandler.sendExceptionMessage("Flickr.GetUrl", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
 			//}catch (Exception e2) {}
 			return null;
 		}
-	
 		
 		return imageUrl;
 	}
