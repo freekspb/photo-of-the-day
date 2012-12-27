@@ -12,7 +12,6 @@ import hram.android.PhotoOfTheDay.Parsers.Wikipedia;
 import hram.android.PhotoOfTheDay.Parsers.Yandex;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastEnum;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastReceiver;
-import hram.android.PhotoOfTheDay.help.HelpActivity;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,11 +28,8 @@ import com.bugsense.trace.BugSenseHandler;
 import com.novoda.imageloader.core.util.DirectLoader;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -43,7 +39,6 @@ import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
 import android.util.DisplayMetrics;
 //import android.util.Log;
@@ -53,8 +48,7 @@ import android.view.SurfaceHolder;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-public class Wallpaper extends WallpaperService 
-{
+public class Wallpaper extends WallpaperService {
 	public static final String TAG = Constants.TAG;
 	private final Handler mHandler = new Handler();
 	private List<MyEngine> engines = new ArrayList<MyEngine>();
@@ -65,7 +59,7 @@ public class Wallpaper extends WallpaperService
 	private Bitmap bm;
 	public SharedPreferences preferences;
 	private String currentUrl;
-	//private BaseParser parser;
+	// private BaseParser parser;
 	private int currentParser = -1;
 	private int currentHeight = -1;
 	private int currentWidth = -1;
@@ -83,12 +77,32 @@ public class Wallpaper extends WallpaperService
 		mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		
 		try {
-			SetCurrentParser(Integer.decode(preferences.getString(Constants.SOURCES_NAME, "1")));
+			int parser = Integer.decode(preferences.getString(Constants.SOURCES_NAME, "-1"));
+			// если нет сохраненного в настройках
+			if (parser < 0)
+			{
+				DisplayMetrics metrics = new DisplayMetrics();
+				Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+				display.getMetrics(metrics);
+				// если ширина дисплея больше высоты (для планшетов)
+				if (display.getWidth() > display.getHeight())
+				{
+					// NG - так как там почти все изображения альбомные
+					parser = 3;
+				}
+				else
+				{
+					parser = 1;
+				}
+				
+			}
+			
+			SetCurrentParser(parser);
 		} catch (Exception e) {
 			preferences.edit().putString(Constants.SOURCES_NAME, "1").commit();
 			SetCurrentParser(1);
 		}
-		
+
 		ReadFile();
 	}
 
@@ -250,28 +264,28 @@ public class Wallpaper extends WallpaperService
 	public int getCurrentParser() {
 		return currentParser;
 	}
-	
+
 	public BaseParser createCurrentParser() 
 	{
 		switch (getCurrentParser()) 
 		{
-			case 1:
-				return new Yandex(this, preferences);
-			case 2:
-				return new Flickr(this, preferences);
-			case 3:
-				return new NationalGeographic();
-			case 4:
-				return new Nasa();
-			case 5:
-				return new Wikipedia();
-			case 6:
-				return new TestParser(this, preferences);
-			case 7:
-				return new EarthShots();
-			default:
-				// Log.i(TAG, "Создание парсера по умолчанию");
-				return new Yandex(this, preferences);
+		case 1:
+			return new Yandex(this, preferences);
+		case 2:
+			return new Flickr(this, preferences);
+		case 3:
+			return new NationalGeographic();
+		case 4:
+			return new Nasa();
+		case 5:
+			return new Wikipedia();
+		case 6:
+			return new TestParser(this, preferences);
+		case 7:
+			return new EarthShots();
+		default:
+			// Log.i(TAG, "Создание парсера по умолчанию");
+			return new Yandex(this, preferences);
 		}
 	}
 
@@ -298,7 +312,7 @@ public class Wallpaper extends WallpaperService
 			}
 
 			SetCurrentUrl(preferences.getString(Constants.LAST_URL, ""));
-			
+
 			Calendar c = Calendar.getInstance();
 			c.setTimeInMillis(lastUpdate);
 			SetCurrentDay(c.get(Calendar.DATE));
@@ -391,7 +405,7 @@ public class Wallpaper extends WallpaperService
 			}
 
 			// Log.d(TAG, "Загрузка картинки по адресу: " + url);
-			//Bitmap bm = ImageDownloader.loadImageFromUrl(url);
+			// Bitmap bm = ImageDownloader.loadImageFromUrl(url);
 			Bitmap bm = new DirectLoader().download(url);
 			if (bm == null) {
 				throw new ConnectionException("Ошибка загрузки киртинки");
@@ -416,17 +430,17 @@ public class Wallpaper extends WallpaperService
 			// Log.w(TAG, String.format("%s. Запуск проверяльщика",
 			// e.getMessage()));
 			CheckOnline();
-		}  catch (IncorrectDataFormat e) {
-			try{
+		} catch (IncorrectDataFormat e) {
+			try {
 				BugSenseHandler.sendExceptionMessage("IncorrectDataFormat", "" + getCurrentParser(), e);
 			}catch (Exception e2) {}
 		} catch (Exception e) {
-			try{
+			try {
 				BugSenseHandler.sendExceptionMessage("Wallpaper.update", "" + getCurrentParser(), e);
 			}catch (Exception e2) {}
 		}
 	}
-	
+
 	/**
 	 * Создание и запуск таймера проверки наличия услуги передачи данных
 	 */
@@ -502,7 +516,6 @@ public class Wallpaper extends WallpaperService
 			preferences.registerOnSharedPreferenceChangeListener(this);
 
 			wp = service;
-			download = BitmapFactory.decodeResource(getResources(), R.drawable.download);
 			widgetReceiver = new WidgetBroadcastReceiver(wp, this);
 		}
 
@@ -532,7 +545,7 @@ public class Wallpaper extends WallpaperService
 			if (preferences != null) {
 				preferences.unregisterOnSharedPreferenceChangeListener(this);
 			}
-			
+
 			// https://www.bugsense.com/dashboard/project/ab3f3ed5#error/67667495
 			try
 			{ 
@@ -553,7 +566,7 @@ public class Wallpaper extends WallpaperService
 		 */
 		private void netUpdates() {
 			// Log.d(TAG, "Создание таймера обновлений");
-			
+
 			timer.scheduleAtFixedRate(new TimerTask() 
 			{
 				@Override
@@ -566,7 +579,7 @@ public class Wallpaper extends WallpaperService
 							wp.StartUpdate();
 							return;
 						}
-	
+
 						// Log.d(TAG, "Проверка времени последнего обновления");
 						if (wp.GetCurrentDay() != Calendar.getInstance().get(Calendar.DATE)) {
 							// Log.d(TAG, "Запуск обновления");
@@ -712,8 +725,8 @@ public class Wallpaper extends WallpaperService
 				}
 			}
 		}
-		*/	
-				
+		 */
+
 		/**
 		 * Draw one frame of the animation. This method gets called repeatedly
 		 * by posting a delayed Runnable. You can do any drawing you want in
@@ -730,12 +743,48 @@ public class Wallpaper extends WallpaperService
 				Bitmap bm = wp.GetBitmap();
 				if (c != null) {
 					if (bm == null) {
+						if(download == null)
+						{
+							download = BitmapFactory.decodeResource(getResources(), R.drawable.download);
+						}
 						// Log.d(TAG, "Картинки нет рисуем загрузку");
-						double rescaling = (double) mWidth / download.getWidth();
-						int width = (int) (download.getWidth() * rescaling);
-						int offset = (mHeight / 2) - (width / 2);
+
+						int topOffset;
+						int leftOffset;
+						int newBmHeight;
+						int newBmWidth;
+
+						// если высота экрана больше ширины
+						if (mHeight > mWidth)
+						{
+							// отступ сбоку - 1/6 часть экрана по ширине 
+							leftOffset = (int )(mWidth / 6);
+							// ширина изображения - 4/6 экрана по ширине
+							newBmWidth = mWidth - 2*leftOffset;
+							// коэффициент масштабирования 
+							double rescaling = (double) newBmWidth / download.getWidth();
+							// высота
+							newBmHeight = (int) (download.getHeight() * rescaling);
+							// отступ сверху
+							topOffset = (int )(mHeight - newBmHeight)/ 2;							
+						}
+						// если ширина экрана больше высоты
+						else
+						{
+							// отступ сверху - 1/6 часть экрана по высоте 
+							topOffset = (int )(mHeight / 6);
+							// высоты изображения - 4/6 экрана по высоте
+							newBmHeight = mHeight - 2*topOffset;
+							// коэффициент масштабирования 
+							double rescaling = (double) newBmHeight/ download.getHeight();
+							// ширина
+							newBmWidth = (int) (download.getWidth() * rescaling);
+							// левый отступ ижображения
+							leftOffset = (int )(mWidth - newBmWidth)/ 2;
+						}
+						
 						c.drawRect(new Rect(0, 0, mWidth, mHeight), new Paint());
-						c.drawBitmap(Bitmap.createScaledBitmap(download, (int) (download.getWidth() * rescaling), (int) (download.getHeight() * rescaling), true), 0, offset, null);
+						c.drawBitmap(Bitmap.createScaledBitmap(download, newBmWidth, newBmHeight, true), leftOffset, topOffset, null);
 						if (IsOnline()) {
 							c.drawText(getText(R.string.download).toString(), mWidth / 2, 100, mPaint);
 						} else {
@@ -745,17 +794,37 @@ public class Wallpaper extends WallpaperService
 						return;
 					}
 
+					// чистим, чтобы не виселов памяти
+					if (download != null)
+					{
+						download.recycle();
+						download = null;
+					}
+					
 					if (mHeight != currentHeight || mWidth != currentWidth) {
 						// Log.d(TAG,String.format("Изменились размеры, изменяем размер: %d->%d, %d->%d", currentHeight, mHeight, currentWidth, mWidth));
 						double rescaling = (double) mHeight / bm.getHeight();
-						if (mHorizontal) {
+						
+						int newBmHeight = mHeight;
+						int newBmWidth = (int) (bm.getWidth() * rescaling);
+						
+						// если ширина экрана больше картинки после мастабировния
+						if (newBmWidth < mWidth)
+						{
+							// то масштабируем по ширине
 							rescaling = (double) mWidth / bm.getWidth();
-							rescaling *= 1.5;
+							newBmHeight = (int) (bm.getHeight() * rescaling);
+							newBmWidth = mWidth;							
 						}
+						
+//						if (mHorizontal) {
+//							rescaling = (double) mWidth / bm.getWidth();
+//							rescaling *= 1.5;
+//						}
 
 						try
 						{
-							bm = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth() * rescaling), (int) (bm.getHeight() * rescaling), true);
+							bm = Bitmap.createScaledBitmap(bm, newBmWidth, newBmHeight, true);
 							wp.SetBitmap(bm);
 							currentHeight = mHeight;
 							currentWidth = mWidth;
@@ -778,7 +847,7 @@ public class Wallpaper extends WallpaperService
 						}
 					}
 
-					if (isPreview() == false) {
+					if (isPreview() == false && mXStep != 0) {
 						float step1 = mWidth * mXStep;
 						float step2 = (bm.getWidth() - mWidth) * mXStep;
 						float dX = (float) mPixels * (step2 / step1);
@@ -838,7 +907,7 @@ public class Wallpaper extends WallpaperService
 				}
 			}
 		}
-		
+
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String arg1) 
 		{
 			if (isPreview() == false) {
