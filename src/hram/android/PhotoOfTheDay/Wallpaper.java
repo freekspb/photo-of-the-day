@@ -854,10 +854,7 @@ public class Wallpaper extends WallpaperService {
 						c.translate(dX, 0f);
 					}
 
-					if (mHorizontal)
-						c.drawBitmap(bm, 0, -currentHeight / 3, null);
-					else
-						c.drawBitmap(bm, 0, 0, null);
+					c.drawBitmap(bm, 0, 0, null);
 				}
 			} finally {
 				if (c != null)
