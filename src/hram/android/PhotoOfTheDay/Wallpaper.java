@@ -285,7 +285,7 @@ public class Wallpaper extends WallpaperService {
 		case 7:
 			return new EarthShots();
 		case 8:
-			return new Bing();
+			return new Bing(this);
 		default:
 			// Log.i(TAG, "Создание парсера по умолчанию");
 			return new Yandex(this, preferences);

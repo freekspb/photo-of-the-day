@@ -3,7 +3,7 @@
     <string name="app_name">Фото дня</string>
     <string name="app_name_gallery">Фото дня - галерея</string>
     <string name="widget_name_dark">Фото дня - темный</string>
-	<string name="wallpaper_description">Обои с изображением Фото дня с сервиса Яндекс.Фотки</string>
+    <string name="wallpaper_description">Обои с изображением Фото дня с сервиса Яндекс.Фотки</string>
     <string name="download">Загрузка фотографии...</string>
     <string name="error">Ошибка!</string>
     <string name="isOffline">Передача данных отключена.</string>
@@ -34,6 +34,7 @@
     <string name="saveFileToSD">Изображение сохранено на SD</string>
     <string name="noImages">Нет сохраненных изображений</string>
     <!-- Добро пожаловать -->
-	<string name="button_back">Назад</string>
-	<string name="button_done">Продолжить</string>
+    <string name="button_back">Назад</string>
+    <string name="button_done">Продолжить</string>
+    <string name="bingCountryTag">(Bing United States)</string>
 </resources>
