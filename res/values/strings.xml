@@ -36,6 +36,7 @@
     <string name="errorSaveFileToSD">Error writing data to SD card</string>
     <string name="saveFileToSD">Image has been saved</string>
     <string name="noImages">No images</string>
-	<string name="button_back">Back</string>
-	<string name="button_done">Ok</string>
+    <string name="button_back">Back</string>
+    <string name="button_done">Ok</string>
+    <string name="bingCountryTag">(Bing United States)</string>
 </resources>

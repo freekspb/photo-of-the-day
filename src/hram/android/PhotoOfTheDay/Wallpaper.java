@@ -3,6 +3,7 @@ package hram.android.PhotoOfTheDay;
 import hram.android.PhotoOfTheDay.Exceptions.ConnectionException;
 import hram.android.PhotoOfTheDay.Exceptions.IncorrectDataFormat;
 import hram.android.PhotoOfTheDay.Parsers.BaseParser;
+import hram.android.PhotoOfTheDay.Parsers.Bing;
 import hram.android.PhotoOfTheDay.Parsers.EarthShots;
 import hram.android.PhotoOfTheDay.Parsers.Flickr;
 import hram.android.PhotoOfTheDay.Parsers.Nasa;
@@ -283,6 +284,8 @@ public class Wallpaper extends WallpaperService {
 			return new TestParser(this, preferences);
 		case 7:
 			return new EarthShots();
+		case 8:
+			return new Bing(this);
 		default:
 			// Log.i(TAG, "Создание парсера по умолчанию");
 			return new Yandex(this, preferences);
@@ -854,10 +857,7 @@ public class Wallpaper extends WallpaperService {
 						c.translate(dX, 0f);
 					}
 
-					if (mHorizontal)
-						c.drawBitmap(bm, 0, -currentHeight / 3, null);
-					else
-						c.drawBitmap(bm, 0, 0, null);
+					c.drawBitmap(bm, 0, 0, null);
 				}
 			} finally {
 				if (c != null)
