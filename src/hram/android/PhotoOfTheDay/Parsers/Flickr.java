@@ -161,13 +161,13 @@ public class Flickr extends BaseParser
 	        
 	        return urls.get(rnd.nextInt(urls.size()));
 		}catch (SAXException e) {
-			try{
-				BugSenseHandler.sendExceptionMessage("Flickr.SAXException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
-			}catch (Exception e2) {}
+			//try{
+			//	BugSenseHandler.sendExceptionMessage("Flickr.SAXException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			//}catch (Exception e2) {}
 		}catch (ParserConfigurationException e) {
-			try{
-				BugSenseHandler.sendExceptionMessage("Flickr.ParserConfigurationException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
-			}catch (Exception e2) {}
+			//try{
+			//	BugSenseHandler.sendExceptionMessage("Flickr.ParserConfigurationException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			//}catch (Exception e2) {}
 		}catch (OutOfMemoryError e) {
 			//try{
 			//	BugSenseHandler.sendExceptionMessage("Flickr.GetUrlByTag", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
