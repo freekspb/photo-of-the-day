@@ -31,6 +31,7 @@ import hram.android.PhotoOfTheDay.Constants;
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 import hram.android.PhotoOfTheDay.R;
+import hram.android.PhotoOfTheDay.gallery.AndroidCustomGalleryActivity;
 
 /**
  * Виджет отправляющий в Wallpaper событие необходимости сохранения текущих обоев.
@@ -62,10 +63,10 @@ public class SdSaverAppWidgetProvider extends AppWidgetProvider {
          //регистрируем наше событие
          remoteViews.setOnClickPendingIntent(R.id.btn_bluetooth, actionPendingIntent);
 
-         //Подготавливаем Intent для Broadcast
-         Intent openGallery = new Intent(WidgetBroadcastEnum.OPEN_GALLERY_ACTION);
-         //создаем наше событие
-         PendingIntent openGalleryPendingIntent = PendingIntent.getBroadcast(context, 0, openGallery, 0);
+         // открытие галереи
+         Intent intent = new Intent(context, AndroidCustomGalleryActivity.class);
+         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+         PendingIntent openGalleryPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
          //регистрируем наше событие
          remoteViews.setOnClickPendingIntent(R.id.btn_wifi, openGalleryPendingIntent);
 

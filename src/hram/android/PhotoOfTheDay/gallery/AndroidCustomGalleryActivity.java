@@ -205,11 +205,6 @@ public class AndroidCustomGalleryActivity extends Activity
 		imagegrid = (GridView) findViewById(R.id.PhoneImageGrid);
 		imagegrid.setAdapter(imageAdapter);
 
-		// опрашиваем живые обои на запущенность
-		requestWallaper();
-		
-		//initializeButtons();
-		
 //		if (imageAdapter.getCount() == 0)
 //		{
 //			Toast.makeText(this, getString(R.string.noImages), Toast.LENGTH_SHORT).show();
@@ -224,9 +219,6 @@ public class AndroidCustomGalleryActivity extends Activity
 				openImage(v);
 			}
 		});
-		
-		// инициализируем кнопки
-		initializeButtons();
 	}
 
 	@Override
@@ -250,6 +242,16 @@ public class AndroidCustomGalleryActivity extends Activity
 		super.onStop();
 	}
 	
+	@Override
+	protected void onResume() {
+		// опрашиваем живые обои на запущенность
+		requestWallaper();		
+		// инициализируем кнопки
+		initializeButtons();
+		
+		super.onResume();
+	}
+
 	private void openImage(View v)
 	{
 		int id = (Integer)v.getTag(R.id.imageID);
