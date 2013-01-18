@@ -435,13 +435,13 @@ public class Wallpaper extends WallpaperService {
 			// e.getMessage()));
 			CheckOnline();
 		} catch (IncorrectDataFormat e) {
-			try {
-				BugSenseHandler.sendExceptionMessage("IncorrectDataFormat", "" + getCurrentParser(), e);
-			}catch (Exception e2) {}
+			//try {
+			//	BugSenseHandler.sendExceptionMessage("IncorrectDataFormat", "" + getCurrentParser(), e);
+			//}catch (Exception e2) {}
 		} catch (Exception e) {
-			try {
-				BugSenseHandler.sendExceptionMessage("Wallpaper.update", "" + getCurrentParser(), e);
-			}catch (Exception e2) {}
+			//try {
+			//	BugSenseHandler.sendExceptionMessage("Wallpaper.update", "" + getCurrentParser(), e);
+			//}catch (Exception e2) {}
 		}
 	}
 
@@ -557,10 +557,10 @@ public class Wallpaper extends WallpaperService {
 				unregisterReceiver(widgetReceiver);
 			}
 			catch(java.lang.IllegalArgumentException e){ 
-				BugSenseHandler.sendExceptionMessage("error/67667495", "После исправления", e);
+				//BugSenseHandler.sendExceptionMessage("error/67667495", "После исправления", e);
 			}
 			catch(Exception e){
-				BugSenseHandler.sendExceptionMessage("unregisterReceiver", "После исправления", e);
+				//BugSenseHandler.sendExceptionMessage("unregisterReceiver", "После исправления", e);
 			}
 			super.onDestroy();
 		}
@@ -829,7 +829,7 @@ public class Wallpaper extends WallpaperService {
 
 						try
 						{
-							bm = Bitmap.createScaledBitmap(bm, newBmWidth, newBmHeight, true);
+							bm = Bitmap.createScaledBitmap(bm, newBmWidth, newBmHeight, false);
 							wp.SetBitmap(bm);
 							currentHeight = mHeight;
 							currentWidth = mWidth;

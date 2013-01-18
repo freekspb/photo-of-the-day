@@ -54,13 +54,13 @@ public class EarthShots extends BaseParser
     		String image = str.substring(startPosition, endPosition - 1);
     		return image.replaceFirst("/285/", "/full/");
 		}catch (SAXException e) {
-			try{
-				BugSenseHandler.sendExceptionMessage("EarthShots.SAXException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
-			}catch (Exception e2) {}
+			//try{
+			//	BugSenseHandler.sendExceptionMessage("EarthShots.SAXException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			//}catch (Exception e2) {}
 		}catch (ParserConfigurationException e) {
-			try{
-				BugSenseHandler.sendExceptionMessage("EarthShots.ParserConfigurationException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
-			}catch (Exception e2) {}
+			//try{
+			//	BugSenseHandler.sendExceptionMessage("EarthShots.ParserConfigurationException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			//}catch (Exception e2) {}
 		}catch (OutOfMemoryError e) {}
 		return null;
 	}
