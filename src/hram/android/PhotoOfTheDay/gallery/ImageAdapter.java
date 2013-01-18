@@ -1,4 +1,4 @@
-package hram.android.PhotoOfTheDay.appwidget;
+package hram.android.PhotoOfTheDay.gallery;
 
 import java.sql.Date;
 import java.text.DateFormat;
