@@ -153,7 +153,7 @@ public class AndroidCustomGalleryActivity extends Activity
 	{
 		Intent intent = new Intent(this, HelpActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		String page = HelpActivity.WHATS_NEW_PAGE;
+		String page = HelpActivity.DEFAULT_PAGE;
 		//page = HelpActivity.DEFAULT_PAGE;
 		intent.putExtra(HelpActivity.REQUESTED_PAGE_KEY, page);
 		
