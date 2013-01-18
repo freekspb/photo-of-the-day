@@ -27,7 +27,7 @@
     <string name="howToUse">How to use</string>
     <string name="howToUseDescr">Details about the app</string>
     <string name="whatsNew">What\'s new?</string>
-    <string name="softwareVersion">Software wersion</string>
+    <string name="softwareVersion">Software version</string>
     <string name="updateStarted">Download image started.</string>
     <string name="setupDescription">"Choose 'Photo of the day'\r\n from the list."</string>
     <!-- ============================ -->
@@ -39,7 +39,8 @@
     <string name="button_back">Back</string>
     <string name="button_done">Ok</string>
     <string name="bingCountryTag">(Bing United States)</string>
-    <string name="installWallpaper">Images are downloaded and updated automatically every day from resource  (website) you choose in settings. Run live wallpaper "Photo of the day" and enjoy the best photos of the world on your device desktop.</string>
+    <string name="installWallpaper">"Images are downloaded and updated automatically every day from resource  (website) you choose in settings. Run live wallpaper 'Photo of the day' and enjoy the best photos of the world on your device desktop."</string>
     <string name="installSettings">Settings</string>
     <string name="installStart">Start</string>
+    <string name="installAbout">About</string>
 </resources>

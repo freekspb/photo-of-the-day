@@ -26,6 +26,8 @@ import android.provider.MediaStore;
 //import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -52,6 +54,11 @@ public class AndroidCustomGalleryActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		
+        // remove title
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        
 		//Log.i(TAG, "onCreate");
 		try {
 			showHelpOnFirstLaunch();
@@ -142,6 +149,17 @@ public class AndroidCustomGalleryActivity extends Activity
 		this.startActivity(myIntent);
 	}
 	
+	public void showHelp()
+	{
+		Intent intent = new Intent(this, HelpActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		String page = HelpActivity.WHATS_NEW_PAGE;
+		//page = HelpActivity.DEFAULT_PAGE;
+		intent.putExtra(HelpActivity.REQUESTED_PAGE_KEY, page);
+		
+		startActivity(intent);
+	}
+	
 //	private void addInstallWallapaperInclude()
 //	{
 //		addInflateLayout(R.layout.install_wallpaper_include);
@@ -160,7 +178,7 @@ public class AndroidCustomGalleryActivity extends Activity
 	            	try {
 	            		runFastSettings();
 	    			} catch (Exception e) {
-	//    				BugSenseHandler.sendException(e);
+	    				BugSenseHandler.sendException(e);
 	    			}
 	            }
 			});
@@ -175,11 +193,26 @@ public class AndroidCustomGalleryActivity extends Activity
 	            	try {
 	            		runSetUpWallpaper();
 	    			} catch (Exception e) {
-	//    				BugSenseHandler.sendException(e);
+	    				BugSenseHandler.sendException(e);
 	    			}
 	            }
 			});
 		}
+		
+		// О программе
+		Button about = (Button)findViewById(R.id.installAboutButton);
+		if (about != null)
+		{
+			about.setOnClickListener(new View.OnClickListener() {
+	            public void onClick(View v) {
+	            	try {
+	            		showHelp();
+	    			} catch (Exception e) {
+	    				BugSenseHandler.sendException(e);
+	    			}
+	            }
+			});
+		}		
 	}
 
 	private void requestWallaper()

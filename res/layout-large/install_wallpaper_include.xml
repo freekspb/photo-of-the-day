@@ -24,7 +24,7 @@
 		<Button
 		    android:id="@+id/installSettingsButton"
 		    android:layout_width="0dp"
-		    android:layout_weight="0.5"
+		    android:layout_weight="1"
 		    android:layout_height="wrap_content"
 			android:gravity="center"		    
 	        android:text="@string/installSettings"
@@ -34,12 +34,21 @@
 	    <Button
 		    android:id="@+id/installStartButton"
 		    android:layout_width="0dp"
-		    android:layout_weight="0.5"
+		    android:layout_weight="1"
 		    android:layout_height="wrap_content"
 		    android:gravity="center"		    
 	        android:text="@string/installStart"
 	        android:contentDescription="@string/installStart"
 		    android:drawableLeft="@drawable/ic_gallery_run_wallpaper" />
+
+	    <Button
+		    android:id="@+id/installAboutButton"
+		    android:layout_width="0dp"
+		    android:layout_weight="1"
+		    android:layout_height="wrap_content"
+		    android:gravity="center"		    
+	        android:text="@string/installAbout"
+		    android:drawableLeft="@drawable/ic_gallery_about" />
 	    
 	</LinearLayout>
 

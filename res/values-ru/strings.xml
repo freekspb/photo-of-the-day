@@ -37,7 +37,8 @@
     <string name="button_back">Назад</string>
     <string name="button_done">Продолжить</string>
     <string name="bingCountryTag">(Bing United States)</string>
-    <string name="installWallpaper">Изображения загружаются и обновляются автоматически каждый день с выбранного в настройках ресурса. Запустите живые обои "Фото дня" и наслаждайтесь лучшими фотографиями мира на рабочем столе Вашего устройства.</string>
+    <string name="installWallpaper">"Изображения загружаются и обновляются автоматически каждый день с выбранного в настройках источника (веб-сайта). Запустите живые обои 'Фото дня' и наслаждайтесь лучшими фотографиями мира на рабочем столе Вашего устройства."</string>
     <string name="installSettings">Настройки</string>
     <string name="installStart">Запустить</string>
+    <string name="installAbout">О программе</string>
 </resources>
