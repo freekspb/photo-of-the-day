@@ -43,7 +43,7 @@ public class SetUpLiveWallpaper extends Activity
         	startActivity(intent);
         }
         catch(Exception e){
-        	BugSenseHandler.sendExceptionMessage("error/67505696", "После исправления", e);
+        	//BugSenseHandler.sendExceptionMessage("error/67505696", "После исправления", e);
         }
         
         finish();
