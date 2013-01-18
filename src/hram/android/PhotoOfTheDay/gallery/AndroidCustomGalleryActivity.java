@@ -1,4 +1,4 @@
-package hram.android.PhotoOfTheDay.appwidget;
+package hram.android.PhotoOfTheDay.gallery;
 
 import java.io.File;
 
@@ -6,27 +6,31 @@ import com.bugsense.trace.BugSenseHandler;
 
 import hram.android.PhotoOfTheDay.Constants;
 import hram.android.PhotoOfTheDay.R;
+import hram.android.PhotoOfTheDay.SetUpLiveWallpaper;
+import hram.android.PhotoOfTheDay.appwidget.FastSettings;
+import hram.android.PhotoOfTheDay.appwidget.SDHelper;
 import hram.android.PhotoOfTheDay.help.HelpActivity;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.CursorLoader;
+//import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 //import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
@@ -41,6 +45,8 @@ public class AndroidCustomGalleryActivity extends Activity
 	private String imagesOrderBy = null;
 	private Uri imagesUri = null;
 	private String imagesQuery = null;
+	
+	private GalleryBroadcastReceiver galleryReceiver;	
 
 	/** Called when the activity is first created. */
 	@Override
@@ -48,12 +54,20 @@ public class AndroidCustomGalleryActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		
+        // remove title
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        
 		//Log.i(TAG, "onCreate");
 		try {
 			showHelpOnFirstLaunch();
 		} catch (Exception e) {
 			BugSenseHandler.sendExceptionMessage("Wallpaper", "showHelpOnFirstLaunch", e);
 		}
+		
+		galleryReceiver = new GalleryBroadcastReceiver(this);
+		registerReceiver(galleryReceiver, new IntentFilter(GalleryBroadcastEnum.ANSWER_WALLPAPER));		
 	}
 	
 	/**
@@ -104,23 +118,108 @@ public class AndroidCustomGalleryActivity extends Activity
 		*/
 	}
 
-	@TargetApi(11)
-	private Cursor getImages_API_11() 
-	{
-		CursorLoader cursorLoader = new CursorLoader(this, imagesUri, imagesColumns, imagesQuery, new String[] {SDHelper.MEDIA_TAG}, imagesOrderBy);
-		return cursorLoader.loadInBackground();
-	}
+//	@TargetApi(11)
+//	private Cursor getImages_API_11() 
+//	{
+//		CursorLoader cursorLoader = new CursorLoader(this, imagesUri, imagesColumns, imagesQuery, new String[] {SDHelper.MEDIA_TAG}, imagesOrderBy);
+//		return cursorLoader.loadInBackground();
+//	}
 	
 	/** Встраивает layout по его id r_layout в верхней части галереи. */
 	private void addInflateLayout(int r_layout) {
-        LinearLayout submitScoreLayout = (LinearLayout)findViewById(R.id.gallery_include);
-        submitScoreLayout.removeAllViews();
+        LinearLayout containerLayout = (LinearLayout)findViewById(R.id.gallery_include);
+        containerLayout.removeAllViews();
 
         // Create new LayoutInflater - this has to be done this way, as you can't directly inflate an XML without creating an inflater object first
         LayoutInflater inflater = getLayoutInflater();
-        submitScoreLayout.addView(inflater.inflate(r_layout, null));
+        containerLayout.addView(inflater.inflate(r_layout, null));
 	}
 
+	private void runFastSettings()
+	{
+		Intent myIntent = new Intent(this, FastSettings.class);
+		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		this.startActivity(myIntent);
+	}
+
+	private void runSetUpWallpaper()
+	{
+		Intent myIntent = new Intent(this, SetUpLiveWallpaper.class);
+		myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		this.startActivity(myIntent);
+	}
+	
+	public void showHelp()
+	{
+		Intent intent = new Intent(this, HelpActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		String page = HelpActivity.WHATS_NEW_PAGE;
+		//page = HelpActivity.DEFAULT_PAGE;
+		intent.putExtra(HelpActivity.REQUESTED_PAGE_KEY, page);
+		
+		startActivity(intent);
+	}
+	
+//	private void addInstallWallapaperInclude()
+//	{
+//		addInflateLayout(R.layout.install_wallpaper_include);
+//	
+//		initializeButtons();
+//	}
+
+	private void initializeButtons()
+	{
+		// настройки
+		Button settings = (Button)findViewById(R.id.installSettingsButton);
+		if (settings != null)
+		{
+			settings.setOnClickListener(new View.OnClickListener() {
+	            public void onClick(View v) {
+	            	try {
+	            		runFastSettings();
+	    			} catch (Exception e) {
+	    				BugSenseHandler.sendException(e);
+	    			}
+	            }
+			});
+		}
+		
+		// запустить
+		Button start = (Button)findViewById(R.id.installStartButton);
+		if (start != null)
+		{
+			start.setOnClickListener(new View.OnClickListener() {
+	            public void onClick(View v) {
+	            	try {
+	            		runSetUpWallpaper();
+	    			} catch (Exception e) {
+	    				BugSenseHandler.sendException(e);
+	    			}
+	            }
+			});
+		}
+		
+		// О программе
+		Button about = (Button)findViewById(R.id.installAboutButton);
+		if (about != null)
+		{
+			about.setOnClickListener(new View.OnClickListener() {
+	            public void onClick(View v) {
+	            	try {
+	            		showHelp();
+	    			} catch (Exception e) {
+	    				BugSenseHandler.sendException(e);
+	    			}
+	            }
+			});
+		}		
+	}
+
+	private void requestWallaper()
+	{
+		sendBroadcast(new Intent(GalleryBroadcastEnum.REQUEST_WALLPAPER));
+	}
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -139,12 +238,12 @@ public class AndroidCustomGalleryActivity extends Activity
 		imagegrid = (GridView) findViewById(R.id.PhoneImageGrid);
 		imagegrid.setAdapter(imageAdapter);
 
-		if (imageAdapter.getCount() == 0)
-		{
-			Toast.makeText(this, getString(R.string.noImages), Toast.LENGTH_SHORT).show();
-			
-			addInflateLayout(R.layout.install_widget_include);
-		}
+//		if (imageAdapter.getCount() == 0)
+//		{
+//			Toast.makeText(this, getString(R.string.noImages), Toast.LENGTH_SHORT).show();
+//			
+//			addInflateLayout(R.layout.install_widget_include);
+//		}
 		
 		imagegrid.setOnItemClickListener(new OnItemClickListener() 
 		{
@@ -153,7 +252,6 @@ public class AndroidCustomGalleryActivity extends Activity
 				openImage(v);
 			}
 		});
-		
 	}
 
 	@Override
@@ -177,6 +275,16 @@ public class AndroidCustomGalleryActivity extends Activity
 		super.onStop();
 	}
 	
+	@Override
+	protected void onResume() {
+		// опрашиваем живые обои на запущенность
+		requestWallaper();		
+		// инициализируем кнопки
+		initializeButtons();
+		
+		super.onResume();
+	}
+
 	private void openImage(View v)
 	{
 		int id = (Integer)v.getTag(R.id.imageID);
@@ -204,9 +312,25 @@ public class AndroidCustomGalleryActivity extends Activity
 		}
 	}
 	
-	@TargetApi(11)
-	private Cursor getImageCursor_API_11(String[] columns, int id) 
-	{
-		return new CursorLoader(this, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, MediaStore.Images.Media._ID + " = " + id, null, MediaStore.Images.Media._ID).loadInBackground();
+//	@TargetApi(11)
+//	private Cursor getImageCursor_API_11(String[] columns, int id) 
+//	{
+//		return new CursorLoader(this, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, MediaStore.Images.Media._ID + " = " + id, null, MediaStore.Images.Media._ID).loadInBackground();
+//	}
+	
+	public void removeInstallWallapaperInclude() {
+		addInflateLayout(R.layout.null_include);		
+	}
+
+	@Override
+	protected void onDestroy() {
+		try
+		{ 
+			unregisterReceiver(galleryReceiver);
+		}
+		catch (Exception e)
+		{
+		}
+		super.onDestroy();
 	}
 }

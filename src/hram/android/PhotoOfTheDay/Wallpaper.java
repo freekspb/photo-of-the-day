@@ -11,6 +11,7 @@ import hram.android.PhotoOfTheDay.Parsers.NationalGeographic;
 import hram.android.PhotoOfTheDay.Parsers.TestParser;
 import hram.android.PhotoOfTheDay.Parsers.Wikipedia;
 import hram.android.PhotoOfTheDay.Parsers.Yandex;
+import hram.android.PhotoOfTheDay.gallery.GalleryBroadcastEnum;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastEnum;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastReceiver;
 
@@ -535,6 +536,7 @@ public class Wallpaper extends WallpaperService {
 			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.NEXT_PARSER_ACTION));
 			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.SETTINGS_ACTION));
 			registerReceiver(widgetReceiver, new IntentFilter(WidgetBroadcastEnum.CHANGE_SETTINGS_ACTION));
+			registerReceiver(widgetReceiver, new IntentFilter(GalleryBroadcastEnum.REQUEST_WALLPAPER));
 		}
 
 		@Override

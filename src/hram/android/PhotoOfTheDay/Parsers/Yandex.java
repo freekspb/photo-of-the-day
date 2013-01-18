@@ -67,7 +67,7 @@ public class Yandex extends BaseParser
 				
 				//String str = href.attr("href");
 				url = src.attr("src");
-				url = url.substring(0,url.length() - 3) + "L";
+				url = url.substring(0,url.length() - 3) + "XXL";
 			}
         }catch (OutOfMemoryError e) {
 			//try{
@@ -113,7 +113,7 @@ public class Yandex extends BaseParser
 					}
 					
 					str = src.attr("src");
-					str = str.substring(0, str.length() - 1) + "L";
+					str = str.substring(0, str.length() - 1) + "XXL";
 					//Log.i(TAG, "src: " + str);
 					if(wp.GetCurrentUrl() != null && wp.GetCurrentUrl().equals(str))
 					{

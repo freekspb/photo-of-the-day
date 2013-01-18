@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" 
 	android:layout_height="fill_parent">
 	
-    <include
-        android:id="@+id/gallery_include"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        layout="@layout/null_include" />
-
     <GridView android:id="@+id/PhoneImageGrid"
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent"
-		android:numColumns="4" 
+		android:numColumns="3" 
 		android:verticalSpacing="5dp"
 		android:horizontalSpacing="5dp" 
 		android:stretchMode="columnWidth" 
 		android:gravity="center"/>
+
+    <include
+        android:id="@+id/gallery_include"
+        android:layout_width="550dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        layout="@layout/install_wallpaper_include" />
 	
-</LinearLayout>
+</FrameLayout>
