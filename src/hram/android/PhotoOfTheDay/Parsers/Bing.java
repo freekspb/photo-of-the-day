@@ -87,13 +87,13 @@ public class Bing extends BaseParser
     		String image = str.substring(startPosition, endPosition - 1);
     		return image;
 		}catch (SAXException e) {
-			try{
-				BugSenseHandler.sendExceptionMessage("Bing.SAXException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
-			}catch (Exception e2) {}
+			//try{
+			//	BugSenseHandler.sendExceptionMessage("Bing.SAXException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			//}catch (Exception e2) {}
 		}catch (ParserConfigurationException e) {
-			try{
-				BugSenseHandler.sendExceptionMessage("Bing.ParserConfigurationException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
-			}catch (Exception e2) {}
+			//try{
+			//	BugSenseHandler.sendExceptionMessage("Bing.ParserConfigurationException", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			//}catch (Exception e2) {}
 		}catch (OutOfMemoryError e) {}
 		return null;
 	}
