@@ -26,6 +26,7 @@ import android.provider.MediaStore;
 //import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -126,14 +127,21 @@ public class AndroidCustomGalleryActivity extends Activity
 //	}
 	
 	/** Встраивает layout по его id r_layout в верхней части галереи. */
-	private void addInflateLayout(int r_layout) {
-        LinearLayout containerLayout = (LinearLayout)findViewById(R.id.gallery_include);
-        containerLayout.removeAllViews();
-
-        // Create new LayoutInflater - this has to be done this way, as you can't directly inflate an XML without creating an inflater object first
-        LayoutInflater inflater = getLayoutInflater();
-        containerLayout.addView(inflater.inflate(r_layout, null));
-	}
+//	private void addInflateLayout(int r_layout) {
+//		try{
+//		ViewGroup containerLayout = (ViewGroup)findViewById(R.id.gallery_include);
+//        containerLayout.removeAllViews();
+//
+//        containerLayout.setVisibility(View.VISIBLE);
+//        // Create new LayoutInflater - this has to be done this way, as you can't directly inflate an XML without creating an inflater object first
+//        LayoutInflater inflater = getLayoutInflater();
+//        containerLayout.addView(inflater.inflate(r_layout, null));
+//		}
+//		catch(Exception e)
+//		{
+//			int a = 1;
+//		}
+//	}
 
 	private void runFastSettings()
 	{
@@ -153,7 +161,7 @@ public class AndroidCustomGalleryActivity extends Activity
 	{
 		Intent intent = new Intent(this, HelpActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		String page = HelpActivity.WHATS_NEW_PAGE;
+		String page = HelpActivity.DEFAULT_PAGE;
 		//page = HelpActivity.DEFAULT_PAGE;
 		intent.putExtra(HelpActivity.REQUESTED_PAGE_KEY, page);
 		
@@ -319,7 +327,10 @@ public class AndroidCustomGalleryActivity extends Activity
 //	}
 	
 	public void removeInstallWallapaperInclude() {
-		addInflateLayout(R.layout.null_include);		
+		ViewGroup containerLayout = (ViewGroup)findViewById(R.id.gallery_include);
+        containerLayout.removeAllViews();
+
+        containerLayout.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
