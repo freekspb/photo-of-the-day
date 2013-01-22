@@ -35,6 +35,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
@@ -45,7 +46,6 @@ import android.service.wallpaper.WallpaperService;
 import android.util.DisplayMetrics;
 //import android.util.Log;
 import android.view.Display;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -145,6 +145,44 @@ public class Wallpaper extends WallpaperService {
 	 */
 	public void SetBitmap(Bitmap value) {
 		// Log.d(TAG, "Сохранение указателя картинки");
+		
+		if (value == null)
+		{
+			bm = null;
+			currentHeight = -1;
+			currentWidth = -1;
+			return;
+		}
+		int bmWidth = value.getWidth(); //исходная ширина 
+		int bmHeight = value.getHeight(); //исходная высота 
+		
+		DisplayMetrics metrics = new DisplayMetrics();
+		Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+		display.getMetrics(metrics);
+		
+		int displayWidth = display.getWidth();
+		int displayHeight = display.getHeight();
+
+		if (bmWidth != displayWidth || bmHeight != displayHeight) {
+			// Log.d(TAG,String.format("Изменились размеры, изменяем размер: %d->%d, %d->%d", currentHeight, mHeight, currentWidth, mWidth));
+			float rescaling = (float) displayHeight / bmHeight;
+			
+			int newBmHeight = displayHeight;
+			int newBmWidth = (int) (bmWidth * rescaling);
+			
+			// если ширина экрана больше картинки после мастабировния
+			if (newBmWidth < displayWidth)
+			{
+				// то масштабируем по ширине
+				rescaling = (float) displayWidth / bmWidth;
+				newBmHeight = (int) (bmHeight * rescaling);
+				newBmWidth = displayWidth;							
+			}
+			
+			bm = Bitmap.createScaledBitmap(value, newBmWidth, newBmHeight, true);
+			return;
+		}
+		
 		bm = value;
 	}
 
@@ -319,17 +357,12 @@ public class Wallpaper extends WallpaperService {
 
 			Calendar c = Calendar.getInstance();
 			c.setTimeInMillis(lastUpdate);
+			//зачем на чтение установка даты загрузки картинки?
 			SetCurrentDay(c.get(Calendar.DATE));
 
 			if (GetCurrentUrl().length() > 0) {
 				stream = openFileInput(Constants.FILE_NAME);
-				bm = BitmapFactory.decodeStream(stream);
-				// Log.d(TAG, "Считана картинка из файла");
-
-				currentHeight = bm.getHeight();
-				currentWidth = bm.getWidth();
-				// Log.d(TAG, String.format("Ширина: %d, Высота: %d",
-				// currentWidth, currentHeight));
+				SetBitmap(BitmapFactory.decodeStream(stream));				
 			}
 
 		} catch (Exception e) {
@@ -342,7 +375,6 @@ public class Wallpaper extends WallpaperService {
 				} catch (IOException e) {
 				}
 		}
-
 	}
 
 	/**
@@ -408,6 +440,7 @@ public class Wallpaper extends WallpaperService {
 				return;
 			}
 
+			//утановку свойства LAST_UPDATE перенести сюда
 			// Log.d(TAG, "Загрузка картинки по адресу: " + url);
 			// Bitmap bm = ImageDownloader.loadImageFromUrl(url);
 			Bitmap bm = new DirectLoader().download(url);
@@ -488,7 +521,6 @@ public class Wallpaper extends WallpaperService {
 		private int mWidth = -1;
 		private Wallpaper wp;
 		// private Rect mRectFrame;
-		private boolean mHorizontal;
 		private Bitmap download;
 		private SharedPreferences preferences;
 		final WidgetBroadcastReceiver widgetReceiver;
@@ -675,7 +707,6 @@ public class Wallpaper extends WallpaperService {
 
 			mHeight = height;
 			mWidth = width;
-			initFrameParams();
 			drawFrame();
 		}
 
@@ -806,60 +837,59 @@ public class Wallpaper extends WallpaperService {
 						download = null;
 					}
 					
+					float rescaling = 1;
+					
 					if (mHeight != currentHeight || mWidth != currentWidth) {
 						// Log.d(TAG,String.format("Изменились размеры, изменяем размер: %d->%d, %d->%d", currentHeight, mHeight, currentWidth, mWidth));
-						double rescaling = (double) mHeight / bm.getHeight();
-						
-						int newBmHeight = mHeight;
+						rescaling = (float) mHeight / bm.getHeight();
 						int newBmWidth = (int) (bm.getWidth() * rescaling);
 						
 						// если ширина экрана больше картинки после мастабировния
 						if (newBmWidth < mWidth)
 						{
 							// то масштабируем по ширине
-							rescaling = (double) mWidth / bm.getWidth();
-							newBmHeight = (int) (bm.getHeight() * rescaling);
-							newBmWidth = mWidth;							
-						}
-						
-//						if (mHorizontal) {
-//							rescaling = (double) mWidth / bm.getWidth();
-//							rescaling *= 1.5;
-//						}
-
-						try
-						{
-							bm = Bitmap.createScaledBitmap(bm, newBmWidth, newBmHeight, false);
-							wp.SetBitmap(bm);
-							currentHeight = mHeight;
-							currentWidth = mWidth;
-						}catch (OutOfMemoryError e) {
-							System.gc();
-							c.drawText(getText(R.string.error).toString(), mWidth / 2, 100, mPaint);
-							c.drawText(getText(R.string.isOutOfMemory1).toString(), mWidth / 2, 150, mPaint);
-							c.drawText(getText(R.string.isOutOfMemory2).toString(), mWidth / 2, 200, mPaint);
-							/*
-							try{
-								// логирование показало что картинки скачиваются нормальные (корректный URL) и нормально отображаются (проверено с пом. тестового парсера)
-								String msg = String.format("URL: %s, Width: %d, Height: %d, mWidth: %d, mHeight: %d, rescaling: %f", GetCurrentUrl(), bm.getWidth(), bm.getHeight(), mWidth, mHeight, (float)rescaling);
-								BugSenseHandler.sendExceptionMessage("createScaledBitmap", msg, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
-							}catch (Exception e2){
-							}finally{
-								ResetBitmap();
-							}
-							*/
-							return;
+							rescaling = (float) mWidth / bm.getWidth();
 						}
 					}
+					
+					// матрица масштабирования
+					Matrix matrix = new Matrix();
+					matrix.setScale(rescaling, rescaling);
 
+					float dX = 0;
+					// смещение для устройств со скролингом
 					if (isPreview() == false && mXStep != 0) {
 						float step1 = mWidth * mXStep;
 						float step2 = (bm.getWidth() - mWidth) * mXStep;
-						float dX = (float) mPixels * (step2 / step1);
+						dX = (float) mPixels * (step2 / step1);
+					}
+					// смещение для устройств без скролинга (по центру)
+					if (mXStep == -1 || mXStep == 0) {
+						dX = (mWidth - bm.getWidth())/2;
+					}
+					if (dX != 0)
+					{
 						c.translate(dX, 0f);
 					}
-
-					c.drawBitmap(bm, 0, 0, null);
+					
+					try
+					{
+						c.drawBitmap(bm, matrix, null);
+					}catch (OutOfMemoryError e) {
+						System.gc();
+						c.drawText(getText(R.string.error).toString(), mWidth / 2, 100, mPaint);
+						c.drawText(getText(R.string.isOutOfMemory1).toString(), mWidth / 2, 150, mPaint);
+						c.drawText(getText(R.string.isOutOfMemory2).toString(), mWidth / 2, 200, mPaint);
+						try{
+							// логирование показало что картинки скачиваются нормальные (корректный URL) и нормально отображаются (проверено с пом. тестового парсера)
+							String msg = String.format("URL: %s, Width: %d, Height: %d, mWidth: %d, mHeight: %d, rescaling: %f", GetCurrentUrl(), bm.getWidth(), bm.getHeight(), mWidth, mHeight, (float)rescaling);
+							BugSenseHandler.sendExceptionMessage("c.drawBitmap(bm, matrix, null)", msg, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+						}catch (Exception e2){
+						}finally{
+							ResetBitmap();
+						}
+						return;
+					}
 				}
 			} finally {
 				if (c != null)
@@ -870,22 +900,6 @@ public class Wallpaper extends WallpaperService {
 				if (mVisible) {
 					// mHandler.postDelayed(drawRunner, 1000);
 				}
-			}
-		}
-
-		void initFrameParams() {
-			DisplayMetrics metrics = new DisplayMetrics();
-			Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-			display.getMetrics(metrics);
-
-			// mRectFrame = new Rect(0, 0, metrics.widthPixels,
-			// metrics.heightPixels);
-
-			int rotation = display.getOrientation();
-			if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
-				mHorizontal = false;
-			} else {
-				mHorizontal = true;
 			}
 		}
 
