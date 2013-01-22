@@ -10,7 +10,6 @@ import hram.android.PhotoOfTheDay.Constants;
 import hram.android.PhotoOfTheDay.Wallpaper;
 import hram.android.PhotoOfTheDay.Wallpaper.MyEngine;
 import hram.android.PhotoOfTheDay.gallery.AndroidCustomGalleryActivity;
-import hram.android.PhotoOfTheDay.gallery.GalleryBroadcastEnum;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -112,14 +111,6 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
 				BugSenseHandler.sendException(e);
 			}
         }
-        else if (action.equals(GalleryBroadcastEnum.REQUEST_WALLPAPER)) {
-        	try {
-        		wp.sendBroadcast(new Intent(GalleryBroadcastEnum.ANSWER_WALLPAPER));
-    			return;
-			} catch (Exception e) {
-				//BugSenseHandler.sendException(e);
-			}
-        }        
     }
     
     private int getNextParser(int currentParser) {

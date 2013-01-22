@@ -11,12 +11,21 @@
 		android:horizontalSpacing="5dp" 
 		android:stretchMode="columnWidth" 
 		android:gravity="center"/>
-
+    
+    <include
+        android:id="@+id/gallery_actionbar_include"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_gravity="right|top"
+        layout="@layout/gallery_actionbar_include"
+        android:visibility="visible" />
+    
     <include
         android:id="@+id/gallery_include"
         android:layout_width="550dp"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
-        layout="@layout/install_wallpaper_include" />
+		android:visibility="invisible"	        
+        layout="@layout/null_include" />
 	
 </FrameLayout>

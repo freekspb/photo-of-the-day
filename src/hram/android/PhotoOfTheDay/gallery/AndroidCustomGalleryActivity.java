@@ -7,14 +7,17 @@ import com.bugsense.trace.BugSenseHandler;
 import hram.android.PhotoOfTheDay.Constants;
 import hram.android.PhotoOfTheDay.R;
 import hram.android.PhotoOfTheDay.SetUpLiveWallpaper;
+import hram.android.PhotoOfTheDay.Wallpaper;
 import hram.android.PhotoOfTheDay.appwidget.FastSettings;
 import hram.android.PhotoOfTheDay.appwidget.SDHelper;
 import hram.android.PhotoOfTheDay.help.HelpActivity;
 
 import android.app.Activity;
+import android.app.WallpaperInfo;
+import android.app.WallpaperManager;
+import android.content.ComponentName;
 //import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -31,7 +34,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
@@ -47,8 +50,6 @@ public class AndroidCustomGalleryActivity extends Activity
 	private Uri imagesUri = null;
 	private String imagesQuery = null;
 	
-	private GalleryBroadcastReceiver galleryReceiver;	
-
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
@@ -66,9 +67,6 @@ public class AndroidCustomGalleryActivity extends Activity
 		} catch (Exception e) {
 			BugSenseHandler.sendExceptionMessage("Wallpaper", "showHelpOnFirstLaunch", e);
 		}
-		
-		galleryReceiver = new GalleryBroadcastReceiver(this);
-		registerReceiver(galleryReceiver, new IntentFilter(GalleryBroadcastEnum.ANSWER_WALLPAPER));		
 	}
 	
 	/**
@@ -126,22 +124,20 @@ public class AndroidCustomGalleryActivity extends Activity
 //		return cursorLoader.loadInBackground();
 //	}
 	
-	/** Встраивает layout по его id r_layout в верхней части галереи. */
-//	private void addInflateLayout(int r_layout) {
-//		try{
-//		ViewGroup containerLayout = (ViewGroup)findViewById(R.id.gallery_include);
-//        containerLayout.removeAllViews();
-//
-//        containerLayout.setVisibility(View.VISIBLE);
-//        // Create new LayoutInflater - this has to be done this way, as you can't directly inflate an XML without creating an inflater object first
-//        LayoutInflater inflater = getLayoutInflater();
-//        containerLayout.addView(inflater.inflate(r_layout, null));
-//		}
-//		catch(Exception e)
-//		{
-//			int a = 1;
-//		}
-//	}
+	/** Встраивает layout по его id r_layout в r_include. */
+	private void addInflateLayout(int r_include, int r_layout) {
+		ViewGroup containerLayout = (ViewGroup)findViewById(r_include);
+		if (containerLayout == null)
+		{
+			return;
+		}
+        containerLayout.removeAllViews();
+
+        containerLayout.setVisibility(View.VISIBLE);
+        // Create new LayoutInflater - this has to be done this way, as you can't directly inflate an XML without creating an inflater object first
+        LayoutInflater inflater = getLayoutInflater();
+        containerLayout.addView(inflater.inflate(r_layout, null));
+	}
 
 	private void runFastSettings()
 	{
@@ -168,12 +164,12 @@ public class AndroidCustomGalleryActivity extends Activity
 		startActivity(intent);
 	}
 	
-//	private void addInstallWallapaperInclude()
-//	{
-//		addInflateLayout(R.layout.install_wallpaper_include);
-//	
-//		initializeButtons();
-//	}
+	private void addInstallWallapaperInclude()
+	{
+		addInflateLayout(R.id.gallery_include, R.layout.install_wallpaper_include);
+	
+		initializeButtons();
+	}
 
 	private void initializeButtons()
 	{
@@ -223,9 +219,45 @@ public class AndroidCustomGalleryActivity extends Activity
 		}		
 	}
 
-	private void requestWallaper()
+	private void addActionBarInclude()
 	{
-		sendBroadcast(new Intent(GalleryBroadcastEnum.REQUEST_WALLPAPER));
+		addInflateLayout(R.id.gallery_actionbar_include, R.layout.gallery_actionbar_include);
+	
+		initializeActionBar();
+	}
+	
+	private void initializeActionBar()
+	{
+		// настройки
+		ImageButton settings = (ImageButton)findViewById(R.id.actionSettingsButton);
+		if (settings != null)
+		{
+			settings.setOnClickListener(new View.OnClickListener() {
+	            public void onClick(View v) {
+	            	try {
+	            		runFastSettings();
+	    			} catch (Exception e) {
+	    				BugSenseHandler.sendException(e);
+	    			}
+	            }
+			});
+		}
+	}
+
+	private void checkWallpaper()
+	{
+		WallpaperManager wpm = (WallpaperManager) getSystemService(WALLPAPER_SERVICE);
+		WallpaperInfo info = wpm.getWallpaperInfo();
+		if (info != null && info.getComponent().equals(new ComponentName(this, Wallpaper.class)))
+		{
+			setInvisibleInclude(R.id.gallery_include);
+			addActionBarInclude();
+		} 
+		else
+		{
+			setInvisibleInclude(R.id.gallery_actionbar_include);
+			addInstallWallapaperInclude();
+		}
 	}
 	
 	@Override
@@ -285,8 +317,8 @@ public class AndroidCustomGalleryActivity extends Activity
 	
 	@Override
 	protected void onResume() {
-		// опрашиваем живые обои на запущенность
-		requestWallaper();		
+		// проверка запущенности обоев
+		checkWallpaper();
 		// инициализируем кнопки
 		initializeButtons();
 		
@@ -325,23 +357,27 @@ public class AndroidCustomGalleryActivity extends Activity
 //	{
 //		return new CursorLoader(this, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, MediaStore.Images.Media._ID + " = " + id, null, MediaStore.Images.Media._ID).loadInBackground();
 //	}
-	
+
 	public void removeInstallWallapaperInclude() {
 		ViewGroup containerLayout = (ViewGroup)findViewById(R.id.gallery_include);
+		if (containerLayout == null)
+		{
+			return;
+		}
+		
         containerLayout.removeAllViews();
-
         containerLayout.setVisibility(View.INVISIBLE);
 	}
 
-	@Override
-	protected void onDestroy() {
-		try
-		{ 
-			unregisterReceiver(galleryReceiver);
-		}
-		catch (Exception e)
+	private void setInvisibleInclude(int r_include)
+	{
+		ViewGroup containerLayout = (ViewGroup)findViewById(r_include);
+		if (containerLayout == null)
 		{
+			return;
 		}
-		super.onDestroy();
+		
+        containerLayout.removeAllViews();
+        containerLayout.setVisibility(View.INVISIBLE);		
 	}
 }
