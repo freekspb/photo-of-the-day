@@ -68,8 +68,7 @@ public class Wallpaper extends WallpaperService {
 	@Override
 	public void onCreate() {
 		// Log.i(TAG, "Создание сервиса.");
-		// BugSenseHandler.initAndStartSession(this,
-		// Constants.BUG_SENSE_APIKEY);
+		 BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
 
 		// настройки
 		preferences = getSharedPreferences(Constants.SETTINGS_NAME, 0);
@@ -321,7 +320,7 @@ public class Wallpaper extends WallpaperService {
 		case 7:
 			return new EarthShots();
 		case 8:
-			return new Bing(this);
+			return new Bing();
 		default:
 			// Log.i(TAG, "Создание парсера по умолчанию");
 			return new Yandex(this, preferences);
