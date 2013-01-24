@@ -40,4 +40,5 @@
     <string name="installSettings">Настройки</string>
     <string name="installStart">Запустить</string>
     <string name="installAbout">О программе</string>
+    <string name="assets_html_folder">html-ru/</string>
 </resources>

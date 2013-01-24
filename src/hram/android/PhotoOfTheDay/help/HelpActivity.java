@@ -19,12 +19,16 @@ public final class HelpActivity extends Activity {
   public static final String DEFAULT_PAGE = "index.html";
   public static final String WHATS_NEW_PAGE = "whatsnew.html";
 
-  private static final String BASE_URL = "file:///android_asset/html/";
+  private static final String BASE_URL = "file:///android_asset/";
   private static final String WEBVIEW_STATE_PRESENT = "webview_state_present";
 
   private WebView webView;
   private Button backButton;
 
+  private String getBaseUrl() {
+	return BASE_URL + this.getString(R.string.assets_html_folder);
+  }
+  
   private final Button.OnClickListener backListener = new Button.OnClickListener() {
     public void onClick(View view) {
       webView.goBack();
@@ -54,14 +58,14 @@ public final class HelpActivity extends Activity {
     } else if (intent != null) {
       String page = intent.getStringExtra(REQUESTED_PAGE_KEY);
       if (page != null && page.length() > 0) {
-        webView.loadUrl(BASE_URL + page);
+        webView.loadUrl(getBaseUrl() + page);
         //webView.loadDataWithBaseURL("", BASE_URL + page, "text/html", "utf-8", "");
       } else {
-        webView.loadUrl(BASE_URL + DEFAULT_PAGE);
+        webView.loadUrl(getBaseUrl() + DEFAULT_PAGE);
         //webView.loadDataWithBaseURL("", BASE_URL + DEFAULT_PAGE, "text/html", "utf-8", "");
       }
     } else {
-      webView.loadUrl(BASE_URL + DEFAULT_PAGE);
+      webView.loadUrl(getBaseUrl() + DEFAULT_PAGE);
       //webView.loadDataWithBaseURL("", BASE_URL + DEFAULT_PAGE, "text/html", "utf-8", "");
     }
 

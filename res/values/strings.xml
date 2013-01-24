@@ -42,4 +42,5 @@
     <string name="installSettings">Settings</string>
     <string name="installStart">Start</string>
     <string name="installAbout">About</string>
+    <string name="assets_html_folder">html/</string>
 </resources>
