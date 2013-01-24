@@ -123,12 +123,12 @@ public class Bing extends BaseParser
 				.get();
 				
 			String str = doc.html();
-			int startPosition = str.indexOf("g_img={url:'") + 13;
+			int startPosition = str.indexOf("g_img={url:'");
 			if (startPosition == -1)
 			{
 				throw new IncorrectDataFormat(doc.ownText());
 			}
-			startPosition = startPosition + 13;
+			startPosition += 13;
     		int endPosition = str.indexOf("'", startPosition);
     		String image = str.substring(startPosition, endPosition);
     		return "http://www.bing.com/" + image;
