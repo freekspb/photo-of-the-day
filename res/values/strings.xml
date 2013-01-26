@@ -43,4 +43,5 @@
     <string name="installStart">Start</string>
     <string name="installAbout">About</string>
     <string name="assets_html_folder">html/</string>
+    <string name="galleryWelcomeText">"Here will be saved images you like. You can save images by widget 'Photo of the day'. Now go to home screen and enjoy picture."</string>
 </resources>

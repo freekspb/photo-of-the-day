@@ -252,11 +252,20 @@ public class AndroidCustomGalleryActivity extends Activity
 		{
 			setInvisibleInclude(R.id.gallery_include);
 			addActionBarInclude();
+			if (imageAdapter.getCount() == 0)
+			{				
+				setVisiblityView(R.id.galleryWelcomeText, true);
+			}
+			else
+			{
+				setVisiblityView(R.id.galleryWelcomeText, false);
+			}
 		} 
 		else
 		{
 			setInvisibleInclude(R.id.gallery_actionbar_include);
 			addInstallWallapaperInclude();
+			setVisiblityView(R.id.galleryWelcomeText, false);
 		}
 	}
 	
@@ -379,5 +388,23 @@ public class AndroidCustomGalleryActivity extends Activity
 		
         containerLayout.removeAllViews();
         containerLayout.setVisibility(View.INVISIBLE);		
+	}
+	
+	private void setVisiblityView(int id_view, Boolean visibility)
+	{
+		View view = (View)findViewById(id_view);
+		if (view == null)
+		{
+			return;
+		}
+		
+		if (visibility)
+		{
+			view.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			view.setVisibility(View.INVISIBLE);
+		}
 	}
 }

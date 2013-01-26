@@ -24,9 +24,18 @@
 			android:horizontalSpacing="5dp" 
 			android:stretchMode="columnWidth" 
 			android:gravity="center"/>
-		
 	</LinearLayout>
 
+	<TextView
+	    android:id="@+id/galleryWelcomeText"
+	    android:layout_gravity="center"
+	    android:inputType="textMultiLine"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="20dp"
+	    android:text="@string/galleryWelcomeText"
+	    android:visibility="invisible" />
+	
     <include
         android:id="@+id/gallery_actionbar_include"
         android:layout_width="wrap_content"

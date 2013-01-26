@@ -20,6 +20,17 @@
         layout="@layout/gallery_actionbar_include"
         android:visibility="visible" />
     
+	<TextView
+	    android:id="@+id/galleryWelcomeText"
+	    android:layout_gravity="center"
+	    android:inputType="textMultiLine"
+	    android:layout_width="600dp"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="20dp"
+	    android:text="@string/galleryWelcomeText"
+	    android:textAppearance="?android:attr/textAppearanceLarge" 
+	    android:visibility="invisible" />
+    
     <include
         android:id="@+id/gallery_include"
         android:layout_width="550dp"
