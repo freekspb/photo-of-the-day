@@ -881,7 +881,7 @@ public class Wallpaper extends WallpaperService {
 						dX = (float) mPixels * (step2 / step1);
 					}
 					// если предварительный просмотр или смещение для устройств без скролинга (по центру)
-					if (isPreview() || (!mHasScroling && mPixels == 0 && mXStep == -1)) {
+					if (isPreview() || (!mHasScroling && mPixels == 0 && (mXStep == -1 || mXStep == 0))) {
 						dX = (mWidth - bm.getWidth()) / 2;
 					}
 					if (dX != 0) {
