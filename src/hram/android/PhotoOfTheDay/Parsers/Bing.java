@@ -1,31 +1,20 @@
 package hram.android.PhotoOfTheDay.Parsers;
 
-import hram.android.PhotoOfTheDay.R;
-
 import java.io.IOException;
-import java.net.URL;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
-import org.xml.sax.SAXException;
-
-import android.content.Context;
-
-import com.bugsense.trace.BugSenseHandler;
+import hram.android.PhotoOfTheDay.Exceptions.IncorrectDataFormat;
 
 public class Bing extends BaseParser 
 {
-	private Context wp;
-	
-	public Bing(Context context)
+	public Bing()
 	{
-		this.wp = context;
 	}
 	
-	@Override
-	public String GetUrl() throws IOException
+	/*
+	public String GetUrl2() throws IOException
 	{
 		String url = "http://feeds.feedburner.com/bingimages";
 		final URL feedUrl = new URL(url);
@@ -97,7 +86,60 @@ public class Bing extends BaseParser
 		}catch (OutOfMemoryError e) {}
 		return null;
 	}
+	*/
 	
+	/*
+	private void saveFile(String text) throws IOException
+	{
+		//File file = new File(getAlbumStorageDir(FOLDER).getPath(), filename);
+		File file = new File(SDHelper.getAlbumStorageDir(SDHelper.FOLDER) + File.separator + "html.txt");
+		if (file.exists()) {
+			int a = 1;
+		}
+		file.createNewFile();
+		//write the bytes in file
+		FileWriter writer = new FileWriter(file);
+		try
+		{
+			writer.append(text);
+			writer.flush();
+		}
+		finally
+		{
+			writer.close();
+		}		
+	}
+	*/
+	
+	@Override
+	public String GetUrl() throws IncorrectDataFormat, IOException
+	{
+        try{
+			// чистка памяти
+    		System.gc();
+
+	        Document doc = Jsoup.connect("http://bing.com")
+				.userAgent("Mozilla")
+				.get();
+				
+			String str = doc.html();
+			int startPosition = str.indexOf("g_img={url:'");
+			if (startPosition == -1)
+			{
+				throw new IncorrectDataFormat(doc.ownText());
+			}
+			startPosition += 13;
+    		int endPosition = str.indexOf("'", startPosition);
+    		String image = str.substring(startPosition, endPosition);
+    		return "http://www.bing.com/" + image;
+        }catch (OutOfMemoryError e) {
+			//try{
+			//	BugSenseHandler.sendExceptionMessage("Flickr.GetUrl", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
+			//}catch (Exception e2) {}
+			return null;
+		}
+	}
+		
 	@Override
 	public boolean IsTagSupported() 
 	{

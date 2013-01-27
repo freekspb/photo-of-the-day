@@ -68,8 +68,7 @@ public class Wallpaper extends WallpaperService {
 	@Override
 	public void onCreate() {
 		// Log.i(TAG, "Создание сервиса.");
-		// BugSenseHandler.initAndStartSession(this,
-		// Constants.BUG_SENSE_APIKEY);
+		 BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
 
 		// настройки
 		preferences = getSharedPreferences(Constants.SETTINGS_NAME, 0);
@@ -321,7 +320,7 @@ public class Wallpaper extends WallpaperService {
 		case 7:
 			return new EarthShots();
 		case 8:
-			return new Bing(this);
+			return new Bing();
 		default:
 			// Log.i(TAG, "Создание парсера по умолчанию");
 			return new Yandex(this, preferences);
@@ -515,8 +514,12 @@ public class Wallpaper extends WallpaperService {
 	public class MyEngine extends Engine implements
 			SharedPreferences.OnSharedPreferenceChangeListener {
 		private final Paint mPaint = new Paint();
-		private int mPixels;
-		private float mXStep;
+		private int mPixels = 0;
+		private float mXStep = 0;
+		// флаг необходимы лишь для определения со скролом экран или нет
+		private float mOffset = 0;
+		// флаг того, что прошивка со встроенным скролингом, определяется автоматически по ряду параметров
+		private Boolean mHasScroling = false;
 		private Timer timer = new Timer();
 		private int mHeight = -1;
 		private int mWidth = -1;
@@ -735,8 +738,19 @@ public class Wallpaper extends WallpaperService {
 			// Log.d(TAG, String.format("xStep: %f, xPixels: %d", xStep,
 			// xPixels));
 
+			if (mHasScroling == false)
+			{
+				// на прошивках со скролингом меняется xPixels
+				// однако есди обновление в крайнем левом положении, то xPixels не изменится,
+				// в этом случае определяем по xOffset
+				if (mPixels != xPixels || mOffset != xOffset)
+				{
+					mHasScroling = true;
+				}
+			}
 			mXStep = xStep;
 			mPixels = xPixels;
+			mOffset = xOffset;
 			drawFrame();
 		}
 
@@ -861,13 +875,13 @@ public class Wallpaper extends WallpaperService {
 
 					float dX = 0;
 					// смещение для устройств со скролингом
-					if (isPreview() == false && mXStep != 0) {
+					if (isPreview() == false && mXStep != 0 && mPixels != 0) {
 						float step1 = mWidth * mXStep;
 						float step2 = (bm.getWidth() - mWidth) * mXStep;
 						dX = (float) mPixels * (step2 / step1);
 					}
-					// смещение для устройств без скролинга (по центру)
-					if (mXStep == -1 || mXStep == 0) {
+					// если предварительный просмотр или смещение для устройств без скролинга (по центру)
+					if (isPreview() || (!mHasScroling && mPixels == 0 && (mXStep == -1 || mXStep == 0))) {
 						dX = (mWidth - bm.getWidth()) / 2;
 					}
 					if (dX != 0) {
