@@ -4,7 +4,7 @@
     <string name="widget_name_dark">Photo of the day - dark</string>
     <string name="app_name_gallery">Photo of the day - gallery</string>
     <string name="wallpaper_description">Live wallpaper that displays photo of the day from Flickr and Fotki.Yandex</string>
-    <string name="download">Download image...</string>
+    <string name="download">Download image…</string>
     <string name="error">Error!</string>
     <string name="isOffline">Data communication off.</string>
     <string name="isOutOfMemory1">Memory full,</string>
@@ -37,7 +37,7 @@
     <string name="saveFileToSD">Image has been saved</string>
     <string name="noImages">No images</string>
     <string name="button_back">Back</string>
-    <string name="button_done">Ok</string>
+    <string name="button_done">OK</string>
     <string name="installWallpaper">"Images are downloaded and updated automatically every day from resource  (website) you choose in settings. Run live wallpaper 'Photo of the day' and enjoy the best photos of the world on your device desktop."</string>
     <string name="installSettings">Settings</string>
     <string name="installStart">Start</string>
