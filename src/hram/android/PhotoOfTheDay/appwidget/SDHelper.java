@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -75,7 +76,7 @@ public class SDHelper {
 		String fileName = null;
 		try {
 			fileName = url.substring( url.lastIndexOf('/')+1, url.length() );
-			if (!fileName.toLowerCase().endsWith(".jpg")) {
+			if (!fileName.toLowerCase(Locale.US).endsWith(".jpg")) {
 				fileName += ".jpg";
 			}
 		} catch (Exception e) {
