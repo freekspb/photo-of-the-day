@@ -4,7 +4,7 @@
     <string name="app_name_gallery">Фото дня - галерея</string>
     <string name="widget_name_dark">Фото дня - темный</string>
     <string name="wallpaper_description">Обои с изображением Фото дня с сервиса Яндекс.Фотки</string>
-    <string name="download">Загрузка фотографии...</string>
+    <string name="download">Загрузка фотографии…</string>
     <string name="error">Ошибка!</string>
     <string name="isOffline">Передача данных отключена.</string>
     <string name="isOutOfMemory1">Недостаточно памяти,</string>

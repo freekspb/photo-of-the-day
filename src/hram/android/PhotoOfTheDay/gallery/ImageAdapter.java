@@ -50,7 +50,7 @@ public class ImageAdapter extends BaseAdapter
 	
 	public static class ViewHolder {
 		public TextView tv1;
-		public TextView tv2;
+		//public TextView tv2;
 		public ImageView image;
 	}
 
@@ -63,7 +63,7 @@ public class ImageAdapter extends BaseAdapter
 			
 			holder = new ViewHolder();
 			holder.tv1 = (TextView)convertView.findViewById(R.id.tv1);
-			holder.tv2 = (TextView)convertView.findViewById(R.id.tv2);
+			//holder.tv2 = (TextView)convertView.findViewById(R.id.tv2);
 			holder.image = (ImageView)convertView.findViewById(R.id.image);
 			convertView.setTag(holder);
 		} 
@@ -82,7 +82,7 @@ public class ImageAdapter extends BaseAdapter
 		Date d = new Date(Long.parseLong(date_added) * 1000);
 		DateFormat format = DateFormat.getDateInstance();
 		holder.tv1.setText(format.format(d));
-		holder.tv2.setText("");
+		//holder.tv2.setText("");
 		
 		convertView.setTag(R.id.imageID, _id);
 		

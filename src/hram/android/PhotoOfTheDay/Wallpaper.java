@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
@@ -892,27 +893,15 @@ public class Wallpaper extends WallpaperService {
 						c.drawBitmap(bm, matrix, null);
 					} catch (OutOfMemoryError e) {
 						System.gc();
-						c.drawText(getText(R.string.error).toString(),
-								mWidth / 2, 100, mPaint);
-						c.drawText(getText(R.string.isOutOfMemory1).toString(),
-								mWidth / 2, 150, mPaint);
-						c.drawText(getText(R.string.isOutOfMemory2).toString(),
-								mWidth / 2, 200, mPaint);
+						c.drawText(getText(R.string.error).toString(), mWidth / 2, 100, mPaint);
+						c.drawText(getText(R.string.isOutOfMemory1).toString(), mWidth / 2, 150, mPaint);
+						c.drawText(getText(R.string.isOutOfMemory2).toString(), mWidth / 2, 200, mPaint);
 						try {
 							// логирование показало что картинки скачиваются
 							// нормальные (корректный URL) и нормально
 							// отображаются (проверено с пом. тестового парсера)
-							String msg = String
-									.format("URL: %s, Width: %d, Height: %d, mWidth: %d, mHeight: %d, rescaling: %f",
-											GetCurrentUrl(), bm.getWidth(),
-											bm.getHeight(), mWidth, mHeight,
-											(float) rescaling);
-							BugSenseHandler
-									.sendExceptionMessage(
-											"c.drawBitmap(bm, matrix, null)",
-											msg,
-											new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(
-													e.getMessage()));
+							String msg = String.format(Locale.US, "URL: %s, Width: %d, Height: %d, mWidth: %d, mHeight: %d, rescaling: %f", GetCurrentUrl(), bm.getWidth(), bm.getHeight(), mWidth, mHeight, (float) rescaling);
+							BugSenseHandler.sendExceptionMessage("c.drawBitmap(bm, matrix, null)", msg, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
 						} catch (Exception e2) {
 						} finally {
 							ResetBitmap();
