@@ -1,5 +1,6 @@
 package hram.android.PhotoOfTheDay;
 
+import hram.android.PhotoOfTheDay.ZTouchMove.ZTouchMoveListener;
 import hram.android.PhotoOfTheDay.Exceptions.ConnectionException;
 import hram.android.PhotoOfTheDay.Exceptions.IncorrectDataFormat;
 import hram.android.PhotoOfTheDay.Parsers.BaseParser;
@@ -46,6 +47,7 @@ import android.service.wallpaper.WallpaperService;
 import android.util.DisplayMetrics;
 //import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -513,7 +515,7 @@ public class Wallpaper extends WallpaperService {
 	}
 
 	public class MyEngine extends Engine implements
-			SharedPreferences.OnSharedPreferenceChangeListener {
+			SharedPreferences.OnSharedPreferenceChangeListener, ZTouchMoveListener {
 		private final Paint mPaint = new Paint();
 		private int mPixels = 0;
 		private float mXStep = 0;
@@ -521,6 +523,7 @@ public class Wallpaper extends WallpaperService {
 		private float mOffset = 0;
 		// флаг того, что прошивка со встроенным скролингом, определяется автоматически по ряду параметров
 		private Boolean mHasScroling = false;
+		private Boolean mProgramScroling = false;
 		private Timer timer = new Timer();
 		private int mHeight = -1;
 		private int mWidth = -1;
@@ -529,6 +532,7 @@ public class Wallpaper extends WallpaperService {
 		private Bitmap download;
 		private SharedPreferences preferences;
 		final WidgetBroadcastReceiver widgetReceiver;
+		ZTouchMove mTouchMove;
 
 		private final Runnable drawRunner = new Runnable() {
 			public void run() {
@@ -556,6 +560,7 @@ public class Wallpaper extends WallpaperService {
 			preferences = Wallpaper.this.getSharedPreferences(
 					Constants.SETTINGS_NAME, 0);
 			preferences.registerOnSharedPreferenceChangeListener(this);
+			mProgramScroling = preferences.getBoolean("programScrolingPref", false);
 
 			wp = service;
 			widgetReceiver = new WidgetBroadcastReceiver(wp, this);
@@ -579,6 +584,19 @@ public class Wallpaper extends WallpaperService {
 					WidgetBroadcastEnum.SETTINGS_ACTION));
 			registerReceiver(widgetReceiver, new IntentFilter(
 					WidgetBroadcastEnum.CHANGE_SETTINGS_ACTION));
+			
+//			if (isPreview())
+//			{
+//				return;
+//			}
+//			if (preferences.getBoolean("programScrolingPref", false) == false)
+//			{
+//				return;
+//			}
+			setTouchEventsEnabled(true);
+			mTouchMove = new ZTouchMove();
+			mTouchMove.init(wp);
+			mTouchMove.addMovingListener(this);
 		}
 
 		@Override
@@ -721,11 +739,6 @@ public class Wallpaper extends WallpaperService {
 		}
 
 		@Override
-		public void onSurfaceCreated(SurfaceHolder holder) {
-			super.onSurfaceCreated(holder);
-		}
-
-		@Override
 		public void onSurfaceDestroyed(SurfaceHolder holder) {
 			super.onSurfaceDestroyed(holder);
 			mVisible = false;
@@ -754,7 +767,20 @@ public class Wallpaper extends WallpaperService {
 			mOffset = xOffset;
 			drawFrame();
 		}
-
+		
+		public void onTouchOffsetChanged(float xOffset) {
+			if (mProgramScroling == false)
+			{
+				return;
+			}
+			
+			mOffset = xOffset;
+			//Log.e(TAG, String.format("xOffset = %f", xOffset));
+			drawFrame();
+		}
+		
+		
+		
 		// для тестирования вывода ошибки о том что мало памяти
 		/*
 		 * void drawFrameOutOf() { // Log.d(TAG, "Процедура отрисовки");
@@ -775,6 +801,17 @@ public class Wallpaper extends WallpaperService {
 		 * // Reschedule the next redraw mHandler.removeCallbacks(drawRunner);
 		 * if (mVisible) { // mHandler.postDelayed(drawRunner, 1000); } } }
 		 */
+
+		@Override
+		public void onTouchEvent(MotionEvent event) {
+			if (mProgramScroling == false)
+			{
+				return;
+			}
+			
+			mTouchMove.onTouchEvent(event);
+			super.onTouchEvent(event);
+		}
 
 		/**
 		 * Draw one frame of the animation. This method gets called repeatedly
@@ -881,10 +918,16 @@ public class Wallpaper extends WallpaperService {
 						float step2 = (bm.getWidth() - mWidth) * mXStep;
 						dX = (float) mPixels * (step2 / step1);
 					}
-					// если предварительный просмотр или смещение для устройств без скролинга (по центру)
-					if (isPreview() || (!mHasScroling && mPixels == 0 && (mXStep == -1 || mXStep == 0))) {
+					// если предварительный просмотр
+					if (isPreview()) {
 						dX = (mWidth - bm.getWidth()) / 2;
 					}
+					if (isPreview() == false && mProgramScroling) {
+						dX = (float) (mWidth - (bm.getWidth())) * mOffset;
+						
+					}
+					
+					//Log.d(TAG, String.format("dX = %f", dX));
 					if (dX != 0) {
 						c.translate(dX, 0f);
 					}
@@ -942,6 +985,8 @@ public class Wallpaper extends WallpaperService {
 				if (SetCurrentParser(Integer.decode(value))) {
 					StartUpdate();
 				}
+			} else if (key.equals("programScrolingPref")) {
+				mProgramScroling = preferences.getBoolean(key, false);
 			}
 		}
 
@@ -971,6 +1016,8 @@ public class Wallpaper extends WallpaperService {
 				if (SetCurrentParser(Integer.decode(value))) {
 					StartUpdate();
 				}
+			} else if (arg1.equals("programScrolingPref")) {
+				mProgramScroling = preferences.getBoolean(arg1, false);
 			}
 		}
 

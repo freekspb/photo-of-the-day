@@ -29,8 +29,13 @@
        <CheckBoxPreference android:key="downloadEveryUpdate"
        		android:dependency="tagPhotoEnable" android:summary="@string/downloadEveryUpdateSummary" android:title="@string/downloadEveryUpdate">
        </CheckBoxPreference>
-       
     </PreferenceCategory>
+  	<PreferenceCategory android:title="@string/catSrolling">
+		<CheckBoxPreference android:title="@string/programScrolingPref"
+            android:summary="@string/programScrolingPref"
+            android:key="programScrolingPref">
+       </CheckBoxPreference>
+	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/networkSettings">
 		<CheckBoxPreference android:key="wifiOnly" 
 			android:summary="@string/wifiOnlySummary" android:title="@string/wifiOnly">
