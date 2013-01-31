@@ -30,6 +30,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.bugsense.trace.BugSenseHandler;
 import com.novoda.imageloader.core.util.DirectLoader;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -38,13 +39,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
-import android.util.DisplayMetrics;
 //import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -71,7 +73,7 @@ public class Wallpaper extends WallpaperService {
 	@Override
 	public void onCreate() {
 		// Log.i(TAG, "Создание сервиса.");
-		 BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
+		BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
 
 		// настройки
 		preferences = getSharedPreferences(Constants.SETTINGS_NAME, 0);
@@ -80,22 +82,19 @@ public class Wallpaper extends WallpaperService {
 		mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
 		try {
-			int parser = Integer.decode(preferences.getString(
-					Constants.SOURCES_NAME, "-1"));
+			int parser = Integer.decode(preferences.getString(Constants.SOURCES_NAME, "-1"));
 			// если нет сохраненного в настройках
 			if (parser < 0) {
-				DisplayMetrics metrics = new DisplayMetrics();
-				Display display = ((WindowManager) getSystemService(WINDOW_SERVICE))
-						.getDefaultDisplay();
-				display.getMetrics(metrics);
+				Point displaySize = getDisplaySize();
+				int displayWidth = displaySize.x;
+				int displayHeight = displaySize.y;
 				// если ширина дисплея больше высоты (для планшетов)
-				if (display.getWidth() > display.getHeight()) {
+				if (displayWidth > displayHeight) {
 					// NG - так как там почти все изображения альбомные
 					parser = 3;
 				} else {
 					parser = 1;
 				}
-
 			}
 
 			SetCurrentParser(parser);
@@ -137,12 +136,30 @@ public class Wallpaper extends WallpaperService {
 		engines.remove(object);
 	}
 
+    @SuppressLint("NewApi")
+    @SuppressWarnings("deprecation")	
+	private Point getDisplaySize()
+	{
+		Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+		
+        // API Level 13
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            Point size = new Point();
+            display.getSize(size);
+            return size;
+        } else {
+            // API Level <13
+        	return new Point(display.getWidth(), display.getHeight());
+        }
+		
+	}
+	
 	/**
 	 * Сохраняет указатель на картинку
 	 * 
 	 * @param value
 	 */
-	public void SetBitmap(Bitmap value) {
+    public void SetBitmap(Bitmap value) {
 		// Log.d(TAG, "Сохранение указателя картинки");
 
 		if (value == null) {
@@ -154,14 +171,10 @@ public class Wallpaper extends WallpaperService {
 		int bmWidth = value.getWidth(); // исходная ширина
 		int bmHeight = value.getHeight(); // исходная высота
 
-		DisplayMetrics metrics = new DisplayMetrics();
-		Display display = ((WindowManager) getSystemService(WINDOW_SERVICE))
-				.getDefaultDisplay();
-		display.getMetrics(metrics);
-
-		int displayWidth = display.getWidth();
-		int displayHeight = display.getHeight();
-
+		Point displaySize = getDisplaySize();
+		int displayWidth = displaySize.x;
+		int displayHeight = displaySize.y;
+		
 		if (bmWidth != displayWidth || bmHeight != displayHeight) {
 			// Log.d(TAG,String.format("Изменились размеры, изменяем размер: %d->%d, %d->%d",
 			// currentHeight, mHeight, currentWidth, mWidth));
@@ -178,8 +191,7 @@ public class Wallpaper extends WallpaperService {
 				newBmWidth = displayWidth;
 			}
 
-			bm = Bitmap
-					.createScaledBitmap(value, newBmWidth, newBmHeight, true);
+			bm = Bitmap.createScaledBitmap(value, newBmWidth, newBmHeight, true);
 			return;
 		}
 
@@ -356,7 +368,6 @@ public class Wallpaper extends WallpaperService {
 
 			Calendar c = Calendar.getInstance();
 			c.setTimeInMillis(lastUpdate);
-			// зачем на чтение установка даты загрузки картинки?
 			SetCurrentDay(c.get(Calendar.DATE));
 
 			if (GetCurrentUrl().length() > 0) {
@@ -440,7 +451,6 @@ public class Wallpaper extends WallpaperService {
 				return;
 			}
 
-			// утановку свойства LAST_UPDATE перенести сюда
 			// Log.d(TAG, "Загрузка картинки по адресу: " + url);
 			// Bitmap bm = ImageDownloader.loadImageFromUrl(url);
 			Bitmap bm = new DirectLoader().download(url);
@@ -519,10 +529,8 @@ public class Wallpaper extends WallpaperService {
 		private final Paint mPaint = new Paint();
 		private int mPixels = 0;
 		private float mXStep = 0;
-		// флаг необходимы лишь для определения со скролом экран или нет
+		// для программного скролинга
 		private float mOffset = 0;
-		// флаг того, что прошивка со встроенным скролингом, определяется автоматически по ряду параметров
-		private Boolean mHasScroling = false;
 		private Boolean mProgramScroling = false;
 		private Timer timer = new Timer();
 		private int mHeight = -1;
@@ -589,14 +597,12 @@ public class Wallpaper extends WallpaperService {
 //			{
 //				return;
 //			}
-//			if (preferences.getBoolean("programScrolingPref", false) == false)
-//			{
-//				return;
-//			}
-			setTouchEventsEnabled(true);
-			mTouchMove = new ZTouchMove();
-			mTouchMove.init(wp);
-			mTouchMove.addMovingListener(this);
+			if (preferences.getBoolean("programScrolingPref", false) == false)
+			{
+				return;
+			}
+			// активация программного скролинга
+			onProgramScrolingChanged();
 		}
 
 		@Override
@@ -752,16 +758,6 @@ public class Wallpaper extends WallpaperService {
 			// Log.d(TAG, String.format("xStep: %f, xPixels: %d", xStep,
 			// xPixels));
 
-			if (mHasScroling == false)
-			{
-				// на прошивках со скролингом меняется xPixels
-				// однако есди обновление в крайнем левом положении, то xPixels не изменится,
-				// в этом случае определяем по xOffset
-				if (mPixels != xPixels || mOffset != xOffset)
-				{
-					mHasScroling = true;
-				}
-			}
 			mXStep = xStep;
 			mPixels = xPixels;
 			mOffset = xOffset;
@@ -778,8 +774,6 @@ public class Wallpaper extends WallpaperService {
 			//Log.e(TAG, String.format("xOffset = %f", xOffset));
 			drawFrame();
 		}
-		
-		
 		
 		// для тестирования вывода ошибки о том что мало памяти
 		/*
@@ -913,18 +907,19 @@ public class Wallpaper extends WallpaperService {
 
 					float dX = 0;
 					// смещение для устройств со скролингом
-					if (isPreview() == false && mXStep != 0 && mPixels != 0) {
+					if (isPreview() == false && mProgramScroling == false && mXStep != 0 && mPixels != 0) {
 						float step1 = mWidth * mXStep;
 						float step2 = (bm.getWidth() - mWidth) * mXStep;
 						dX = (float) mPixels * (step2 / step1);
 					}
 					// если предварительный просмотр
 					if (isPreview()) {
+						// всегда центруем
 						dX = (mWidth - bm.getWidth()) / 2;
 					}
+					// если не превью и программный скролинг включен
 					if (isPreview() == false && mProgramScroling) {
 						dX = (float) (mWidth - (bm.getWidth())) * mOffset;
-						
 					}
 					
 					//Log.d(TAG, String.format("dX = %f", dX));
@@ -964,12 +959,18 @@ public class Wallpaper extends WallpaperService {
 			}
 		}
 
-		public void onPreferenceChanged(String key) {
-			// Log.d(TAG, "Изменено " + key);
-			String tag = preferences.getString("tagPhotoValue", "");
+		private void internalPreferenceChanged(SharedPreferences prefs, String key, Boolean checkPreview)
+		{
+			if (checkPreview && isPreview())
+			{
+				return;
+			}
+			
+			// Log.d(TAG, "Изменено " + arg1);
+			String tag = prefs.getString("tagPhotoValue", "");
 			if (key.equals("tagPhotoEnable")
 					&& createCurrentParser().IsTagSupported()) {
-				if (preferences.getBoolean(key, false) && tag.length() == 0) {
+				if (prefs.getBoolean(key, false) && tag.length() == 0) {
 					return;
 				}
 
@@ -980,45 +981,54 @@ public class Wallpaper extends WallpaperService {
 					&& tag.length() > 0) {
 				StartUpdate();
 			} else if (key.equals("sources")) {
-				String value = preferences.getString(key, "0");
+				String value = prefs.getString(key, "0");
 
 				if (SetCurrentParser(Integer.decode(value))) {
 					StartUpdate();
 				}
 			} else if (key.equals("programScrolingPref")) {
-				mProgramScroling = preferences.getBoolean(key, false);
-			}
+				setProgramScroling(preferences.getBoolean(key, false));
+			}			
+		}
+		
+		public void onPreferenceChanged(String key) {
+			// Log.d(TAG, "Изменено " + key);
+			internalPreferenceChanged(preferences, key, false);
 		}
 
-		public void onSharedPreferenceChanged(SharedPreferences prefs,
-				String arg1) {
-			if (isPreview() == false) {
+		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+			internalPreferenceChanged(preferences, key, false);
+		}
+		
+		private void setProgramScroling(Boolean value)
+		{
+			if (mProgramScroling == value)
+			{
 				return;
 			}
-
-			// Log.d(TAG, "Изменено " + arg1);
-			String tag = prefs.getString("tagPhotoValue", "");
-			if (arg1.equals("tagPhotoEnable")
-					&& createCurrentParser().IsTagSupported()) {
-				if (prefs.getBoolean(arg1, false) && tag.length() == 0) {
+			mProgramScroling = value;
+			onProgramScrolingChanged();
+		}
+		
+		private void onProgramScrolingChanged() {
+			if (mProgramScroling == true)
+			{
+				setTouchEventsEnabled(true);
+				mTouchMove = new ZTouchMove();
+				mTouchMove.init(wp);
+				mTouchMove.addMovingListener(this);
+			}
+			else
+			{
+				setTouchEventsEnabled(false);
+				if (mTouchMove == null)
+				{
 					return;
 				}
-
-				StartUpdate();
+				mTouchMove.removeMovingListener(this);
+				mTouchMove = null;
 			}
-			if (arg1.equals("tagPhotoValue")
-					&& createCurrentParser().IsTagSupported()
-					&& tag.length() > 0) {
-				StartUpdate();
-			} else if (arg1.equals("sources")) {
-				String value = prefs.getString(arg1, "0");
 
-				if (SetCurrentParser(Integer.decode(value))) {
-					StartUpdate();
-				}
-			} else if (arg1.equals("programScrolingPref")) {
-				mProgramScroling = preferences.getBoolean(arg1, false);
-			}
 		}
 
 		private void StartUpdate() {

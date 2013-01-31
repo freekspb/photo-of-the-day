@@ -205,7 +205,20 @@ public class ZTouchMove {
     }
     
     public synchronized void addMovingListener(ZTouchMoveListener listener) {
+    	if (mListeners.contains(listener))
+    	{
+    		return;
+    	}
         mListeners.add(listener);
+    }
+    
+    public synchronized void removeMovingListener(ZTouchMoveListener listener) {
+    	if (!mListeners.contains(listener))
+    		
+    	{
+    		return;
+    	}
+        mListeners.remove(listener);
     }
     
     private synchronized void dispatchMoving() {
