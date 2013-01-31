@@ -74,14 +74,6 @@
             </intent-filter>
         </receiver>
         
-        <receiver android:name=".appwidget.WidgetBroadcastReceiver">
-        <!-- 
-            <intent-filter>
-                <action android:name=".appwidget.WidgetBroadcastEnum.SAVE_ACTION" />
-                <action android:name="hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastEnum.SAVE_ACTION" />
-            </intent-filter>
-			 -->	
-        </receiver>
     </application>
     
 </manifest>

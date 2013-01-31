@@ -99,10 +99,10 @@ public class SdSaverAppWidgetProvider extends AppWidgetProvider {
         // This setting is sticky across reboots, but that doesn't matter, because this will
         // be called after boot if there is a widget instance for this provider.
         PackageManager pm = context.getPackageManager();
-        pm.setComponentEnabledSetting(
-                new ComponentName("hram.android.PhotoOfTheDay", ".appwidget.WidgetBroadcastReceiver"),
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
+//        pm.setComponentEnabledSetting(
+//                new ComponentName("hram.android.PhotoOfTheDay", ".appwidget.WidgetBroadcastReceiver"),
+//                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+//                PackageManager.DONT_KILL_APP);
         pm.setComponentEnabledSetting(
                 new ComponentName("hram.android.PhotoOfTheDay", ".appwidget.SdSaverAppWidgetProvider"),
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
@@ -115,10 +115,10 @@ public class SdSaverAppWidgetProvider extends AppWidgetProvider {
         // TIME_CHANGED broadcasts.
         Log.d(TAG, "onDisabled");
         PackageManager pm = context.getPackageManager();
-        pm.setComponentEnabledSetting(
-                new ComponentName("hram.android.PhotoOfTheDay", ".appwidget.WidgetBroadcastReceiver"),
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
+//        pm.setComponentEnabledSetting(
+//                new ComponentName("hram.android.PhotoOfTheDay", ".appwidget.WidgetBroadcastReceiver"),
+//                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+//                PackageManager.DONT_KILL_APP);
         pm.setComponentEnabledSetting(
                 new ComponentName("hram.android.PhotoOfTheDay", ".appwidget.SdSaverAppWidgetProvider"),
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
