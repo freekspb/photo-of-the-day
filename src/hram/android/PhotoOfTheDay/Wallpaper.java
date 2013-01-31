@@ -761,6 +761,12 @@ public class Wallpaper extends WallpaperService {
 			mXStep = xStep;
 			mPixels = xPixels;
 			mOffset = xOffset;
+			
+			if (mProgramScroling == true)
+			{
+				return;
+			}
+			
 			drawFrame();
 		}
 		
