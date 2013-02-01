@@ -542,6 +542,7 @@ public class Wallpaper extends WallpaperService {
 		// для программного скролинга
 		private float mOffset = 0;
 		private Boolean mProgramScroling = false;
+		private Boolean mDisabledScroling = false;
 		private Timer timer = new Timer();
 		private int mHeight = -1;
 		private int mWidth = -1;
@@ -579,7 +580,8 @@ public class Wallpaper extends WallpaperService {
 					Constants.SETTINGS_NAME, 0);
 			preferences.registerOnSharedPreferenceChangeListener(this);
 			mProgramScroling = preferences.getBoolean("programScrolingPref", false);
-
+			mDisabledScroling = preferences.getBoolean("disableScrolingPref", false);
+			
 			wp = service;
 			widgetReceiver = new WidgetBroadcastReceiver(wp, this);
 		}
@@ -923,18 +925,18 @@ public class Wallpaper extends WallpaperService {
 
 					float dX = 0;
 					// смещение для устройств со скролингом
-					if (isPreview() == false && mProgramScroling == false && mXStep != 0 && mPixels != 0) {
+					if (isPreview() == false && mProgramScroling == false && mDisabledScroling == false && mXStep != 0 && mPixels != 0) {
 						float step1 = mWidth * mXStep;
 						float step2 = (bm.getWidth() - mWidth) * mXStep;
 						dX = (float) mPixels * (step2 / step1);
 					}
 					// если предварительный просмотр
-					if (isPreview()) {
+					if (isPreview() || mDisabledScroling) {
 						// всегда центруем
 						dX = (mWidth - bm.getWidth()) / 2;
 					}
 					// если не превью и программный скролинг включен
-					if (isPreview() == false && mProgramScroling) {
+					if (isPreview() == false && mDisabledScroling == false && mProgramScroling) {
 						dX = (float) (mWidth - (bm.getWidth())) * mOffset;
 					}
 					
@@ -1004,6 +1006,8 @@ public class Wallpaper extends WallpaperService {
 				}
 			} else if (key.equals("programScrolingPref")) {
 				setProgramScroling(preferences.getBoolean(key, false));
+			} else if (key.equals("disableScrolingPref")) {
+				setDisabledScroling(preferences.getBoolean(key, false));
 			}			
 		}
 		
@@ -1044,7 +1048,16 @@ public class Wallpaper extends WallpaperService {
 				mTouchMove.removeMovingListener(this);
 				mTouchMove = null;
 			}
+		}
 
+		private void setDisabledScroling(Boolean value)
+		{
+			if (mDisabledScroling == value)
+			{
+				return;
+			}
+			mDisabledScroling = value;
+			drawFrame();
 		}
 
 		private void StartUpdate() {

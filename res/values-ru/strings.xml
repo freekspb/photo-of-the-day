@@ -42,5 +42,7 @@
     <string name="galleryWelcomeText">"Здесь будут сохранены понравившиеся Вам изображения. Их можно сохранить с помощью виджета 'Фото дня'. Теперь возвращайтесь на Рабочий стол и наслаждайтесь изображением."</string>
     <string name="catSrolling">Скролинг</string>
     <string name="programScrolingPref">Программный скролинг (beta)</string>
-    <string name="programScrolingPrefSummamry">Используйте для включения скролинга обоев при листании экранов, если Ваше устройство не обладает этой функцией</string>
+    <string name="disableScrolingPref">Отключить скролинг обоев</string>
+    <string name="disableScrolingPrefSummary">Будет рисоваться статичное изображение</string>
+    <string name="programScrolingPrefSummary">Бета-функционал: Используйте для включения скролинга обоев при листании экранов, если Ваше устройство не обладает этой функцией</string>
 </resources>

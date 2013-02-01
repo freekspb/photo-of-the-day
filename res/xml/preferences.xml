@@ -31,9 +31,15 @@
        </CheckBoxPreference>
     </PreferenceCategory>
   	<PreferenceCategory android:title="@string/catSrolling">
+		<CheckBoxPreference android:key="disableScrolingPref"
+		    android:title="@string/disableScrolingPref"
+            android:summary="@string/disableScrolingPrefSummary"
+            android:disableDependentsState="True">
+		</CheckBoxPreference>
 		<CheckBoxPreference android:title="@string/programScrolingPref"
-            android:summary="@string/programScrolingPrefSummamry"
-            android:key="programScrolingPref">
+            android:summary="@string/programScrolingPrefSummary"
+            android:key="programScrolingPref"
+            android:dependency="disableScrolingPref">
        </CheckBoxPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/networkSettings">
