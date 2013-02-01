@@ -36,11 +36,6 @@
             android:summary="@string/disableScrolingPrefSummary"
             android:disableDependentsState="True">
 		</CheckBoxPreference>
-		<CheckBoxPreference android:title="@string/programScrolingPref"
-            android:summary="@string/programScrolingPrefSummary"
-            android:key="programScrolingPref"
-            android:dependency="disableScrolingPref">
-       </CheckBoxPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/networkSettings">
 		<CheckBoxPreference android:key="wifiOnly" 
