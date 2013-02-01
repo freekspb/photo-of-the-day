@@ -49,6 +49,7 @@ public class ZTouchMove {
     
     private float mPosition = 0.5f;
     private float mPositionDelta = 0;
+    private float mOffset = -1;
     private float mTouchDownX;
     private int xDiff;
     private VelocityTracker mVelocityTracker;
@@ -214,7 +215,6 @@ public class ZTouchMove {
     
     public synchronized void removeMovingListener(ZTouchMoveListener listener) {
     	if (!mListeners.contains(listener))
-    		
     	{
     		return;
     	}
@@ -222,9 +222,14 @@ public class ZTouchMove {
     }
     
     private synchronized void dispatchMoving() {
+    	float newOffset = normalizePosition(mPosition + mPositionDelta);
+    	if (mOffset == newOffset) {
+    		return;
+    	}
+    	mOffset = newOffset;
         Iterator<ZTouchMoveListener> iterator = mListeners.iterator();
         while(iterator.hasNext())  {
-            ((ZTouchMoveListener) iterator.next()).onTouchOffsetChanged(normalizePosition(mPosition + mPositionDelta));
+            ((ZTouchMoveListener) iterator.next()).onTouchOffsetChanged(mOffset);
         }
     }
 }
