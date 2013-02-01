@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">Photo of the day</string>
     <string name="widget_name_dark">Photo of the day - dark</string>
-    <string name="app_name_gallery">Photo of the day - gallery</string>
     <string name="wallpaper_description">Live wallpaper that displays photo of the day from Flickr and Fotki.Yandex</string>
     <string name="download">Download image…</string>
     <string name="error">Error!</string>
@@ -35,7 +34,6 @@
     <!-- ============================ -->
     <string name="errorSaveFileToSD">Error writing data to SD card</string>
     <string name="saveFileToSD">Image has been saved</string>
-    <string name="noImages">No images</string>
     <string name="button_back">Back</string>
     <string name="button_done">OK</string>
     <string name="installWallpaper">"Images are downloaded and updated automatically every day from resource  (website) you choose in settings. Run live wallpaper 'Photo of the day' and enjoy the best photos of the world on your device desktop."</string>
@@ -45,5 +43,6 @@
     <string name="assets_html_folder">html/</string>
     <string name="galleryWelcomeText">"Here will be saved images you like. You can save images by widget 'Photo of the day'. Now go to home screen and enjoy picture."</string>
     <string name="catSrolling">Scrolling</string>
-    <string name="programScrolingPref">Program scrolling</string>
+    <string name="programScrolingPref">Program scrolling (beta)</string>
+    <string name="programScrolingPrefSummamry">"Use to enable scrolling wallpapers, when you scroll homescreens (If this functionality doesn't work in Android platform)"</string>
 </resources>

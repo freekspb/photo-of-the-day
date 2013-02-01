@@ -66,7 +66,7 @@ public class ZTouchMove {
     private int mTouchState = TOUCH_STATE_REST;
     
     private int mWidth;
-    private int mNumVirtualScreens = 5;
+    private int mNumVirtualScreens = 9;
     
     @SuppressLint("NewApi")
     @SuppressWarnings("deprecation")

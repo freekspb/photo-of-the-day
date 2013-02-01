@@ -772,7 +772,7 @@ public class Wallpaper extends WallpaperService {
 			mPixels = xPixels;
 			mOffset = xOffset;
 			
-			if (mProgramScroling == true)
+			if (mProgramScroling == true && mOffset != 0.5f)
 			{
 				return;
 			}
