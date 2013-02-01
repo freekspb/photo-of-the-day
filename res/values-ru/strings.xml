@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="app_name">Фото дня</string>
-    <string name="app_name_gallery">Фото дня - галерея</string>
     <string name="widget_name_dark">Фото дня - темный</string>
     <string name="wallpaper_description">Обои с изображением Фото дня с сервиса Яндекс.Фотки</string>
     <string name="download">Загрузка фотографии…</string>
     <string name="error">Ошибка!</string>
-    <string name="isOffline">Передача данных отключена.</string>
+    <string name="isOffline">Передача данных отключена</string>
     <string name="isOutOfMemory1">Недостаточно памяти,</string>
     <string name="isOutOfMemory2">закройте несколько программ :(</string>
     <string name="sources">Источники обоев</string>
@@ -32,7 +31,6 @@
     <string name="setupDescription">"Выберите 'Фото дня'\r\n в списке программ"</string>
     <string name="errorSaveFileToSD">Ошибка сохранения файла</string>
     <string name="saveFileToSD">Изображение сохранено на SD</string>
-    <string name="noImages">Нет сохраненных изображений</string>
     <!-- Добро пожаловать -->
     <string name="button_back">Назад</string>
     <string name="button_done">Продолжить</string>
@@ -42,4 +40,9 @@
     <string name="installAbout">О программе</string>
     <string name="assets_html_folder">html-ru/</string>
     <string name="galleryWelcomeText">"Здесь будут сохранены понравившиеся Вам изображения. Их можно сохранить с помощью виджета 'Фото дня'. Теперь возвращайтесь на Рабочий стол и наслаждайтесь изображением."</string>
+    <string name="catSrolling">Скролинг</string>
+    <string name="programScrolingPref">Программный скролинг (beta)</string>
+    <string name="disableScrolingPref">Отключить скролинг обоев</string>
+    <string name="disableScrolingPrefSummary">Будет рисоваться статичное изображение</string>
+    <string name="programScrolingPrefSummary">Бета-функционал: Используйте для включения скролинга обоев при листании экранов, если Ваше устройство не обладает этой функцией</string>
 </resources>
