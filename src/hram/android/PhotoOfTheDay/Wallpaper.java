@@ -191,7 +191,14 @@ public class Wallpaper extends WallpaperService {
 				newBmWidth = displayWidth;
 			}
 
-			bm = Bitmap.createScaledBitmap(value, newBmWidth, newBmHeight, true);
+			try
+			{
+				bm = Bitmap.createScaledBitmap(value, newBmWidth, newBmHeight, true);
+			}
+			catch(OutOfMemoryError e)
+			{
+				bm = value;
+			}
 			return;
 		}
 
@@ -482,6 +489,9 @@ public class Wallpaper extends WallpaperService {
 			// BugSenseHandler.sendExceptionMessage("IncorrectDataFormat", "" +
 			// getCurrentParser(), e);
 			// }catch (Exception e2) {}
+		} catch (OutOfMemoryError e) {
+			System.gc();
+			CheckOnline();
 		} catch (Exception e) {
 			// try {
 			// BugSenseHandler.sendExceptionMessage("Wallpaper.update", "" +
