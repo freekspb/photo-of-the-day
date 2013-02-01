@@ -774,7 +774,8 @@ public class Wallpaper extends WallpaperService {
 			mPixels = xPixels;
 			mOffset = xOffset;
 			
-			if (mProgramScroling == true && mOffset != 0.5f)
+			//if (mProgramScroling == true && mOffset != 0.5f)
+			if (mProgramScroling == true)
 			{
 				return;
 			}
@@ -783,6 +784,9 @@ public class Wallpaper extends WallpaperService {
 		}
 		
 		public void onTouchOffsetChanged(float xOffset) {
+			// если сколинг выключен
+			// либо центральный экран - отработает onOffsetsChanged - для отработки возвращения на центральный экран по кнопке Home
+			//if (mProgramScroling == false || mOffset == 0.5f)
 			if (mProgramScroling == false)
 			{
 				return;
