@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="hram.android.PhotoOfTheDay"
-      android:versionCode="27"
-      android:versionName="2.10">
+      android:versionCode="28"
+      android:versionName="2.11">
       
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -74,14 +74,6 @@
             </intent-filter>
         </receiver>
         
-        <receiver android:name=".appwidget.WidgetBroadcastReceiver">
-        <!-- 
-            <intent-filter>
-                <action android:name=".appwidget.WidgetBroadcastEnum.SAVE_ACTION" />
-                <action android:name="hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastEnum.SAVE_ACTION" />
-            </intent-filter>
-			 -->	
-        </receiver>
     </application>
     
 </manifest>
