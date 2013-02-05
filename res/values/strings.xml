@@ -47,4 +47,6 @@
     <string name="disableScrolingPref">Disable scrolling wallpaper</string>
     <string name="disableScrolingPrefSummary">Static image on homescreen</string>
     <string name="programScrolingPrefSummary">"Beta funcionality! Use to enable scrolling wallpapers, when you scroll homescreens (If this functionality doesn't work in Android platform)"</string>
+    <string name="scrollingEffect">Effect</string>
+    <string name="scrollingEffectSummary">Graphical effect</string>
 </resources>

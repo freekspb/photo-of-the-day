@@ -41,6 +41,13 @@
             android:key="programScrolingPref"
             android:dependency="disableScrolingPref">
        </CheckBoxPreference>
+       <ListPreference android:key="scrollingEffect" 
+       		android:title="@string/scrollingEffect" 
+       		android:summary="@string/scrollingEffectSummary" 
+       		android:entries="@array/scrollingEffectArray" 
+       		android:entryValues="@array/scrollingEffectValues"
+       		android:defaultValue="1">
+       </ListPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/networkSettings">
 		<CheckBoxPreference android:key="wifiOnly" 

@@ -16,4 +16,14 @@
         <item>7</item>
         <item>8</item>
     </string-array>
+    
+	<string-array name="scrollingEffectArray" translatable="false">
+        <item>Spring</item>
+        <item>List</item>
+    </string-array>
+
+    <string-array name="scrollingEffectValues" translatable="false">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 </resources>

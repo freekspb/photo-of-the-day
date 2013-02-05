@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -17,6 +18,8 @@ import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
 public class ZTouchMove {
+	private static final String TAG = "ZMOVE"; 
+	
     public interface ZTouchMoveListener {
         public void onTouchOffsetChanged(float xOffset);
     }
@@ -31,7 +34,7 @@ public class ZTouchMove {
             // d = 0
             // where x = derivative in point 0
             //input = (float)(-Math.cos(10*((double)input/Math.PI)) + 1) / 2;
-            input = (mVelocity - 2) * (float) Math.pow(input, 3) + (3 - 2 * mVelocity) * (float) Math.pow(input, 2) + mVelocity * input; 
+            input = (mVelocity - 2) * (float) Math.pow(input, 3) + (3 - 2 * mVelocity) * (float) Math.pow(input, 2) + mVelocity * input;
             return input;
         }
     }
@@ -134,6 +137,8 @@ public class ZTouchMove {
                     velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
                     float velocityX = velocityTracker.getXVelocity() / (float)(mNumVirtualScreens * mWidth);
                     
+                    Log.d(TAG, String.format("mPositon = %f; mPositionDelta = %f", mPosition, mPositionDelta));
+                    
                     mPosition =  mPosition + mPositionDelta;
                     mPositionDelta = 0;
                     
@@ -142,9 +147,25 @@ public class ZTouchMove {
                         // deaccelerate();
                         // Inertion
                         if(Math.abs(velocityX) * (float)(mNumVirtualScreens * mWidth) > SNAP_VELOCITY)
-                            moveToPosition(mPosition, mPosition - (velocityX > 0 ? 1 : -1) * 1 / (float) mNumVirtualScreens );
+                        {
+                        	float m = (mPosition - (velocityX > 0 ? 1 : -1) * 1 / (float) mNumVirtualScreens);
+                        	Log.d(TAG, String.format("moveToPosition = %f", m));
+                        	if (m < 0)
+                        		m = 1 + m;
+                        	if (m > 1)
+                        		m = m - 1; // брать остаток от деления
+                            moveToPosition(mPosition, m);
+                        }
                         else
+                        {
+                        	float m = mPosition - 0.7f * velocityX * ((float)SCROLLING_TIME / 1000);
+                        	Log.d(TAG, String.format("moveToPosition = %f", m));
+                        	if (m < 0)
+                        		m = 1 + m;
+                        	if (m > 1)
+                        		m = m - 1;
                             moveToPosition(mPosition, mPosition - 0.7f * velocityX * ((float)SCROLLING_TIME / 1000) );						
+                        }
                     }					
                 }				
                 mTouchState = TOUCH_STATE_REST;
@@ -159,14 +180,15 @@ public class ZTouchMove {
     }
     
     private boolean returnSpring() {
-        mVelocity = 0;
-        if(mPositionDelta + mPosition > 1 - 0.5 / (float) mNumVirtualScreens)
-            moveToPosition(mPosition, (float) (1 - 0.5 / (float) mNumVirtualScreens));
-        else if(mPositionDelta + mPosition < 0.5 / (float) mNumVirtualScreens)
-            moveToPosition(mPosition, (float) 0.5 / (float) mNumVirtualScreens);
-        else
-            return false;
-        return true;
+    	return false;
+//        mVelocity = 0;
+//        if(mPositionDelta + mPosition > 1 - 0.5 / (float) mNumVirtualScreens)
+//            moveToPosition(mPosition, (float) (1 - 0.5 / (float) mNumVirtualScreens));
+//        else if(mPositionDelta + mPosition < 0.5 / (float) mNumVirtualScreens)
+//            moveToPosition(mPosition, (float) 0.5 / (float) mNumVirtualScreens);
+//        else
+//            return false;
+//        return true;
     }
     
     private void moveToPosition(float current_position, float desired_position) {
