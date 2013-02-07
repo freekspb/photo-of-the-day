@@ -46,7 +46,8 @@
        		android:summary="@string/scrollingEffectSummary" 
        		android:entries="@array/scrollingEffectArray" 
        		android:entryValues="@array/scrollingEffectValues"
-       		android:defaultValue="1">
+       		android:defaultValue="1"
+       		android:dependency="programScrolingPref">
        </ListPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/networkSettings">

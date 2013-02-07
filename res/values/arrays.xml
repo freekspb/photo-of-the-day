@@ -18,8 +18,8 @@
     </string-array>
     
 	<string-array name="scrollingEffectArray" translatable="false">
-        <item>Spring</item>
-        <item>List</item>
+        <item>@string/effectSpring</item>
+        <item>@string/effectJump</item>
     </string-array>
 
     <string-array name="scrollingEffectValues" translatable="false">

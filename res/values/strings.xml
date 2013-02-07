@@ -43,10 +43,12 @@
     <string name="assets_html_folder">html/</string>
     <string name="galleryWelcomeText">"Here will be saved images you like. You can save images by widget 'Photo of the day'. Now go to home screen and enjoy picture."</string>
     <string name="catSrolling">Scrolling</string>
-    <string name="programScrolingPref">Program scrolling (beta)</string>
+    <string name="programScrolingPref">Alternative scrolling (beta)</string>
     <string name="disableScrolingPref">Disable scrolling wallpaper</string>
     <string name="disableScrolingPrefSummary">Static image on homescreen</string>
     <string name="programScrolingPrefSummary">"Beta funcionality! Use to enable scrolling wallpapers, when you scroll homescreens (If this functionality doesn't work in Android platform)"</string>
-    <string name="scrollingEffect">Effect</string>
-    <string name="scrollingEffectSummary">Graphical effect</string>
+    <string name="scrollingEffect">Border mode</string>
+    <string name="scrollingEffectSummary">Graphical scrolling effect on border</string>
+    <string name="effectJump">Jump back</string>
+    <string name="effectSpring">Spring</string>
 </resources>

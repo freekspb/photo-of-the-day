@@ -8,7 +8,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Handler;
-import android.util.Log;
+//import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -19,6 +19,13 @@ import android.widget.Scroller;
 
 public class ZTouchMove {
 	private static final String TAG = "ZMOVE"; 
+	
+	/*
+	 * Эффект при достижении края изображения
+	 * True - отпружинивание
+	 * False - перелистывание на другой край изображения
+	 */
+	private boolean springMode = true;
 	
     public interface ZTouchMoveListener {
         public void onTouchOffsetChanged(float xOffset);
@@ -69,7 +76,7 @@ public class ZTouchMove {
     private int mTouchState = TOUCH_STATE_REST;
     
     private int mWidth;
-    private int mNumVirtualScreens = 9;
+    private int mNumVirtualScreens = 7;
     
     @SuppressLint("NewApi")
     @SuppressWarnings("deprecation")
@@ -92,6 +99,23 @@ public class ZTouchMove {
             // API Level <13
             mWidth = display.getWidth();			
         }
+    }
+    
+    /*
+     * Возвращает новое смещение картинки в зависимости от режима springMode
+     */
+    private float getdX(float dX)
+    {
+    	if (springMode)
+    	{
+    		return dX;
+    	}
+    	
+    	if (dX < 0)
+    		return 1 + dX;
+    	if (dX > 1)
+    		return dX - 1; // брать остаток от деления
+		return dX;
     }
     
     public void onTouchEvent(MotionEvent e) {
@@ -137,7 +161,7 @@ public class ZTouchMove {
                     velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
                     float velocityX = velocityTracker.getXVelocity() / (float)(mNumVirtualScreens * mWidth);
                     
-                    Log.d(TAG, String.format("mPositon = %f; mPositionDelta = %f", mPosition, mPositionDelta));
+                    //Log.d(TAG, String.format("mPositon = %f; mPositionDelta = %f", mPosition, mPositionDelta));
                     
                     mPosition =  mPosition + mPositionDelta;
                     mPositionDelta = 0;
@@ -148,23 +172,13 @@ public class ZTouchMove {
                         // Inertion
                         if(Math.abs(velocityX) * (float)(mNumVirtualScreens * mWidth) > SNAP_VELOCITY)
                         {
-                        	float m = (mPosition - (velocityX > 0 ? 1 : -1) * 1 / (float) mNumVirtualScreens);
-                        	Log.d(TAG, String.format("moveToPosition = %f", m));
-                        	if (m < 0)
-                        		m = 1 + m;
-                        	if (m > 1)
-                        		m = m - 1; // брать остаток от деления
-                            moveToPosition(mPosition, m);
+                        	float dX = getdX((mPosition - (velocityX > 0 ? 1 : -1) * 1 / (float) mNumVirtualScreens));
+                            moveToPosition(mPosition, dX);
                         }
                         else
                         {
-                        	float m = mPosition - 0.7f * velocityX * ((float)SCROLLING_TIME / 1000);
-                        	Log.d(TAG, String.format("moveToPosition = %f", m));
-                        	if (m < 0)
-                        		m = 1 + m;
-                        	if (m > 1)
-                        		m = m - 1;
-                            moveToPosition(mPosition, mPosition - 0.7f * velocityX * ((float)SCROLLING_TIME / 1000) );						
+                        	float dX = getdX(mPosition - 0.7f * velocityX * ((float)SCROLLING_TIME / 1000));
+                            moveToPosition(mPosition, dX);
                         }
                     }					
                 }				
@@ -180,15 +194,19 @@ public class ZTouchMove {
     }
     
     private boolean returnSpring() {
-    	return false;
-//        mVelocity = 0;
-//        if(mPositionDelta + mPosition > 1 - 0.5 / (float) mNumVirtualScreens)
-//            moveToPosition(mPosition, (float) (1 - 0.5 / (float) mNumVirtualScreens));
-//        else if(mPositionDelta + mPosition < 0.5 / (float) mNumVirtualScreens)
-//            moveToPosition(mPosition, (float) 0.5 / (float) mNumVirtualScreens);
-//        else
-//            return false;
-//        return true;
+    	if (springMode == false)
+    	{
+        	return false;
+    	}
+    	
+        mVelocity = 0;
+        if(mPositionDelta + mPosition > 1 - 0.5 / (float) mNumVirtualScreens)
+            moveToPosition(mPosition, (float) (1 - 0.5 / (float) mNumVirtualScreens));
+        else if(mPositionDelta + mPosition < 0.5 / (float) mNumVirtualScreens)
+            moveToPosition(mPosition, (float) 0.5 / (float) mNumVirtualScreens);
+        else
+            return false;
+        return true;
     }
     
     private void moveToPosition(float current_position, float desired_position) {
@@ -254,4 +272,11 @@ public class ZTouchMove {
             ((ZTouchMoveListener) iterator.next()).onTouchOffsetChanged(mOffset);
         }
     }
+    
+    /*
+     * Устанавливает текущий режим отрисовки обоев при достежении краев изображения.
+     */
+    public void setSpringMode(boolean value) {
+    	springMode = value;
+	}
 }

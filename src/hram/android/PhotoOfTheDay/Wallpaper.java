@@ -1012,7 +1012,10 @@ public class Wallpaper extends WallpaperService {
 				setProgramScroling(preferences.getBoolean(key, false));
 			} else if (key.equals("disableScrolingPref")) {
 				setDisabledScroling(preferences.getBoolean(key, false));
-			}			
+			} else if (key.equals("scrollingEffect")) {
+				String value = prefs.getString(key, "0");
+				setScrolingEffect(Integer.decode(value));
+			}						
 		}
 		
 		public void onPreferenceChanged(String key) {
@@ -1062,6 +1065,18 @@ public class Wallpaper extends WallpaperService {
 			}
 			mDisabledScroling = value;
 			drawFrame();
+		}
+
+		private void setScrolingEffect(int value)
+		{
+			if (mTouchMove == null)
+			{
+				return;
+			}
+			if (value == 1)
+				mTouchMove.setSpringMode(true);
+			else
+				mTouchMove.setSpringMode(false);
 		}
 
 		private void StartUpdate() {
