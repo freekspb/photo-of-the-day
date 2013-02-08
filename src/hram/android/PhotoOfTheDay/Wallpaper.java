@@ -73,7 +73,7 @@ public class Wallpaper extends WallpaperService {
 	@Override
 	public void onCreate() {
 		// Log.i(TAG, "Создание сервиса.");
-		//BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
+		BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
 
 		// настройки
 		preferences = getSharedPreferences(Constants.SETTINGS_NAME, 0);
@@ -191,6 +191,13 @@ public class Wallpaper extends WallpaperService {
 				newBmWidth = displayWidth;
 			}
 
+			// если рассчиталось что-то неверно, то берем начальный размер
+			if (newBmHeight <= 0 || newBmHeight <= 0)
+			{
+				bm = value;
+				return;
+			}
+			
 			try
 			{
 				bm = Bitmap.createScaledBitmap(value, newBmWidth, newBmHeight, true);
