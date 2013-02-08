@@ -191,6 +191,13 @@ public class Wallpaper extends WallpaperService {
 				newBmWidth = displayWidth;
 			}
 
+			// если рассчиталось что-то неверно, то берем начальный размер
+			if (newBmHeight <= 0 || newBmHeight <= 0)
+			{
+				bm = value;
+				return;
+			}
+			
 			try
 			{
 				bm = Bitmap.createScaledBitmap(value, newBmWidth, newBmHeight, true);
@@ -1012,7 +1019,10 @@ public class Wallpaper extends WallpaperService {
 				setProgramScroling(preferences.getBoolean(key, false));
 			} else if (key.equals("disableScrolingPref")) {
 				setDisabledScroling(preferences.getBoolean(key, false));
-			}			
+			} else if (key.equals("scrollingEffect")) {
+				String value = prefs.getString(key, "0");
+				setScrolingEffect(Integer.decode(value));
+			}						
 		}
 		
 		public void onPreferenceChanged(String key) {
@@ -1064,6 +1074,18 @@ public class Wallpaper extends WallpaperService {
 			drawFrame();
 		}
 
+		private void setScrolingEffect(int value)
+		{
+			if (mTouchMove == null)
+			{
+				return;
+			}
+			if (value == 1)
+				mTouchMove.setSpringMode(true);
+			else
+				mTouchMove.setSpringMode(false);
+		}
+
 		private void StartUpdate() {
 			if (wp.IsWiFiEnabled() == false) {
 				return;
@@ -1083,4 +1105,5 @@ public class Wallpaper extends WallpaperService {
 			wp.StartUpdate();
 		}
 	}
+
 }
