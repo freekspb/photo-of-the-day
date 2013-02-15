@@ -9,8 +9,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import com.bugsense.trace.BugSenseHandler;
-
 public class EarthShots extends BaseParser 
 {	
 	public EarthShots()
