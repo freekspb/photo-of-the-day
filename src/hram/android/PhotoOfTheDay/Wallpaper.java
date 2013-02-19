@@ -343,7 +343,7 @@ public class Wallpaper extends WallpaperService {
 			return new NationalGeographic();
 		case 4:
 			return new Nasa();
-		case 5:
+		case 10:
 			return new Wikipedia();
 		case 6:
 			return new TestParser(this, preferences);

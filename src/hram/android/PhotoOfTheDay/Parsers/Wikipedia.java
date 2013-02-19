@@ -16,31 +16,32 @@ public class Wikipedia extends BaseParser {
 	@Override
 	public String GetUrl() throws IOException 
 	{
-		Document doc = Jsoup.connect("http://commons.wikimedia.org/wiki/Main_Page").get();
+		Document doc = Jsoup.connect("http://commons.wikimedia.org/wiki/Main_Page")
+				.userAgent("Mozilla")
+				.get();
 		
-		Element table = doc.select("table[class=toccolours]").first();
-		for(Element td: table.select("td[class=toccolours]"))
+		Element picture = doc.select("div[id=mf-picture-picture]").first();
+		if(picture == null)
 		{
-			if(td.toString() == null || td.childNodes().size() == 0)
-			{
-				continue;
-			}
-			
-			Element src = td.select("img[src]").first();
-			if(src == null)
-			{
-				return null;
-			}
-			
-			String imageUrl = src.attr("src");
-			
-			int start = imageUrl.indexOf("/thumb/") + 6;
-			int end = imageUrl.indexOf(".jpg") + 4;
-			
-			return "http://upload.wikimedia.org/wikipedia/commons" + imageUrl.substring(start, end);
+			return null;
 		}
+		Element image = picture.select("img").first();
+		if(image == null)
+		{
+			return null;
+		}
+		String img = image.attr("src");
 		
-		return null;
+		// пытаемся загрузить в более хорошем качестве
+		try{
+			String imageWidth = image.attr("width");
+			img = "http:" + img.replace(imageWidth + "px-", "1280px-");
+			return img;
+		}
+		catch (Exception e)
+		{
+			return img;
+		}
 	}
 
 	@Override
