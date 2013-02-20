@@ -33,6 +33,7 @@ import com.novoda.imageloader.core.util.DirectLoader;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -663,6 +664,11 @@ public class Wallpaper extends WallpaperService {
 				@Override
 				public void run() {
 					try {
+						if (IsNeedAutoChangeSource()) {
+							wp.sendBroadcast(new Intent(WidgetBroadcastEnum.NEXT_PARSER_ACTION));
+							return;
+						}
+						
 						// Log.d(TAG, "Сработал таймер обновления");
 						if (IsNeedDownloadEveryUpdate()) {
 							// Log.d(TAG, "Запуск периодического обновления");
@@ -740,6 +746,30 @@ public class Wallpaper extends WallpaperService {
 
 			// Log.d(TAG, "надо обновлять");
 			return true;
+		}
+
+		/**
+		 * Возвращает флаг того, что необходимо переключать источник обоев
+		 * и обновлять картинку. Используется для ежечасной смены источников.
+		 * 
+		 * @return true если необходимо менять источник при каждой проверке
+		 */
+		private boolean IsNeedAutoChangeSource() {
+			try {
+				// Log.d(TAG, "если это превью то не обновляем по таймеру");
+				if (isPreview()) {
+					// Log.d(TAG, "это превью не обновляем по таймеру");
+					return false;
+				}
+
+				if (preferences.getBoolean("autoChangeSource", false) == true) {
+					return true;
+				}
+			} catch (Exception e) {
+				return false;
+			}
+
+			return false;
 		}
 
 		@Override
@@ -1063,6 +1093,7 @@ public class Wallpaper extends WallpaperService {
 					return;
 				}
 				mTouchMove.removeMovingListener(this);
+				mTouchMove.recycle();
 				mTouchMove = null;
 			}
 		}

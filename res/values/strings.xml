@@ -16,6 +16,8 @@
     <string name="tagPhotoValueSummary">Set up tag</string>
     <string name="downloadEveryUpdate">Download periodically</string>
     <string name="downloadEveryUpdateSummary">For tags mode only. Download image every hour.</string>
+    <string name="autoChangeSource">Source auto change</string>
+    <string name="autoChangeSourceSummary">Source auto change every hour</string>
     <string name="wifiOnly">Download Wi-Fi only</string>
     <string name="wifiOnlySummary">Download Wi-Fi only</string>
     <string name="sourcesSettings">Sources settings</string>

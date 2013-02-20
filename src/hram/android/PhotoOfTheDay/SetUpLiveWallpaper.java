@@ -1,7 +1,5 @@
 package hram.android.PhotoOfTheDay;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Intent;
