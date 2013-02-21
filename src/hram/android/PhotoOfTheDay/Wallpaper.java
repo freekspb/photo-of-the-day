@@ -99,10 +99,10 @@ public class Wallpaper extends WallpaperService {
 				}
 			}
 
-			SetCurrentParser(parser);
+			SetCurrentParser(parser, true);
 		} catch (Exception e) {
 			preferences.edit().putString(Constants.SOURCES_NAME, "1").commit();
-			SetCurrentParser(1);
+			SetCurrentParser(1, true);
 		}
 
 		ReadFile();
@@ -314,7 +314,7 @@ public class Wallpaper extends WallpaperService {
 	 *            номер парсера
 	 * @return
 	 */
-	public boolean SetCurrentParser(int value) {
+	public boolean SetCurrentParser(int value, Boolean resetBitmap) {
 		l.lock();
 		try {
 			if (currentParser == value) {
@@ -325,8 +325,10 @@ public class Wallpaper extends WallpaperService {
 		} finally {
 			l.unlock();
 		}
-
-		ResetBitmap();
+		if (resetBitmap)
+		{
+			ResetBitmap();
+		}
 		return true;
 	}
 
@@ -1053,7 +1055,7 @@ public class Wallpaper extends WallpaperService {
 			} else if (key.equals("sources")) {
 				String value = prefs.getString(key, "0");
 
-				if (SetCurrentParser(Integer.decode(value))) {
+				if (SetCurrentParser(Integer.decode(value), true)) {
 					StartUpdate();
 				}
 			} else if (key.equals("programScrolingPref")) {
