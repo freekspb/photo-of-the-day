@@ -5,7 +5,7 @@
     <string name="wallpaper_description">Live wallpaper that displays photo of the day from Flickr and Fotki.Yandex</string>
     <string name="download">Download image…</string>
     <string name="error">Error!</string>
-    <string name="isOffline">Data communication off.</string>
+    <string name="isOffline">Data communication off</string>
     <string name="isOutOfMemory1">Memory full,</string>
     <string name="isOutOfMemory2">please close some apps :(</string>
     <string name="sources">Sources of wallpaper</string>
@@ -29,7 +29,7 @@
     <string name="howToUseDescr">Details about the app</string>
     <string name="whatsNew">What\'s new?</string>
     <string name="softwareVersion">Software version</string>
-    <string name="updateStarted">Download image started.</string>
+    <string name="updateStarted">Download image started</string>
     <string name="setupDescription">"Choose 'Photo of the day'\r\n from the list."</string>
     <!-- ============================ -->
     <!--  AppWidget strings           -->
