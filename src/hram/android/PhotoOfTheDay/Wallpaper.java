@@ -895,7 +895,8 @@ public class Wallpaper extends WallpaperService {
 						int leftOffset;
 						int newBmHeight;
 						int newBmWidth;
-
+						float rescaling = 1;
+						
 						// если высота экрана больше ширины
 						if (mHeight > mWidth) {
 							// отступ сбоку - 1/6 часть экрана по ширине
@@ -903,7 +904,7 @@ public class Wallpaper extends WallpaperService {
 							// ширина изображения - 4/6 экрана по ширине
 							newBmWidth = mWidth - 2 * leftOffset;
 							// коэффициент масштабирования
-							double rescaling = (double) newBmWidth
+							rescaling = (float) newBmWidth
 									/ download.getWidth();
 							// высота
 							newBmHeight = (int) (download.getHeight() * rescaling);
@@ -917,18 +918,25 @@ public class Wallpaper extends WallpaperService {
 							// высоты изображения - 4/6 экрана по высоте
 							newBmHeight = mHeight - 2 * topOffset;
 							// коэффициент масштабирования
-							double rescaling = (double) newBmHeight
+							rescaling = (float) newBmHeight
 									/ download.getHeight();
 							// ширина
 							newBmWidth = (int) (download.getWidth() * rescaling);
 							// левый отступ ижображения
 							leftOffset = (int) (mWidth - newBmWidth) / 2;
 						}
+						// если картинка еще не отмасштабирована
+						if (rescaling != 1)
+						{
+							// масштабируем картинку под нужное разрешение
+							download = Bitmap.createScaledBitmap(download, newBmWidth, newBmHeight, true);
+						}
 
-						c.drawRect(new Rect(0, 0, mWidth, mHeight), new Paint());
-						c.drawBitmap(Bitmap.createScaledBitmap(download,
-								newBmWidth, newBmHeight, true), leftOffset,
-								topOffset, null);
+						Paint paint = new Paint();
+						paint.setColor(getResources().getColor(R.color.download_background));
+						c.drawRect(new Rect(0, 0, mWidth, mHeight), paint);
+						c.drawBitmap(download, leftOffset, topOffset, null);
+						
 						if (IsOnline()) {
 							c.drawText(getText(R.string.download).toString(),
 									mWidth / 2, 100, mPaint);
