@@ -84,8 +84,8 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
 	        	SharedPreferences.Editor editor = wp.preferences.edit();
 	            editor.putString(Constants.SOURCES_NAME, "" + nextParser);
 	            editor.commit();
-	            wp.SetCurrentParser(nextParser);
-	            wp.StartUpdate();
+	            //wp.SetCurrentParser(nextParser, false);
+	            //wp.StartUpdate();
 	            return;
 			} catch (Exception e) {
 				BugSenseHandler.sendException(e);

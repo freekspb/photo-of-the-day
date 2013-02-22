@@ -1,8 +1,8 @@
 package hram.android.PhotoOfTheDay;
 
-import java.io.File;
+/*import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.FileNotFoundException;*/
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -108,6 +108,7 @@ public class ImageDownloader
 		}
     }
     
+    /*
     private Bitmap decodeFile(File f)
     {
         try {
@@ -131,6 +132,7 @@ public class ImageDownloader
         } catch (FileNotFoundException e) {}
         return null;
     }
+    */
 
     /*
      * An InputStream that skips the exact number of bytes provided, unless it reaches EOF.

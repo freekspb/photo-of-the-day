@@ -8,6 +8,7 @@
         <item>earthshots.com</item>
         <item>bing.com</item>
         <item>dieselstation.com (cars)</item>
+        <item>wikipedia</item>
     </string-array>
 
     <string-array name="sourcesValues" translatable="false">
@@ -17,16 +18,7 @@
         <item>7</item>
         <item>8</item>
         <item>9</item>
-    </string-array>
-    
-	<string-array name="scrollingEffectArray" translatable="false">
-        <item>@string/effectSpring</item>
-        <item>@string/effectJump</item>
-    </string-array>
-
-    <string-array name="scrollingEffectValues" translatable="false">
-        <item>1</item>
-        <item>2</item>
+        <item>10</item>
     </string-array>
     
 	<string-array name="scrollingEffectArray" translatable="false">

@@ -28,6 +28,7 @@
     <color name="transparent">#00000000</color>
     
     <color name="action_bar_background">#2F222222</color>
+    <color name="download_background">#FF222222</color>
     
     <!-- Help -->
     <color name="help_view">#ff404040</color>
