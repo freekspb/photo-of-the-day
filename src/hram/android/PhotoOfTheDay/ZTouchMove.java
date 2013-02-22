@@ -18,7 +18,7 @@ import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
 public class ZTouchMove {
-	private static final String TAG = "ZMOVE"; 
+	//private static final String TAG = "ZMOVE"; 
 	
 	/*
 	 * Эффект при достижении края изображения
@@ -271,6 +271,14 @@ public class ZTouchMove {
         while(iterator.hasNext())  {
             ((ZTouchMoveListener) iterator.next()).onTouchOffsetChanged(mOffset);
         }
+    }
+    
+    public void recycle()
+    {
+    	if (mVelocityTracker != null)
+    	{
+    		mVelocityTracker.recycle();
+    	}
     }
     
     /*

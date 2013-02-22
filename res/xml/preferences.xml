@@ -17,9 +17,15 @@
        		android:entryValues="@array/sourcesValues"
        		android:defaultValue="1">
        </ListPreference>
+       <CheckBoxPreference android:key="autoChangeSource" 
+       		android:summary="@string/autoChangeSourceSummary" 
+       		android:title="@string/autoChangeSource"
+       		android:disableDependentsState="True">
+       </CheckBoxPreference>
        <CheckBoxPreference android:key="tagPhotoEnable" 
        		android:summary="@string/tagPhotoEnableSummary" 
-       		android:title="@string/tagPhotoEnable">
+       		android:title="@string/tagPhotoEnable"
+       		android:dependency="autoChangeSource">
        </CheckBoxPreference>
        <EditTextPreference android:key="tagPhotoValue" 
        		android:title="@string/tagPhotoValue" 

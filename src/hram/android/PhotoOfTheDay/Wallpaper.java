@@ -33,6 +33,7 @@ import com.novoda.imageloader.core.util.DirectLoader;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -98,10 +99,10 @@ public class Wallpaper extends WallpaperService {
 				}
 			}
 
-			SetCurrentParser(parser);
+			SetCurrentParser(parser, true);
 		} catch (Exception e) {
 			preferences.edit().putString(Constants.SOURCES_NAME, "1").commit();
-			SetCurrentParser(1);
+			SetCurrentParser(1, true);
 		}
 
 		ReadFile();
@@ -313,7 +314,7 @@ public class Wallpaper extends WallpaperService {
 	 *            номер парсера
 	 * @return
 	 */
-	public boolean SetCurrentParser(int value) {
+	public boolean SetCurrentParser(int value, Boolean resetBitmap) {
 		l.lock();
 		try {
 			if (currentParser == value) {
@@ -324,8 +325,10 @@ public class Wallpaper extends WallpaperService {
 		} finally {
 			l.unlock();
 		}
-
-		ResetBitmap();
+		if (resetBitmap)
+		{
+			ResetBitmap();
+		}
 		return true;
 	}
 
@@ -343,7 +346,7 @@ public class Wallpaper extends WallpaperService {
 			return new NationalGeographic();
 		case 4:
 			return new Nasa();
-		case 5:
+		case 10:
 			return new Wikipedia();
 		case 6:
 			return new TestParser(this, preferences);
@@ -663,6 +666,11 @@ public class Wallpaper extends WallpaperService {
 				@Override
 				public void run() {
 					try {
+						if (IsNeedAutoChangeSource()) {
+							wp.sendBroadcast(new Intent(WidgetBroadcastEnum.NEXT_PARSER_ACTION));
+							return;
+						}
+						
 						// Log.d(TAG, "Сработал таймер обновления");
 						if (IsNeedDownloadEveryUpdate()) {
 							// Log.d(TAG, "Запуск периодического обновления");
@@ -740,6 +748,30 @@ public class Wallpaper extends WallpaperService {
 
 			// Log.d(TAG, "надо обновлять");
 			return true;
+		}
+
+		/**
+		 * Возвращает флаг того, что необходимо переключать источник обоев
+		 * и обновлять картинку. Используется для ежечасной смены источников.
+		 * 
+		 * @return true если необходимо менять источник при каждой проверке
+		 */
+		private boolean IsNeedAutoChangeSource() {
+			try {
+				// Log.d(TAG, "если это превью то не обновляем по таймеру");
+				if (isPreview()) {
+					// Log.d(TAG, "это превью не обновляем по таймеру");
+					return false;
+				}
+
+				if (preferences.getBoolean("autoChangeSource", false) == true) {
+					return true;
+				}
+			} catch (Exception e) {
+				return false;
+			}
+
+			return false;
 		}
 
 		@Override
@@ -865,7 +897,8 @@ public class Wallpaper extends WallpaperService {
 						int leftOffset;
 						int newBmHeight;
 						int newBmWidth;
-
+						float rescaling = 1;
+						
 						// если высота экрана больше ширины
 						if (mHeight > mWidth) {
 							// отступ сбоку - 1/6 часть экрана по ширине
@@ -873,7 +906,7 @@ public class Wallpaper extends WallpaperService {
 							// ширина изображения - 4/6 экрана по ширине
 							newBmWidth = mWidth - 2 * leftOffset;
 							// коэффициент масштабирования
-							double rescaling = (double) newBmWidth
+							rescaling = (float) newBmWidth
 									/ download.getWidth();
 							// высота
 							newBmHeight = (int) (download.getHeight() * rescaling);
@@ -887,18 +920,25 @@ public class Wallpaper extends WallpaperService {
 							// высоты изображения - 4/6 экрана по высоте
 							newBmHeight = mHeight - 2 * topOffset;
 							// коэффициент масштабирования
-							double rescaling = (double) newBmHeight
+							rescaling = (float) newBmHeight
 									/ download.getHeight();
 							// ширина
 							newBmWidth = (int) (download.getWidth() * rescaling);
 							// левый отступ ижображения
 							leftOffset = (int) (mWidth - newBmWidth) / 2;
 						}
+						// если картинка еще не отмасштабирована
+						if (rescaling != 1)
+						{
+							// масштабируем картинку под нужное разрешение
+							download = Bitmap.createScaledBitmap(download, newBmWidth, newBmHeight, true);
+						}
 
-						c.drawRect(new Rect(0, 0, mWidth, mHeight), new Paint());
-						c.drawBitmap(Bitmap.createScaledBitmap(download,
-								newBmWidth, newBmHeight, true), leftOffset,
-								topOffset, null);
+						Paint paint = new Paint();
+						paint.setColor(getResources().getColor(R.color.download_background));
+						c.drawRect(new Rect(0, 0, mWidth, mHeight), paint);
+						c.drawBitmap(download, leftOffset, topOffset, null);
+						
 						if (IsOnline()) {
 							c.drawText(getText(R.string.download).toString(),
 									mWidth / 2, 100, mPaint);
@@ -1015,7 +1055,7 @@ public class Wallpaper extends WallpaperService {
 			} else if (key.equals("sources")) {
 				String value = prefs.getString(key, "0");
 
-				if (SetCurrentParser(Integer.decode(value))) {
+				if (SetCurrentParser(Integer.decode(value), true)) {
 					StartUpdate();
 				}
 			} else if (key.equals("programScrolingPref")) {
@@ -1063,6 +1103,7 @@ public class Wallpaper extends WallpaperService {
 					return;
 				}
 				mTouchMove.removeMovingListener(this);
+				mTouchMove.recycle();
 				mTouchMove = null;
 			}
 		}

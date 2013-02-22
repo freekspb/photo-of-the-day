@@ -32,7 +32,7 @@ import hram.android.PhotoOfTheDay.gallery.AndroidCustomGalleryActivity;
  */
 public class SdSaverAppWidgetProvider extends AppWidgetProvider {
     // log tag
-    private static final String TAG = "SdSaverAppWidgetProvider";
+    //private static final String TAG = "SdSaverAppWidgetProvider";
 
     protected RemoteViews getRemoteViews(Context context)
     {

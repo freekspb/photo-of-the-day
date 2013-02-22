@@ -16,6 +16,8 @@
     <string name="tagPhotoValueSummary">Введите ключевое слово. Только для Flickr и Yandex.</string>
     <string name="downloadEveryUpdate">Обновлять периодически</string>
     <string name="downloadEveryUpdateSummary">Только в режиме работы по тегам. Фотография будет обновляться каждый час.</string>
+    <string name="autoChangeSource">Автосмена источника</string>
+    <string name="autoChangeSourceSummary">Автоматическая смена источника обоев каждый час</string>
     <string name="wifiOnly">Только через Wi-FI</string>
     <string name="wifiOnlySummary">Скачивать только через Wi-Fi</string>
     <string name="sourcesSettings">Настройки источников обоев</string>
