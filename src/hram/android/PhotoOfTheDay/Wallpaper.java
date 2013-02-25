@@ -1065,6 +1065,14 @@ public class Wallpaper extends WallpaperService {
 			} else if (key.equals("scrollingEffect")) {
 				String value = prefs.getString(key, "0");
 				setScrolingEffect(Integer.decode(value));
+			} else if (key.equals("numVirtualScreens")) {
+				String value = preferences.getString("numVirtualScreens", "7");
+				int intVal = 7;
+				try {
+					intVal = Integer.decode(value);
+				} catch (Exception e) {
+				}
+				setNumVirtualScreens(intVal);
 			}						
 		}
 		
@@ -1074,6 +1082,7 @@ public class Wallpaper extends WallpaperService {
 		}
 
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+			// тут напутано prefs и preferences
 			internalPreferenceChanged(preferences, key, false);
 		}
 		
@@ -1091,8 +1100,14 @@ public class Wallpaper extends WallpaperService {
 			if (mProgramScroling == true)
 			{
 				setTouchEventsEnabled(true);
+				String value = preferences.getString("numVirtualScreens", "7");
+				int intVal = 7;
+				try {
+					intVal = Integer.decode(value);
+				} catch (Exception e) {
+				}
 				mTouchMove = new ZTouchMove();
-				mTouchMove.init(wp);
+				mTouchMove.init(wp, intVal);
 				mTouchMove.addMovingListener(this);
 			}
 			else
@@ -1130,6 +1145,15 @@ public class Wallpaper extends WallpaperService {
 				mTouchMove.setSpringMode(false);
 		}
 
+		private void setNumVirtualScreens(int value)
+		{
+			if (mTouchMove == null)
+			{
+				return;
+			}
+			mTouchMove.setNumVirtualScreens(value);
+		}
+		
 		private void StartUpdate() {
 			if (wp.IsWiFiEnabled() == false) {
 				return;

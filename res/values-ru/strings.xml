@@ -52,4 +52,6 @@
     <string name="scrollingEffectSummary">Графический эффект при достижении края изображения</string>
     <string name="effectSpring">Отпружинивание</string>
     <string name="effectJump">Переход на другой край</string>
+    <string name="numVirtualScreensSummary">Количество виртуальных рабочих столов</string>
+    <string name="numVirtualScreens">Рабочие столы</string>
 </resources>
