@@ -35,9 +35,16 @@
         <ImageView
             android:id="@+id/img_wifi"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:scaleType="center"
-            android:contentDescription="gallery"
+            />
+
+        <ImageView
+            android:id="@+id/ind_wifi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
             />
         </LinearLayout>
 
@@ -61,9 +68,18 @@
         <ImageView
             android:id="@+id/img_bluetooth"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:scaleType="center"
             />
+
+        <ImageView
+            android:id="@+id/ind_bluetooth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            />
+
     </LinearLayout>
 
     <ImageView
@@ -86,8 +102,16 @@
         <ImageView
             android:id="@+id/img_gps"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:scaleType="center"
+            />
+
+        <ImageView
+            android:id="@+id/ind_gps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
             />
     </LinearLayout>
 
@@ -111,8 +135,16 @@
         <ImageView
             android:id="@+id/img_sync"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:scaleType="center"
+            />
+
+        <ImageView
+            android:id="@+id/ind_sync"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
             />
     </LinearLayout>
 
