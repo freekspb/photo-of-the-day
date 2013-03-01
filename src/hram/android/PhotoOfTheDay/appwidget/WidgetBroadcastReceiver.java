@@ -7,6 +7,7 @@ import java.util.List;
 import com.bugsense.trace.BugSenseHandler;
 
 import hram.android.PhotoOfTheDay.Constants;
+import hram.android.PhotoOfTheDay.R;
 import hram.android.PhotoOfTheDay.Wallpaper;
 import hram.android.PhotoOfTheDay.Wallpaper.MyEngine;
 import hram.android.PhotoOfTheDay.gallery.AndroidCustomGalleryActivity;
@@ -30,6 +31,14 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
 		parsers = getParsersInt(wp);
 	}
 
+	private void nextParser()
+	{
+    	int nextParser = getNextParser(wp.getCurrentParser());
+    	SharedPreferences.Editor editor = wp.preferences.edit();
+        editor.putString(Constants.SOURCES_NAME, "" + nextParser);
+        editor.commit();		
+	}
+	
     @Override
     public void onReceive(Context context, Intent intent) {
     	Log.i(TAG, "onReceive");
@@ -80,12 +89,24 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
         	}
         	
         	try {
-	        	int nextParser = getNextParser(wp.getCurrentParser());
-	        	SharedPreferences.Editor editor = wp.preferences.edit();
-	            editor.putString(Constants.SOURCES_NAME, "" + nextParser);
-	            editor.commit();
+    			Toast.makeText(wp, wp.getString(R.string.updateStarted),
+    					Toast.LENGTH_SHORT).show();
+        		
+	        	nextParser();
 	            //wp.SetCurrentParser(nextParser, false);
 	            //wp.StartUpdate();
+	            return;
+			} catch (Exception e) {
+				BugSenseHandler.sendException(e);
+			}
+        }        
+        else if (action.equals(WidgetBroadcastEnum.AUTO_NEXT_PARSER_ACTION)) {
+        	if (wp == null || wp.preferences == null) {
+        		return;
+        	}
+        	
+        	try {
+	        	nextParser();
 	            return;
 			} catch (Exception e) {
 				BugSenseHandler.sendException(e);

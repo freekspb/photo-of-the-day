@@ -366,7 +366,7 @@ public class Wallpaper extends WallpaperService {
 	 * Сброс настроек для того чтоб отрисовывалась картинка загрузки
 	 */
 	public void ResetBitmap() {
-		SetBitmap(null);
+		//SetBitmap(null);
 		currDay = -1;
 		currentUrl = null;
 	}
@@ -614,6 +614,8 @@ public class Wallpaper extends WallpaperService {
 			registerReceiver(widgetReceiver, new IntentFilter(
 					WidgetBroadcastEnum.NEXT_PARSER_ACTION));
 			registerReceiver(widgetReceiver, new IntentFilter(
+					WidgetBroadcastEnum.AUTO_NEXT_PARSER_ACTION));
+			registerReceiver(widgetReceiver, new IntentFilter(
 					WidgetBroadcastEnum.SETTINGS_ACTION));
 			registerReceiver(widgetReceiver, new IntentFilter(
 					WidgetBroadcastEnum.CHANGE_SETTINGS_ACTION));
@@ -666,8 +668,8 @@ public class Wallpaper extends WallpaperService {
 				@Override
 				public void run() {
 					try {
-						if (IsNeedAutoChangeSource()) {
-							wp.sendBroadcast(new Intent(WidgetBroadcastEnum.NEXT_PARSER_ACTION));
+						if (IsNeedAutoChangeSource() && IsOnline() ) {
+							wp.sendBroadcast(new Intent(WidgetBroadcastEnum.AUTO_NEXT_PARSER_ACTION));
 							return;
 						}
 						
@@ -764,7 +766,7 @@ public class Wallpaper extends WallpaperService {
 					return false;
 				}
 
-				if (preferences.getBoolean("autoChangeSource", false) == true) {
+				if (preferences.getBoolean(Constants.AUTO_CHANGE_SOURCE, false) == true) {
 					return true;
 				}
 			} catch (Exception e) {
@@ -1052,7 +1054,7 @@ public class Wallpaper extends WallpaperService {
 					&& createCurrentParser().IsTagSupported()
 					&& tag.length() > 0) {
 				StartUpdate();
-			} else if (key.equals("sources")) {
+			} else if (key.equals(Constants.SOURCES_NAME)) {
 				String value = prefs.getString(key, "0");
 
 				if (SetCurrentParser(Integer.decode(value), true)) {
@@ -1065,6 +1067,14 @@ public class Wallpaper extends WallpaperService {
 			} else if (key.equals("scrollingEffect")) {
 				String value = prefs.getString(key, "0");
 				setScrolingEffect(Integer.decode(value));
+			} else if (key.equals("numVirtualScreens")) {
+				String value = preferences.getString("numVirtualScreens", "7");
+				int intVal = 7;
+				try {
+					intVal = Integer.decode(value);
+				} catch (Exception e) {
+				}
+				setNumVirtualScreens(intVal);
 			}						
 		}
 		
@@ -1074,6 +1084,7 @@ public class Wallpaper extends WallpaperService {
 		}
 
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+			// тут напутано prefs и preferences
 			internalPreferenceChanged(preferences, key, false);
 		}
 		
@@ -1091,8 +1102,14 @@ public class Wallpaper extends WallpaperService {
 			if (mProgramScroling == true)
 			{
 				setTouchEventsEnabled(true);
+				String value = preferences.getString("numVirtualScreens", "7");
+				int intVal = 7;
+				try {
+					intVal = Integer.decode(value);
+				} catch (Exception e) {
+				}
 				mTouchMove = new ZTouchMove();
-				mTouchMove.init(wp);
+				mTouchMove.init(wp, intVal);
 				mTouchMove.addMovingListener(this);
 			}
 			else
@@ -1130,13 +1147,22 @@ public class Wallpaper extends WallpaperService {
 				mTouchMove.setSpringMode(false);
 		}
 
+		private void setNumVirtualScreens(int value)
+		{
+			if (mTouchMove == null)
+			{
+				return;
+			}
+			mTouchMove.setNumVirtualScreens(value);
+		}
+		
 		private void StartUpdate() {
 			if (wp.IsWiFiEnabled() == false) {
 				return;
 			}
 
-			Toast.makeText(wp, getString(R.string.updateStarted),
-					Toast.LENGTH_SHORT).show();
+//			Toast.makeText(wp, getString(R.string.updateStarted),
+//					Toast.LENGTH_SHORT).show();
 
 			wp.ResetBitmap();
 

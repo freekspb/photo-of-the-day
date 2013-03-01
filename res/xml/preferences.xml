@@ -55,6 +55,14 @@
        		android:defaultValue="1"
        		android:dependency="programScrolingPref">
        </ListPreference>
+       <EditTextPreference
+			android:key="numVirtualScreens"
+			android:title="@string/numVirtualScreens"
+       		android:summary="@string/numVirtualScreensSummary"            
+			android:numeric="integer"
+			android:maxLength="2"
+			android:defaultValue="7"
+			android:dependency="programScrolingPref"/>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/networkSettings">
 		<CheckBoxPreference android:key="wifiOnly" 
