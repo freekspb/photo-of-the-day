@@ -53,4 +53,6 @@
     <string name="scrollingEffectSummary">Graphical scrolling effect on border</string>
     <string name="effectJump">Jump back</string>
     <string name="effectSpring">Spring</string>
+    <string name="numVirtualScreensSummary">Virtual screens count</string>
+    <string name="numVirtualScreens">Virtual screens</string>
 </resources>

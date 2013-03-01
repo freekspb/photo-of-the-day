@@ -80,12 +80,13 @@ public class ZTouchMove {
     
     @SuppressLint("NewApi")
     @SuppressWarnings("deprecation")
-    public void init(Context ctx) {
+    public void init(Context ctx, int numVirtualScreens) {
         mScroller = new Scroller(ctx, new ZInterpolator());
         
         final ViewConfiguration configuration = ViewConfiguration.get(ctx);
         mTouchSlop = configuration.getScaledTouchSlop();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
+        mNumVirtualScreens = Math.max(1, numVirtualScreens);
 
         WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -287,4 +288,11 @@ public class ZTouchMove {
     public void setSpringMode(boolean value) {
     	springMode = value;
 	}
+    
+    /*
+     * Устанавливает количество виртуальных рабочих столов
+     */
+    public void setNumVirtualScreens(int value) {
+    	mNumVirtualScreens = value;
+	}    
 }
