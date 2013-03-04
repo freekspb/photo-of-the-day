@@ -71,7 +71,7 @@ public class DieselStation extends BaseParser
     		String str = desc.getTextContent();
     		int startPosition = str.indexOf("src=") + 5;
     		int endPosition = str.indexOf(" ", startPosition);
-    		String image = str.substring(startPosition, endPosition - 1);
+    		String image = new String(str.substring(startPosition, endPosition - 1));
     		return image;
 		}catch (SAXException e) {
 			//try{
@@ -128,9 +128,13 @@ public class DieselStation extends BaseParser
 				.get();
 	        String str = doc2.html();
 	        int startPosition = str.indexOf("img id=\"wallpaper\" class=\"img_resize\" src=\"");
+	        if (startPosition < 0)
+	        {
+	        	return null;
+	        }
 	        startPosition += 43;
     		int endPosition = str.indexOf("\"", startPosition);
-    		String image = str.substring(startPosition, endPosition);
+    		String image = new String(str.substring(startPosition, endPosition));
 			return image;
 		}catch (OutOfMemoryError e) {}
 		return null;

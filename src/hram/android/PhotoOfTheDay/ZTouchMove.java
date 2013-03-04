@@ -66,14 +66,9 @@ public class ZTouchMove {
     private float mVelocity = 0;
     private Scroller mScroller;
     
-    private final static int TOUCH_STATE_REST = 0;
-    private final static int TOUCH_STATE_SCROLLING = 1;
-    private static final int SCROLLING_TIME = 300;
-    private static final int SNAP_VELOCITY = 350;
-    
     private int mTouchSlop;
     private int mMaximumVelocity;	
-    private int mTouchState = TOUCH_STATE_REST;
+    private int mTouchState = ZTouchMoveConstants.TOUCH_STATE_REST;
     
     private int mWidth;
     private int mNumVirtualScreens = 7;
@@ -130,7 +125,7 @@ public class ZTouchMove {
         
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                mTouchState = mScroller.isFinished() ? TOUCH_STATE_REST : TOUCH_STATE_SCROLLING;
+                mTouchState = mScroller.isFinished() ? ZTouchMoveConstants.TOUCH_STATE_REST : ZTouchMoveConstants.TOUCH_STATE_SCROLLING;
                 if (!mScroller.isFinished()) {
                     mScroller.abortAnimation();
                 }
@@ -141,8 +136,8 @@ public class ZTouchMove {
             case MotionEvent.ACTION_MOVE:
                 xDiff = (int) (x - mTouchDownX);
                 
-                if (Math.abs(xDiff) > mTouchSlop && mTouchState != TOUCH_STATE_SCROLLING) {
-                    mTouchState = TOUCH_STATE_SCROLLING;
+                if (Math.abs(xDiff) > mTouchSlop && mTouchState != ZTouchMoveConstants.TOUCH_STATE_SCROLLING) {
+                    mTouchState = ZTouchMoveConstants.TOUCH_STATE_SCROLLING;
                     if(xDiff < 0)
                         mTouchDownX = mTouchDownX - mTouchSlop;
                     else
@@ -150,14 +145,14 @@ public class ZTouchMove {
                     xDiff = (int) (x - mTouchDownX);
                 }
                 
-                if (mTouchState == TOUCH_STATE_SCROLLING) {
+                if (mTouchState == ZTouchMoveConstants.TOUCH_STATE_SCROLLING) {
                     mPositionDelta = -(float)xDiff / (mWidth * mNumVirtualScreens);
                     
                 }
                 break;
                 
             case MotionEvent.ACTION_UP:
-                if (mTouchState == TOUCH_STATE_SCROLLING) {
+                if (mTouchState == ZTouchMoveConstants.TOUCH_STATE_SCROLLING) {
                     final VelocityTracker velocityTracker = mVelocityTracker;
                     velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
                     float velocityX = velocityTracker.getXVelocity() / (float)(mNumVirtualScreens * mWidth);
@@ -171,23 +166,23 @@ public class ZTouchMove {
                         mVelocity = Math.min(3, Math.abs(velocityX * mNumVirtualScreens)) ;
                         // deaccelerate();
                         // Inertion
-                        if(Math.abs(velocityX) * (float)(mNumVirtualScreens * mWidth) > SNAP_VELOCITY)
+                        if(Math.abs(velocityX) * (float)(mNumVirtualScreens * mWidth) > ZTouchMoveConstants.SNAP_VELOCITY)
                         {
                         	float dX = getdX((mPosition - (velocityX > 0 ? 1 : -1) * 1 / (float) mNumVirtualScreens));
                             moveToPosition(mPosition, dX);
                         }
                         else
                         {
-                        	float dX = getdX(mPosition - 0.7f * velocityX * ((float)SCROLLING_TIME / 1000));
+                        	float dX = getdX(mPosition - 0.7f * velocityX * ((float)ZTouchMoveConstants.SCROLLING_TIME / 1000));
                             moveToPosition(mPosition, dX);
                         }
                     }					
                 }				
-                mTouchState = TOUCH_STATE_REST;
+                mTouchState = ZTouchMoveConstants.TOUCH_STATE_REST;
                 break;
                 
             case MotionEvent.ACTION_CANCEL:
-                mTouchState = TOUCH_STATE_REST;
+                mTouchState = ZTouchMoveConstants.TOUCH_STATE_REST;
                 mPositionDelta = 0;
                 break;
         }
@@ -211,7 +206,7 @@ public class ZTouchMove {
     }
     
     private void moveToPosition(float current_position, float desired_position) {
-        mScroller.startScroll((int)(current_position * 1000), 0, (int)((desired_position - current_position) * 1000), 0, SCROLLING_TIME);
+        mScroller.startScroll((int)(current_position * 1000), 0, (int)((desired_position - current_position) * 1000), 0, ZTouchMoveConstants.SCROLLING_TIME);
         mHandler.postDelayed(mRunnable, 20);
     }
     
@@ -280,6 +275,7 @@ public class ZTouchMove {
     	{
     		mVelocityTracker.recycle();
     	}
+    	mListeners.clear();
     }
     
     /*

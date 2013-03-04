@@ -130,7 +130,8 @@ public class Bing extends BaseParser
 			}
 			startPosition += 13;
     		int endPosition = str.indexOf("'", startPosition);
-    		String image = str.substring(startPosition, endPosition);
+    		String image = new String(str.substring(startPosition, endPosition));
+    		str = null;
     		return "http://www.bing.com/" + image;
         }catch (OutOfMemoryError e) {
 			//try{

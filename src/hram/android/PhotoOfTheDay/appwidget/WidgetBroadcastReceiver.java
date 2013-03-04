@@ -15,14 +15,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
+//import android.util.Log;
 import android.widget.Toast;
 
 public class WidgetBroadcastReceiver extends BroadcastReceiver 
 {
 	private Wallpaper wp;
 	private MyEngine eng;
-	public static final String TAG = "WidgetBroadcastReceiver";
+	//public static final String TAG = "WidgetBroadcastReceiver";
 	private List<Integer> parsers;
 	
 	public WidgetBroadcastReceiver(Wallpaper wallpaper, MyEngine engine) {
@@ -41,18 +41,18 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
 	
     @Override
     public void onReceive(Context context, Intent intent) {
-    	Log.i(TAG, "onReceive");
+    	//Log.i(TAG, "onReceive");
         //Ловим наш Broadcast, проверяем и выводим сообщение
         String action = intent.getAction();
         if (action.equals(WidgetBroadcastEnum.SAVE_ACTION)) {
         	try {
-	        	Log.i(TAG, "onReceive - SAVE_ACTION");
+	        	//Log.i(TAG, "onReceive - SAVE_ACTION");
 	
 	            String msg = null;
 	            try {
 	            	msg = SDHelper.saveImage(wp);
 	            } catch (Exception e) {
-	            	Log.e(TAG, "onReceive" + e.getLocalizedMessage());
+	            	//Log.e(TAG, "onReceive" + e.getLocalizedMessage());
 	            }
 	            if (msg == null)
 	            {
