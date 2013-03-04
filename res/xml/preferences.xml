@@ -22,6 +22,10 @@
        		android:title="@string/autoChangeSource"
        		android:disableDependentsState="True">
        </CheckBoxPreference>
+       <CheckBoxPreference android:key="autoChangeRandom" 
+       		android:summary="autoChangeRandomSummary" 
+       		android:title="autoChangeRandom">
+       </CheckBoxPreference>
        <CheckBoxPreference android:key="tagPhotoEnable" 
        		android:summary="@string/tagPhotoEnableSummary" 
        		android:title="@string/tagPhotoEnable"

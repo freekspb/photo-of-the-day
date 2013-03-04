@@ -3,6 +3,7 @@ package hram.android.PhotoOfTheDay.appwidget;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import com.bugsense.trace.BugSenseHandler;
 
@@ -159,6 +160,32 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
     	return 0;
     }
     
+    private int getRandomParserNumber() {
+    	int max = Collections.max(parsers);
+    	Random rand = new Random();
+    	int nextParser = rand.nextInt(max) + 1;
+    	
+    	// из-за того, что в номерах парсеров пропуски
+    	if (nextParser > 3)
+    	{
+    		nextParser += 3;
+    	}
+    	return nextParser;
+	}
+    
+    
+    private int getRandomParser(int currentParser) {
+    	if (parsers == null) {
+    		return currentParser;
+    	}
+    	
+    	int nextParser = -1;
+    	do {
+    		nextParser = getRandomParserNumber();
+		} while (currentParser == nextParser);
+    	
+    	return nextParser;
+    }
     
     private List<Integer> getParsersInt(Context context) {
     	
