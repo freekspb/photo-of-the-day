@@ -54,4 +54,9 @@
     <string name="effectJump">Переход на другой край</string>
     <string name="numVirtualScreensSummary">Количество виртуальных рабочих столов</string>
     <string name="numVirtualScreens">Рабочие столы</string>
+    <string name="nullString"></string>
+    <string name="openGallery">Открыть галерею</string>
+    <string name="saveImage">Сохранить изображение</string>
+    <string name="nextParser">Следующий источник</string>
+    <string name="openSettings">Настройки</string>
 </resources>

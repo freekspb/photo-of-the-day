@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -91,6 +92,7 @@ public class SDHelper {
 	 * @param parserPrefix Префикс картинки из текущего парсера
 	 * @return parserPrefix_yyyy_MM_dd_
 	 */
+	@SuppressLint("SimpleDateFormat")
 	private static String getFilenamePrefix(String parserPrefix) {
 		String prefix = "";
 		if (parserPrefix == null) {
