@@ -11,6 +11,7 @@ import hram.android.PhotoOfTheDay.R;
 import hram.android.PhotoOfTheDay.Wallpaper;
 import hram.android.PhotoOfTheDay.Wallpaper.MyEngine;
 import hram.android.PhotoOfTheDay.gallery.AndroidCustomGalleryActivity;
+import hram.android.PhotoOfTheDay.preference.ListPreferenceConstants;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,17 +19,23 @@ import android.content.SharedPreferences;
 //import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * @author freek
+ *
+ */
 public class WidgetBroadcastReceiver extends BroadcastReceiver 
 {
 	private Wallpaper wp;
 	private MyEngine eng;
 	//public static final String TAG = "WidgetBroadcastReceiver";
 	private List<Integer> parsers;
+	private List<Integer> favoriteParsers;
 	
 	public WidgetBroadcastReceiver(Wallpaper wallpaper, MyEngine engine) {
 		wp = wallpaper;
 		eng = engine;
 		parsers = getParsersInt(wp);
+		favoriteParsers = getFavoriteParsersInt(wp.preferences, parsers);
 	}
 
 	private void nextParser()
@@ -143,7 +150,7 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
     	
     	currentParser++;
     	while (currentParser <= max) {
-        	if (parsers.contains(currentParser)) {
+        	if (parsers.contains(currentParser) && favoriteParsers.contains(currentParser)) {
         		return currentParser;
         	}
         	currentParser++;
@@ -151,7 +158,7 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
     	// если попали сюда, значит прошли все и надо перебирать сначала
     	currentParser = 0;
     	while (currentParser <= max) {
-        	if (parsers.contains(currentParser)) {
+        	if (parsers.contains(currentParser) && favoriteParsers.contains(currentParser)) {
         		return currentParser;
         	}
         	currentParser++;
@@ -159,14 +166,53 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
     	return 0;
     }
     
-    
-    private List<Integer> getParsersInt(Context context) {
-    	
-    	String[] strings = context.getResources().getStringArray(hram.android.PhotoOfTheDay.R.array.sourcesValues);
+    private static List<Integer> stringsToListInt(String[] strings) {
         List<Integer> list = new ArrayList<Integer>();
+        if (strings == null)
+        {
+        	return list;
+        }
         for (int i = 0; i < strings.length; i++) {
         	list.add(Integer.parseInt(strings[i]));
         }
         return list;
+	}
+    
+    private static List<Integer> getParsersInt(Context context) {
+    	return stringsToListInt(context.getResources().getStringArray(hram.android.PhotoOfTheDay.R.array.sourcesValues));
+	}
+    
+    /** Возвращает лист избранных парсеров. Если не заполнено, то вернет defaultList.
+     * @param prefs Настройки.
+     * @param defaultList Лист парсеров, который вернуть, если избранные парсеры не заполнены.
+     * @return
+     */
+    private static List<Integer> getFavoriteParsersInt(SharedPreferences prefs, List<Integer> defaultList) {
+    	// эти настройки должны браться из preferences
+		String fvPref = prefs.getString(Constants.FAVORITE_SOURCES, ListPreferenceConstants.CHECK_ALL);
+		String[] strings = fvPref.split(ListPreferenceConstants.SEPARATOR);
+    	
+    	// если пустой список или задано 'all'
+    	if (strings == null || (strings.length > 0 && strings[0].equalsIgnoreCase(ListPreferenceConstants.CHECK_ALL)))
+    	{
+    		return defaultList;
+    	}
+    	List<Integer> res = stringsToListInt(strings);
+		if (res.isEmpty())
+		{
+			return defaultList;
+		}
+		return res;
+	}
+    
+    public void refreshFavoriteParsers() {
+    	try
+    	{
+    		favoriteParsers = getFavoriteParsersInt(wp.preferences, parsers);
+    	}
+    	catch (Exception e)
+    	{
+			BugSenseHandler.sendException(e);    		
+    	}
 	}
 }

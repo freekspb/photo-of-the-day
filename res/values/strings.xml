@@ -55,9 +55,11 @@
     <string name="effectSpring">Spring</string>
     <string name="numVirtualScreensSummary">Virtual screens count</string>
     <string name="numVirtualScreens">Virtual screens</string>
-    <string name="nullString"></string>
+    <string name="nullString"/>
     <string name="openGallery">Open gallery</string>
     <string name="saveImage">Save image</string>
     <string name="nextParser">Next parser</string>
     <string name="openSettings">Open settings</string>
+    <string name="favoriteSources">Favorites sources</string>
+    <string name="favoriteSourcesSummary">Select sources for source auto change mode</string>
 </resources>

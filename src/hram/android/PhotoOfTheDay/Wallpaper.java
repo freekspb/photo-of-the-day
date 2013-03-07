@@ -74,7 +74,7 @@ public class Wallpaper extends WallpaperService {
 	@Override
 	public void onCreate() {
 		// Log.i(TAG, "Создание сервиса.");
-		BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
+		//BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
 
 		// настройки
 		preferences = getSharedPreferences(Constants.SETTINGS_NAME, 0);
@@ -1062,7 +1062,6 @@ public class Wallpaper extends WallpaperService {
 			{
 				return;
 			}
-			
 			// Log.d(TAG, "Изменено " + arg1);
 			String tag = prefs.getString("tagPhotoValue", "");
 			if (key.equals("tagPhotoEnable")
@@ -1083,6 +1082,8 @@ public class Wallpaper extends WallpaperService {
 				if (SetCurrentParser(Integer.decode(value), true)) {
 					StartUpdate();
 				}
+			} else if (key.equals(Constants.FAVORITE_SOURCES)) {
+				widgetReceiver.refreshFavoriteParsers();
 			} else if (key.equals("programScrolingPref")) {
 				setProgramScroling(preferences.getBoolean(key, false));
 			} else if (key.equals("disableScrolingPref")) {
