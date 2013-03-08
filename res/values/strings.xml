@@ -60,6 +60,6 @@
     <string name="saveImage">Save image</string>
     <string name="nextParser">Next parser</string>
     <string name="openSettings">Open settings</string>
-    <string name="favoriteSources">Favorites sources</string>
+    <string name="favoriteSources">Favorite sources</string>
     <string name="favoriteSourcesSummary">Select sources for source auto change mode</string>
 </resources>
