@@ -54,7 +54,6 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 public class Wallpaper extends WallpaperService {
 	public static final String TAG = Constants.TAG;
@@ -75,7 +74,7 @@ public class Wallpaper extends WallpaperService {
 	@Override
 	public void onCreate() {
 		// Log.i(TAG, "Создание сервиса.");
-		BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
+		//BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
 
 		// настройки
 		preferences = getSharedPreferences(Constants.SETTINGS_NAME, 0);
@@ -196,10 +195,15 @@ public class Wallpaper extends WallpaperService {
 			// если рассчиталось что-то неверно, то берем начальный размер
 			if (newBmHeight <= 0 || newBmHeight <= 0)
 			{
+				bm.recycle();
 				bm = value;
 				return;
 			}
 			
+			if (bm != null && !bm.isRecycled())
+			{
+				bm.recycle();					
+			}
 			try
 			{
 				bm = Bitmap.createScaledBitmap(value, newBmWidth, newBmHeight, true);
@@ -211,6 +215,10 @@ public class Wallpaper extends WallpaperService {
 			return;
 		}
 
+		if (bm != null && !bm.isRecycled())
+		{
+			bm.recycle();					
+		}
 		bm = value;
 	}
 
@@ -392,7 +400,12 @@ public class Wallpaper extends WallpaperService {
 
 			if (GetCurrentUrl().length() > 0) {
 				stream = openFileInput(Constants.FILE_NAME);
-				SetBitmap(BitmapFactory.decodeStream(stream));
+				Bitmap readBm = BitmapFactory.decodeStream(stream);
+				SetBitmap(readBm);
+				if (GetBitmap() != readBm)
+				{
+					readBm.recycle();
+				}
 			}
 
 		} catch (Exception e) {
@@ -418,9 +431,12 @@ public class Wallpaper extends WallpaperService {
 		try {
 			FileOutputStream fos = openFileOutput(Constants.FILE_NAME,
 					Context.MODE_PRIVATE);
-			// PNG which is lossless, will ignore the quality setting
-			bm.compress(Bitmap.CompressFormat.PNG, 100, fos);
-			fos.close();
+			try {
+				// PNG which is lossless, will ignore the quality setting
+				bm.compress(Bitmap.CompressFormat.PNG, 100, fos);
+			} finally {
+				fos.close();	
+			}
 
 			long now = System.currentTimeMillis();
 
@@ -483,6 +499,13 @@ public class Wallpaper extends WallpaperService {
 			currentWidth = -1;
 			SetBitmap(bm);
 			SaveFile(bm, url);
+			// если текущее изображение не является инстансом локального bm,
+			// т.к. на SetBitmap может создаться изображение с другими размерами
+			if (GetBitmap() != bm)
+			{
+				// чистим локальный bm
+				bm.recycle();
+			}
 
 			for (MyEngine info : engines) {
 				// Log.d(TAG, "Вызов drawFrame()");
@@ -1039,7 +1062,6 @@ public class Wallpaper extends WallpaperService {
 			{
 				return;
 			}
-			
 			// Log.d(TAG, "Изменено " + arg1);
 			String tag = prefs.getString("tagPhotoValue", "");
 			if (key.equals("tagPhotoEnable")
@@ -1060,6 +1082,8 @@ public class Wallpaper extends WallpaperService {
 				if (SetCurrentParser(Integer.decode(value), true)) {
 					StartUpdate();
 				}
+			} else if (key.equals(Constants.FAVORITE_SOURCES)) {
+				widgetReceiver.refreshFavoriteParsers();
 			} else if (key.equals("programScrolingPref")) {
 				setProgramScroling(preferences.getBoolean(key, false));
 			} else if (key.equals("disableScrolingPref")) {

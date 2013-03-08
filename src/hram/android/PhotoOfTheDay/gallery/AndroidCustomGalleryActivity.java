@@ -40,7 +40,7 @@ import android.widget.GridView;
 
 public class AndroidCustomGalleryActivity extends Activity 
 {
-	public static final String TAG = "GalleryActivity";
+	//public static final String TAG = "GalleryActivity";
 	public ImageAdapter imageAdapter;
 	private Cursor cursor;
 	public GridView imagegrid;

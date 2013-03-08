@@ -55,28 +55,28 @@ public class SdSaverAppWidgetProvider extends AppWidgetProvider {
          //создаем наше событие
          PendingIntent actionPendingIntent = PendingIntent.getBroadcast(context, 0, active, 0);
          //регистрируем наше событие
-         remoteViews.setOnClickPendingIntent(R.id.btn_bluetooth, actionPendingIntent);
+         remoteViews.setOnClickPendingIntent(R.id.img_bluetooth, actionPendingIntent);
 
          // открытие галереи
          Intent intent = new Intent(context, AndroidCustomGalleryActivity.class);
          intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
          PendingIntent openGalleryPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
          //регистрируем наше событие
-         remoteViews.setOnClickPendingIntent(R.id.btn_wifi, openGalleryPendingIntent);
+         remoteViews.setOnClickPendingIntent(R.id.img_wifi, openGalleryPendingIntent);
 
          //Подготавливаем Intent для Broadcast
          Intent nextParser = new Intent(WidgetBroadcastEnum.NEXT_PARSER_ACTION);
          //создаем наше событие
          PendingIntent nextParserPendingIntent = PendingIntent.getBroadcast(context, 0, nextParser, 0);
          //регистрируем наше событие
-         remoteViews.setOnClickPendingIntent(R.id.btn_gps, nextParserPendingIntent);
+         remoteViews.setOnClickPendingIntent(R.id.img_gps, nextParserPendingIntent);
 
          //Подготавливаем Intent для Broadcast
          Intent openSttings = new Intent(WidgetBroadcastEnum.SETTINGS_ACTION);
          //создаем наше событие
          PendingIntent openSttingsPendingIntent = PendingIntent.getBroadcast(context, 0, openSttings, 0);
          //регистрируем наше событие
-         remoteViews.setOnClickPendingIntent(R.id.btn_sync, openSttingsPendingIntent);
+         remoteViews.setOnClickPendingIntent(R.id.img_sync, openSttingsPendingIntent);
 
          //обновляем виджет
          appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);

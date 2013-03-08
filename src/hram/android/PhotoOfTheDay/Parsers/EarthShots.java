@@ -49,7 +49,7 @@ public class EarthShots extends BaseParser
     		String str = desc.getTextContent();
     		int startPosition = str.indexOf("img src=") + 9;
     		int endPosition = str.indexOf(" ", startPosition);
-    		String image = str.substring(startPosition, endPosition - 1);
+    		String image = new String(str.substring(startPosition, endPosition - 1));
     		return image.replaceFirst("/285/", "/full/");
 		}catch (SAXException e) {
 			//try{
