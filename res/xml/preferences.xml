@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-  xmlns:android="http://schemas.android.com/apk/res/android">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:hram="http://schemas.android.com/apk/res/hram.android.PhotoOfTheDay">
   	<PreferenceCategory android:title="@string/catAbout">
 		<Preference android:title="@string/howToUse"
             android:summary="@string/howToUseDescr"
@@ -22,6 +23,15 @@
        		android:title="@string/autoChangeSource"
        		android:disableDependentsState="True">
        </CheckBoxPreference>
+	   <hram.android.PhotoOfTheDay.preference.ListPreferenceMultiSelect 
+			hram:checkAll="CheckAll" hram:separator="X"
+			android:defaultValue="1X2X3X6X7X8X9X10"			
+		    android:key="favoriteSources"
+		    android:title="@string/favoriteSources"
+		    android:dialogTitle="@string/favoriteSources"
+		    android:summary="@string/favoriteSourcesSummary"
+		    android:entries="@array/sourcesArray"
+		    android:entryValues="@array/sourcesValues"/>
        <CheckBoxPreference android:key="tagPhotoEnable" 
        		android:summary="@string/tagPhotoEnableSummary" 
        		android:title="@string/tagPhotoEnable"

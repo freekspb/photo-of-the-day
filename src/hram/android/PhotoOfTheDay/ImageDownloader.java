@@ -23,7 +23,7 @@ import android.util.Log;
 
 public class ImageDownloader 
 {
-    private static final String LOG_TAG = "ImageDownloader";
+    //private static final String LOG_TAG = "ImageDownloader";
 
     public static Bitmap downloadBitmap(String url) {
 
@@ -58,13 +58,13 @@ public class ImageDownloader
             }
         } catch (IOException e) {
             getRequest.abort();
-            Log.w(LOG_TAG, "I/O error while retrieving bitmap from " + url, e);
+            //Log.w(LOG_TAG, "I/O error while retrieving bitmap from " + url, e);
         } catch (IllegalStateException e) {
             getRequest.abort();
-            Log.w(LOG_TAG, "Incorrect URL: " + url);
+            //Log.w(LOG_TAG, "Incorrect URL: " + url);
         } catch (Exception e) {
             getRequest.abort();
-            Log.w(LOG_TAG, "Error while retrieving bitmap from " + url, e);
+            //Log.w(LOG_TAG, "Error while retrieving bitmap from " + url, e);
         } finally {
             if ((client instanceof AndroidHttpClient)) {
                 ((AndroidHttpClient) client).close();
