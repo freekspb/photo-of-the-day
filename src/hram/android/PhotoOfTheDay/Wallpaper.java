@@ -104,7 +104,7 @@ public class Wallpaper extends WallpaperService {
 			SetCurrentParser(1, true);
 		}
 
-		ReadFile();
+		ReadFile(true);
 	}
 
 	@Override
@@ -382,7 +382,7 @@ public class Wallpaper extends WallpaperService {
 	/**
 	 * Чтение сохраненной картинки из файла
 	 */
-	public void ReadFile() {
+	public void ReadFile(boolean updateUrl) {
 		// Log.d(TAG, "Чтение картинки из файла");
 
 		FileInputStream stream = null;
@@ -392,7 +392,10 @@ public class Wallpaper extends WallpaperService {
 				return;
 			}
 
-			SetCurrentUrl(preferences.getString(Constants.LAST_URL, ""));
+			if (updateUrl)
+			{
+				SetCurrentUrl(preferences.getString(Constants.LAST_URL, ""));
+			}
 
 			Calendar c = Calendar.getInstance();
 			c.setTimeInMillis(lastUpdate);
@@ -497,8 +500,8 @@ public class Wallpaper extends WallpaperService {
 			// Log.d(TAG, "Картинка успешно загружена");
 			currentHeight = -1;
 			currentWidth = -1;
-			SetBitmap(bm);
 			SaveFile(bm, url);
+			SetBitmap(bm);
 			// если текущее изображение не является инстансом локального bm,
 			// т.к. на SetBitmap может создаться изображение с другими размерами
 			if (GetBitmap() != bm)
@@ -818,8 +821,17 @@ public class Wallpaper extends WallpaperService {
 
 			// Log.d(TAG, "Вызов MyEngine.onSurfaceChanged()");
 
-			mHeight = height;
-			mWidth = width;
+			if (mHeight != -1 && mWidth != -1 && (mHeight != height || mWidth != width))
+			{
+				mHeight = height;
+				mWidth = width;
+				ReadFile(false);
+			}
+			else
+			{
+				mHeight = height;
+				mWidth = width;
+			}
 			drawFrame();
 		}
 
