@@ -313,6 +313,7 @@ public class AndroidCustomGalleryActivity extends Activity
 			cursor.close();
 		}
 		cursor = null;
+		imageAdapter.clean();
 		imageAdapter = null;
 		imagegrid.setAdapter(null);
 		

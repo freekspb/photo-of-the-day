@@ -59,7 +59,7 @@
         android:layout_height="match_parent"
 	    android:layout_weight="1"
         android:scaleType="center"
-        android:contentDescription="@string/openSettings"
+        android:contentDescription="@string/nextParser"
         />
 
     <ImageView

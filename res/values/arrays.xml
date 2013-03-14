@@ -30,15 +30,4 @@
         <item>1</item>
         <item>2</item>
     </string-array>
-
-	<string-array name="pref_upload_buckets_default_entries">
-		<item>All</item>
-		<item>Test1 Display</item>
-		<item>Test2 Display</item>
-	</string-array>
-	<string-array name="pref_upload_buckets_default_values">
-		<item>#ALL#</item>
-		<item>Test1 Value</item>
-		<item>Test2 Value</item>
-	</string-array>
 </resources>

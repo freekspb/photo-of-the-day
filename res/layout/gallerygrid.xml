@@ -15,15 +15,17 @@
 			android:visibility="invisible"
 	        layout="@layout/null_include" />
 	
-		<GridView android:id="@+id/PhoneImageGrid"
-			android:layout_width="match_parent" 
-			android:layout_height="0dp"
-			android:layout_weight="2"
-			android:numColumns="2" 
-			android:verticalSpacing="5dp"
-			android:horizontalSpacing="5dp" 
-			android:stretchMode="columnWidth" 
-			android:gravity="center"/>
+		<GridView
+		    android:id="@+id/PhoneImageGrid"
+		    android:layout_width="match_parent"
+		    android:layout_height="0dp"
+		    android:layout_weight="2"
+		    android:gravity="center"
+		    android:horizontalSpacing="5dp"
+		    android:numColumns="2"
+		    android:stretchMode="columnWidth"
+		    android:verticalSpacing="5dp" />
+
 	</LinearLayout>
 
 	<TextView
