@@ -1,6 +1,12 @@
 package hram.android.PhotoOfTheDay.gallery;
 
 import java.lang.ref.SoftReference;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import android.graphics.Bitmap;
 import android.util.SparseArray;
 
@@ -11,55 +17,66 @@ import android.util.SparseArray;
  */
 public class MemoryCache 
 {
-	//private static final String TAG = Constants.TAG_CACHE;
-    private SparseArray<SoftReference<Bitmap>> cache = new SparseArray<SoftReference<Bitmap>>();
-    
-    public Bitmap get(int id)
-    {
-        
-        //Log.w(TAG, String.format("������ �������� %s �� ���� %s", id, name));
-        SoftReference<Bitmap> ref = cache.get(id);
-        if(ref == null)
-        {
-            return null;
-        }
-        return ref.get();
+	private static final String TAG = "MemoryCache";
+    private Map<String, Bitmap> cache = Collections.synchronizedMap(new LinkedHashMap<String, Bitmap>(10,1.5f,true));//Last argument true for LRU ordering
+    private long size=0;//current allocated size
+    private long limit=1000000;//max memory in bytes
+
+    public MemoryCache(){
+        //use 50% of available heap size
+        setLimit(Runtime.getRuntime().maxMemory()/2);
     }
     
-    /**
-     * 
-     * @param id ID 
-     * @param bitmap 
-     */
-    public void put(int id, Bitmap bitmap)
-    {
-		//Log.d(TAG, String.format("���������� �������� %s � ��� %s.", id, name));
-		cache.put(id, new SoftReference<Bitmap>(bitmap));
-		//Log.d(TAG, "������ ����: " + cache.size());
+    public void setLimit(long new_limit){
+        limit = new_limit;
+        //Log.i(TAG, "MemoryCache will use up to "+limit/1024./1024.+"MB");
     }
 
-    /**
-     * 
-     */
-    public void clear() 
-    {
-    	// чистка картинок
-    	for(int i = 0; i < cache.size(); i++) {
-    	   // get the object by the key.
-    	   SoftReference<Bitmap> ref = cache.valueAt(i);
-    	   if (ref == null)
-    	   {
-    		   continue;
-    	   }
-    	   Bitmap bm = ref.get();
-    	   if (bm == null)
-    	   {
-    		   continue;
-    	   }
-    	   bm.recycle();
-    	   bm = null;
-    	}
-    	
-    	cache.clear();
+    public Bitmap get(String id){
+        try{
+            if(!cache.containsKey(id))
+                return null;
+            //NullPointerException sometimes happen here http://code.google.com/p/osmdroid/issues/detail?id=78 
+            return cache.get(id);
+        }catch(NullPointerException ex){
+            return null;
+        }
+    }
+
+    public void put(String id, Bitmap bitmap){
+        try{
+            if(cache.containsKey(id))
+                size-=getSizeInBytes(cache.get(id));
+            cache.put(id, bitmap);
+            size+=getSizeInBytes(bitmap);
+            checkSize();
+        }catch(Throwable th){
+            th.printStackTrace();
+        }
+    }
+    
+    private void checkSize() {
+        //Log.i(TAG, "cache size="+size+" length="+cache.size());
+        if(size>limit){
+            Iterator<Entry<String, Bitmap>> iter=cache.entrySet().iterator();//least recently accessed item will be the first one iterated  
+            while(iter.hasNext()){
+                Entry<String, Bitmap> entry=iter.next();
+                size-=getSizeInBytes(entry.getValue());
+                iter.remove();
+                if(size<=limit)
+                    break;
+            }
+            //Log.i(TAG, "Clean cache. New size "+cache.size());
+        }
+    }
+
+    public void clear() {
+        cache.clear();
+    }
+
+    long getSizeInBytes(Bitmap bitmap) {
+        if(bitmap==null)
+            return 0;
+        return bitmap.getRowBytes() * bitmap.getHeight();
     }
 }
