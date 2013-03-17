@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Map;
@@ -26,7 +27,7 @@ import android.widget.ImageView;
 
 public class ImageLoader 
 {   
-	MemoryCache memoryCache=new MemoryCache();
+	MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
     private Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService;
@@ -113,9 +114,11 @@ public class ImageLoader
     //decodes image and scales it to reduce memory consumption
     private Bitmap decodeFile(File f)
     {
+    	FileInputStream fis = null;
         try 
         {
-        	return BitmapFactory.decodeStream(new FileInputStream(f));
+        	fis = new FileInputStream(f);
+        	return BitmapFactory.decodeStream(fis);
         	/*
             //decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();
@@ -141,6 +144,12 @@ public class ImageLoader
             */
         } catch (FileNotFoundException e) {
         	Log.e("ImageLoader", "Ошибка чтения из файла: " + e.getMessage());
+        }
+        finally{
+        	try {
+				fis.close();
+			} catch (Exception e) {
+			}
         }
         return null;
     }
@@ -205,7 +214,9 @@ public class ImageLoader
         }
     }
 
-    public void clearCache() {
+    public void clearCache() 
+    {
+    	Log.d("ImageLoader", "Очистка кеша");
         memoryCache.clear();
         //fileCache.clear();
     }

@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 public class ImageAdapter extends BaseAdapter 
 {
-	private Context context;
 	private Cursor cursor;
 	private int _idColumnIndex;
 	private int _dateColumnIndex;
@@ -26,7 +25,6 @@ public class ImageAdapter extends BaseAdapter
 
 	public ImageAdapter(Context context, Cursor cursor) 
 	{
-		this.context = context;
 		this.cursor = cursor;
 		if (cursor == null)
 		{
@@ -72,6 +70,8 @@ public class ImageAdapter extends BaseAdapter
 		else 
 		{
 			holder = (ViewHolder)convertView.getTag();
+			//holder.image.setImageResource(0);
+			holder.image.setImageDrawable(null);
 		}
 		
 		// заполнение
@@ -94,5 +94,7 @@ public class ImageAdapter extends BaseAdapter
 	
 	public void clean() {
 		imageLoader.clearCache();
+		imageLoader = null;
+		inflater = null;
 	}
 }

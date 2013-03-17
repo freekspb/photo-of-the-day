@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.app.WallpaperInfo;
 import android.app.WallpaperManager;
 import android.content.ComponentName;
+import android.content.Context;
 //import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.Log;
 //import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -276,23 +278,7 @@ public class AndroidCustomGalleryActivity extends Activity
 		
 		setContentView(R.layout.gallerygrid);
 		
-		imagesColumns = new String[] { MediaStore.Images.Thumbnails._ID,  MediaStore.Images.Media.DATE_ADDED };
-		imagesOrderBy = MediaStore.Images.Media.DATE_ADDED + " DESC";
-		imagesUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-		imagesQuery = MediaStore.Images.Media.DESCRIPTION + " like ? ";
-		
-		cursor = getImages();
-		imageAdapter = new ImageAdapter(this, cursor);
 		imagegrid = (GridView) findViewById(R.id.PhoneImageGrid);
-		imagegrid.setAdapter(imageAdapter);
-
-//		if (imageAdapter.getCount() == 0)
-//		{
-//			Toast.makeText(this, getString(R.string.noImages), Toast.LENGTH_SHORT).show();
-//			
-//			addInflateLayout(R.layout.install_widget_include);
-//		}
-		
 		imagegrid.setOnItemClickListener(new OnItemClickListener() 
 		{
 			public void onItemClick(AdapterView<?> arg0, View v, int arg2, long arg3) 
@@ -301,7 +287,7 @@ public class AndroidCustomGalleryActivity extends Activity
 			}
 		});
 	}
-
+/*
 	@Override
 	protected void onStop() {
 		
@@ -323,9 +309,21 @@ public class AndroidCustomGalleryActivity extends Activity
 
 		super.onStop();
 	}
-	
+*/	
 	@Override
-	protected void onResume() {
+	protected void onResume() 
+	{
+		Log.i(Constants.TAG, "onResume()");
+		
+		imagesColumns = new String[] { MediaStore.Images.Thumbnails._ID,  MediaStore.Images.Media.DATE_ADDED };
+		imagesOrderBy = MediaStore.Images.Media.DATE_ADDED + " DESC";
+		imagesUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+		imagesQuery = MediaStore.Images.Media.DESCRIPTION + " like ? ";
+		
+		cursor = getImages();
+		imageAdapter = new ImageAdapter(this, cursor);
+		imagegrid.setAdapter(imageAdapter);
+		
 		// проверка запущенности обоев
 		checkWallpaper();
 		// инициализируем кнопки
@@ -333,6 +331,53 @@ public class AndroidCustomGalleryActivity extends Activity
 		
 		super.onResume();
 	}
+	
+	@Override
+	protected void onPause() 
+	{
+		Log.i(Constants.TAG, "onPause()");
+		
+		if (cursor != null)
+		{
+			cursor.close();
+		}
+		cursor = null;
+		imageAdapter.clean();
+		imageAdapter = null;
+		imagegrid.setAdapter(null);
+		
+		imagesColumns = null;
+		imagesOrderBy = null;
+		imagesUri = null;
+		imagesQuery = null;
+		
+		super.onPause();
+	}
+	
+	@Override
+    protected void onDestroy() 
+	{	
+		Log.i(Constants.TAG, "onDestroy()");
+		super.onDestroy();
+
+		unbindDrawables(findViewById(R.id.RootView));
+		System.gc();
+    }
+
+    private void unbindDrawables(View view) {
+    	if(view == null)
+    		return;
+        if (view.getBackground() != null) {
+        view.getBackground().setCallback(null);
+        }
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+            unbindDrawables(((ViewGroup) view).getChildAt(i));
+            }
+            if (!(view instanceof AdapterView<?>))
+                ((ViewGroup) view).removeAllViews();
+        }
+    }
 
 	private void openImage(View v)
 	{

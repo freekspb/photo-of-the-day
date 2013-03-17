@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.util.SparseArray;
 
 /**
@@ -23,8 +24,8 @@ public class MemoryCache
     private long limit=1000000;//max memory in bytes
 
     public MemoryCache(){
-        //use 50% of available heap size
-        setLimit(Runtime.getRuntime().maxMemory()/2);
+        //use 25% of available heap size
+        setLimit(Runtime.getRuntime().maxMemory()/4);
     }
     
     public void setLimit(long new_limit){
@@ -61,7 +62,8 @@ public class MemoryCache
             Iterator<Entry<String, Bitmap>> iter=cache.entrySet().iterator();//least recently accessed item will be the first one iterated  
             while(iter.hasNext()){
                 Entry<String, Bitmap> entry=iter.next();
-                size-=getSizeInBytes(entry.getValue());
+                size -= getSizeInBytes(entry.getValue());
+                entry.getValue().recycle();
                 iter.remove();
                 if(size<=limit)
                     break;
@@ -70,8 +72,22 @@ public class MemoryCache
         }
     }
 
-    public void clear() {
+    public void clear() 
+    {
+    	int count = 0;
+    	int size = 0;
+    	Iterator<Entry<String, Bitmap>> iter = cache.entrySet().iterator();//least recently accessed item will be the first one iterated  
+        while(iter.hasNext()){
+            Entry<String, Bitmap> entry=iter.next();
+            size += getSizeInBytes(entry.getValue());
+            entry.getValue().recycle();
+            count++;
+        }
         cache.clear();
+        
+        Log.i(TAG, String.format("Удалено %d картинок, освобождено %f MB", count, size/1024./1024.));
+        
+        System.gc();
     }
 
     long getSizeInBytes(Bitmap bitmap) {
