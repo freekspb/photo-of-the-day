@@ -152,7 +152,6 @@ public class Wallpaper extends WallpaperService {
             // API Level <13
         	return new Point(display.getWidth(), display.getHeight());
         }
-		
 	}
 	
 	/**
@@ -207,10 +206,14 @@ public class Wallpaper extends WallpaperService {
 			try
 			{
 				bm = Bitmap.createScaledBitmap(value, newBmWidth, newBmHeight, true);
+				currentWidth = newBmWidth;
+				currentHeight = newBmHeight;
 			}
 			catch(OutOfMemoryError e)
 			{
 				bm = value;
+				currentWidth = bm.getWidth();
+				currentHeight = bm.getHeight();
 			}
 			return;
 		}
@@ -220,6 +223,8 @@ public class Wallpaper extends WallpaperService {
 			bm.recycle();					
 		}
 		bm = value;
+		currentWidth = bm.getWidth();
+		currentHeight = bm.getHeight();
 	}
 
 	/**
@@ -377,6 +382,8 @@ public class Wallpaper extends WallpaperService {
 		//SetBitmap(null);
 		currDay = -1;
 		currentUrl = null;
+		currentWidth = -1;
+		currentHeight = -1;
 	}
 
 	/**
@@ -821,6 +828,8 @@ public class Wallpaper extends WallpaperService {
 
 			// Log.d(TAG, "Вызов MyEngine.onSurfaceChanged()");
 
+			// в случае mHeight == -1 && mWidth == -1 - это первый запуск,
+			// в этом случае ReadFile уже отработает, повоторно не нужно вызывать
 			if (mHeight != -1 && mWidth != -1 && (mHeight != height || mWidth != width))
 			{
 				mHeight = height;
@@ -832,6 +841,12 @@ public class Wallpaper extends WallpaperService {
 				mHeight = height;
 				mWidth = width;
 			}
+			// изменяем ширину в скролинге 
+			if (mTouchMove != null)
+			{
+				mTouchMove.initWidth(mWidth);
+			}
+			// рисуем
 			drawFrame();
 		}
 
@@ -851,13 +866,14 @@ public class Wallpaper extends WallpaperService {
 
 			mXStep = xStep;
 			mPixels = xPixels;
-			mOffset = xOffset;
 			
 			//if (mProgramScroling == true && mOffset != 0.5f)
 			if (mProgramScroling == true)
 			{
 				return;
 			}
+			
+			mOffset = xOffset;
 			
 			drawFrame();
 		}
@@ -1037,7 +1053,7 @@ public class Wallpaper extends WallpaperService {
 					}
 
 					try {
-						c.drawBitmap(bm, matrix, null);
+						c.drawBitmap(bm, matrix, null);							
 					} catch (OutOfMemoryError e) {
 						System.gc();
 						c.drawText(getText(R.string.error).toString(), mWidth / 2, 100, mPaint);
@@ -1145,7 +1161,7 @@ public class Wallpaper extends WallpaperService {
 				} catch (Exception e) {
 				}
 				mTouchMove = new ZTouchMove();
-				mTouchMove.init(wp, intVal);
+				mTouchMove.init(wp, intVal, mWidth);
 				mTouchMove.addMovingListener(this);
 			}
 			else
@@ -1211,5 +1227,4 @@ public class Wallpaper extends WallpaperService {
 			wp.StartUpdate();
 		}
 	}
-
 }
