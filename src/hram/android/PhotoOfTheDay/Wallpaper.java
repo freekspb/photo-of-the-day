@@ -214,8 +214,8 @@ public class Wallpaper extends WallpaperService {
 			try
 			{
 				bm = Bitmap.createScaledBitmap(value, newBmWidth, newBmHeight, true);
-				currentWidth = newBmWidth;
-				currentHeight = newBmHeight;
+//				currentWidth = newBmWidth;
+//				currentHeight = newBmHeight;
 				
 				SDHelper.appendLog("currentHeight=" + Integer.toString(currentHeight) + "; currentWidth=" + Integer.toString(currentWidth)); 
 				
@@ -223,8 +223,8 @@ public class Wallpaper extends WallpaperService {
 			catch(OutOfMemoryError e)
 			{
 				bm = value;
-				currentWidth = bm.getWidth();
-				currentHeight = bm.getHeight();
+//				currentWidth = bm.getWidth();
+//				currentHeight = bm.getHeight();
 			}
 			
 			SDHelper.appendLog("SetBitmap finished1...");
