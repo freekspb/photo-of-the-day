@@ -155,6 +155,8 @@ public class Wallpaper extends WallpaperService {
         }
 	}
 	
+	double widthScale = 1.2;
+
 	/**
 	 * Сохраняет указатель на картинку
 	 * 
@@ -192,9 +194,10 @@ public class Wallpaper extends WallpaperService {
 			// если ширина экрана больше картинки после мастабировния
 			if (newBmWidth < displayWidth) {
 				// то масштабируем по ширине
-				rescaling = (float) displayWidth / bmWidth;
+				// коэффициент, чтобы обои скролились
+				newBmWidth = (int)(displayWidth * widthScale);
+				rescaling = (float) newBmWidth / bmWidth;
 				newBmHeight = (int) (bmHeight * rescaling);
-				newBmWidth = displayWidth;
 			}
 
 			SDHelper.appendLog("rescaling=" + Float.toString(rescaling));
@@ -214,8 +217,8 @@ public class Wallpaper extends WallpaperService {
 			try
 			{
 				bm = Bitmap.createScaledBitmap(value, newBmWidth, newBmHeight, true);
-//				currentWidth = newBmWidth;
-//				currentHeight = newBmHeight;
+				currentWidth = newBmWidth;
+				currentHeight = newBmHeight;
 				
 				SDHelper.appendLog("currentHeight=" + Integer.toString(currentHeight) + "; currentWidth=" + Integer.toString(currentWidth)); 
 				
@@ -223,8 +226,8 @@ public class Wallpaper extends WallpaperService {
 			catch(OutOfMemoryError e)
 			{
 				bm = value;
-//				currentWidth = bm.getWidth();
-//				currentHeight = bm.getHeight();
+				currentWidth = bm.getWidth();
+				currentHeight = bm.getHeight();
 			}
 			
 			SDHelper.appendLog("SetBitmap finished1...");
@@ -1060,6 +1063,13 @@ public class Wallpaper extends WallpaperService {
 							// то масштабируем по ширине
 							rescaling = (float) mWidth / bm.getWidth();
 						}
+						// если ширина экрана больше картинки после мастабировния
+						if (newBmWidth < mWidth) {
+							// то масштабируем по ширине
+							// коэффициент, чтобы обои скролились
+							newBmWidth = (int)(mWidth * widthScale);
+							rescaling = (float) newBmWidth / bm.getWidth();
+						}
 						
 						SDHelper.appendLog("bmHeight=" + Integer.toString(bm.getHeight()) + "; bmWidth=" + Integer.toString(bm.getWidth())
 								+ "; rescaling=" + Float.toString(rescaling));
@@ -1095,7 +1105,7 @@ public class Wallpaper extends WallpaperService {
 					
 					// если не превью и программный скролинг включен
 					if (isPreview() == false && mDisabledScroling == false && mProgramScroling) {
-						dX = (float) (mWidth - (bm.getWidth())) * mOffset;
+						dX = (float) (mWidth - bm.getWidth()) * mOffset;
 					}
 					
 					SDHelper.appendLog("dx3=" + Float.toString(dX));
