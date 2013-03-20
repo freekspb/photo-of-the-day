@@ -2,9 +2,12 @@ package hram.android.PhotoOfTheDay.appwidget;
 
 import hram.android.PhotoOfTheDay.R;
 import hram.android.PhotoOfTheDay.Wallpaper;
+
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -177,4 +180,34 @@ public class SDHelper {
 	    values.put(MediaStore.Images.Media.DESCRIPTION, MEDIA_TAG);
 	    contect.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 	}
+	
+	public static void appendLog(String text)
+	{       
+	   File logFile = new File("sdcard/photo-of-the-day-log.txt");
+	   if (!logFile.exists())
+	   {
+	      try
+	      {
+	         logFile.createNewFile();
+	      } 
+	      catch (IOException e)
+	      {
+	         // TODO Auto-generated catch block
+	         e.printStackTrace();
+	      }
+	   }
+	   try
+	   {
+	      //BufferedWriter for performance, true to set append to file flag
+	      BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true)); 
+	      buf.append(text);
+	      buf.newLine();
+	      buf.close();
+	   }
+	   catch (IOException e)
+	   {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+	   }
+	}	
 }
