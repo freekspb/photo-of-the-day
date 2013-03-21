@@ -62,4 +62,6 @@
     <string name="openSettings">Open settings</string>
     <string name="favoriteSources">Favorite sources</string>
     <string name="favoriteSourcesSummary">Select sources for source auto change mode</string>
+    <string name="wideWidthPref">Landscape scrolling</string>
+    <string name="wideWidthPrefSummary">Set to activate scrolling on landscape orientation (only tablet)</string>
 </resources>

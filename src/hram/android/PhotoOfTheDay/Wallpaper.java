@@ -13,6 +13,7 @@ import hram.android.PhotoOfTheDay.Parsers.NationalGeographic;
 import hram.android.PhotoOfTheDay.Parsers.TestParser;
 import hram.android.PhotoOfTheDay.Parsers.Wikipedia;
 import hram.android.PhotoOfTheDay.Parsers.Yandex;
+//import hram.android.PhotoOfTheDay.appwidget.SDHelper;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastEnum;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastReceiver;
 
@@ -70,11 +71,12 @@ public class Wallpaper extends WallpaperService {
 	private int currentParser = -1;
 	private int currentHeight = -1;
 	private int currentWidth = -1;
+	private boolean widthRescaling = false;
 
 	@Override
 	public void onCreate() {
 		// Log.i(TAG, "Создание сервиса.");
-		//BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
+		BugSenseHandler.initAndStartSession(this, Constants.BUG_SENSE_APIKEY);
 
 		// настройки
 		preferences = getSharedPreferences(Constants.SETTINGS_NAME, 0);
@@ -92,7 +94,7 @@ public class Wallpaper extends WallpaperService {
 				// если ширина дисплея больше высоты (для планшетов)
 				if (displayWidth > displayHeight) {
 					// NG - так как там почти все изображения альбомные
-					parser = 3;
+					parser = 8;
 				} else {
 					parser = 1;
 				}
@@ -104,7 +106,9 @@ public class Wallpaper extends WallpaperService {
 			SetCurrentParser(1, true);
 		}
 
-		ReadFile();
+		widthRescaling = preferences.getBoolean(Constants.WIDTH_SCALE, false);
+		
+		ReadFile(true);
 	}
 
 	@Override
@@ -152,9 +156,18 @@ public class Wallpaper extends WallpaperService {
             // API Level <13
         	return new Point(display.getWidth(), display.getHeight());
         }
-		
 	}
-	
+
+    private float getWidthScale()
+    {
+    	if (widthRescaling)
+    	{
+    		return 1.2f;
+    	}
+    	return 1;
+    	
+    }
+    
 	/**
 	 * Сохраняет указатель на картинку
 	 * 
@@ -163,6 +176,8 @@ public class Wallpaper extends WallpaperService {
     public void SetBitmap(Bitmap value) {
 		// Log.d(TAG, "Сохранение указателя картинки");
 
+//    	SDHelper.appendLog("SetBitmap started...");
+    	
 		if (value == null) {
 			bm = null;
 			currentHeight = -1;
@@ -176,6 +191,9 @@ public class Wallpaper extends WallpaperService {
 		int displayWidth = displaySize.x;
 		int displayHeight = displaySize.y;
 		
+//		SDHelper.appendLog("bmHeight=" + Integer.toString(bmHeight) + "; displayHeight=" + Integer.toString(displayHeight) 
+//				+ "; bmWidth=" + Integer.toString(bmWidth) + "; displayWidth=" + Integer.toString(displayWidth));
+		
 		if (bmWidth != displayWidth || bmHeight != displayHeight) {
 			// Log.d(TAG,String.format("Изменились размеры, изменяем размер: %d->%d, %d->%d",
 			// currentHeight, mHeight, currentWidth, mWidth));
@@ -187,11 +205,14 @@ public class Wallpaper extends WallpaperService {
 			// если ширина экрана больше картинки после мастабировния
 			if (newBmWidth < displayWidth) {
 				// то масштабируем по ширине
-				rescaling = (float) displayWidth / bmWidth;
+				// коэффициент, чтобы обои скролились
+				newBmWidth = (int)(displayWidth * getWidthScale());
+				rescaling = (float) newBmWidth / bmWidth;
 				newBmHeight = (int) (bmHeight * rescaling);
-				newBmWidth = displayWidth;
 			}
 
+//			SDHelper.appendLog("rescaling=" + Float.toString(rescaling));
+					
 			// если рассчиталось что-то неверно, то берем начальный размер
 			if (newBmHeight <= 0 || newBmHeight <= 0)
 			{
@@ -207,11 +228,21 @@ public class Wallpaper extends WallpaperService {
 			try
 			{
 				bm = Bitmap.createScaledBitmap(value, newBmWidth, newBmHeight, true);
+				currentWidth = newBmWidth;
+				currentHeight = newBmHeight;
+				
+//				SDHelper.appendLog("currentHeight=" + Integer.toString(currentHeight) + "; currentWidth=" + Integer.toString(currentWidth)); 
+				
 			}
 			catch(OutOfMemoryError e)
 			{
 				bm = value;
+				currentWidth = bm.getWidth();
+				currentHeight = bm.getHeight();
 			}
+			
+//			SDHelper.appendLog("SetBitmap finished1...");
+			
 			return;
 		}
 
@@ -220,6 +251,11 @@ public class Wallpaper extends WallpaperService {
 			bm.recycle();					
 		}
 		bm = value;
+		currentWidth = bm.getWidth();
+		currentHeight = bm.getHeight();
+		
+//		SDHelper.appendLog("currentHeight=" + Integer.toString(currentHeight) + "; currentWidth=" + Integer.toString(currentWidth)); 
+//		SDHelper.appendLog("SetBitmap finished2...");		
 	}
 
 	/**
@@ -377,12 +413,14 @@ public class Wallpaper extends WallpaperService {
 		//SetBitmap(null);
 		currDay = -1;
 		currentUrl = null;
+		currentWidth = -1;
+		currentHeight = -1;
 	}
 
 	/**
 	 * Чтение сохраненной картинки из файла
 	 */
-	public void ReadFile() {
+	public void ReadFile(boolean updateUrl) {
 		// Log.d(TAG, "Чтение картинки из файла");
 
 		FileInputStream stream = null;
@@ -392,7 +430,10 @@ public class Wallpaper extends WallpaperService {
 				return;
 			}
 
-			SetCurrentUrl(preferences.getString(Constants.LAST_URL, ""));
+			if (updateUrl)
+			{
+				SetCurrentUrl(preferences.getString(Constants.LAST_URL, ""));
+			}
 
 			Calendar c = Calendar.getInstance();
 			c.setTimeInMillis(lastUpdate);
@@ -497,8 +538,8 @@ public class Wallpaper extends WallpaperService {
 			// Log.d(TAG, "Картинка успешно загружена");
 			currentHeight = -1;
 			currentWidth = -1;
-			SetBitmap(bm);
 			SaveFile(bm, url);
+			SetBitmap(bm);
 			// если текущее изображение не является инстансом локального bm,
 			// т.к. на SetBitmap может создаться изображение с другими размерами
 			if (GetBitmap() != bm)
@@ -816,10 +857,30 @@ public class Wallpaper extends WallpaperService {
 				int width, int height) {
 			super.onSurfaceChanged(holder, format, width, height);
 
+//			SDHelper.appendLog("onSurfaceChanged: width=" + Integer.toString(width) + "; height=" + Integer.toString(height) + "; mWidth=" + Integer.toString(mWidth) + "; mHeight=" + Integer.toString(mHeight));
+			
 			// Log.d(TAG, "Вызов MyEngine.onSurfaceChanged()");
 
-			mHeight = height;
-			mWidth = width;
+			// в случае mHeight == -1 && mWidth == -1 - это первый запуск,
+			// в этом случае ReadFile уже отработает, повоторно не нужно вызывать
+			if (mHeight != -1 && mWidth != -1 && (mHeight != height || mWidth != width))
+			{
+				mHeight = height;
+				mWidth = width;
+				ReadFile(false);
+			}
+			else
+			{
+				mHeight = height;
+				mWidth = width;
+			}
+			// изменяем ширину в скролинге 
+			if (mTouchMove != null)
+			{
+				mTouchMove.initWidth(mWidth);
+			}
+//			SDHelper.appendLog("onSurfaceChanged: mTouchMove is null=" + Boolean.toString(mTouchMove == null));
+			// рисуем
 			drawFrame();
 		}
 
@@ -837,9 +898,13 @@ public class Wallpaper extends WallpaperService {
 			// Log.d(TAG, String.format("xStep: %f, xPixels: %d", xStep,
 			// xPixels));
 
+//			SDHelper.appendLog("onOffsetsChanged: xStep=" + Float.toString(xStep) + "; mXStep=" + Float.toString(mXStep) 
+//					+ "; xPixels=" + Integer.toString(xPixels) + "; mPixels=" + Integer.toString(mPixels)
+//					+ "; xOffset=" + Float.toString(xOffset) + "; mOffset=" + Float.toString(mOffset)
+//					+ "; mProgramScroling=" + Boolean.toString(mProgramScroling));
+			
 			mXStep = xStep;
 			mPixels = xPixels;
-			mOffset = xOffset;
 			
 			//if (mProgramScroling == true && mOffset != 0.5f)
 			if (mProgramScroling == true)
@@ -847,10 +912,16 @@ public class Wallpaper extends WallpaperService {
 				return;
 			}
 			
+			mOffset = xOffset;
+			
 			drawFrame();
 		}
 		
 		public void onTouchOffsetChanged(float xOffset) {
+			
+//			SDHelper.appendLog("onTouchOffsetChanged: xOffset=" + Float.toString(xOffset) + "; mOffset=" + Float.toString(mOffset)
+//					+ "; mProgramScroling=" + Boolean.toString(mProgramScroling));
+			
 			// если сколинг выключен
 			// либо центральный экран - отработает onOffsetsChanged - для отработки возвращения на центральный экран по кнопке Home
 			//if (mProgramScroling == false || mOffset == 0.5f)
@@ -887,6 +958,9 @@ public class Wallpaper extends WallpaperService {
 
 		@Override
 		public void onTouchEvent(MotionEvent event) {
+			
+//			SDHelper.appendLog("onTouchEvent: mProgramScroling=" + Boolean.toString(mProgramScroling));
+
 			if (mProgramScroling == false)
 			{
 				return;
@@ -984,6 +1058,10 @@ public class Wallpaper extends WallpaperService {
 
 					float rescaling = 1;
 
+//					SDHelper.appendLog("drawFrame started...");
+//					SDHelper.appendLog("mHeight=" + Integer.toString(mHeight) + "; currentHeight=" + Float.toString(currentHeight) 
+//							+ "; mWidth=" + Integer.toString(mWidth) + "; currentWidth=" + Integer.toString(currentWidth));
+					
 					if (mHeight != currentHeight || mWidth != currentWidth) {
 						// Log.d(TAG,String.format("Изменились размеры, изменяем размер: %d->%d, %d->%d",
 						// currentHeight, mHeight, currentWidth, mWidth));
@@ -996,12 +1074,28 @@ public class Wallpaper extends WallpaperService {
 							// то масштабируем по ширине
 							rescaling = (float) mWidth / bm.getWidth();
 						}
+						// если ширина экрана больше картинки после мастабировния
+						if (newBmWidth < mWidth) {
+							// то масштабируем по ширине
+							// коэффициент, чтобы обои скролились
+							newBmWidth = (int)(mWidth * getWidthScale());
+							rescaling = (float) newBmWidth / bm.getWidth();
+						}
+						
+//						SDHelper.appendLog("bmHeight=" + Integer.toString(bm.getHeight()) + "; bmWidth=" + Integer.toString(bm.getWidth())
+//								+ "; rescaling=" + Float.toString(rescaling));
+												
 					}
 
 					// матрица масштабирования
 					Matrix matrix = new Matrix();
 					matrix.setScale(rescaling, rescaling);
 
+//					SDHelper.appendLog("drawFrame calculate dX...");
+//					SDHelper.appendLog("isPreview=" + Boolean.toString(isPreview()) + "; mProgramScroling=" + Boolean.toString(mProgramScroling) 
+//							+ "; mDisabledScroling=" + Boolean.toString(mDisabledScroling)
+//							+ "; mXStep=" + Float.toString(mXStep)  + "; mPixels=" + Float.toString(mPixels));
+					
 					float dX = 0;
 					// смещение для устройств со скролингом
 					if (isPreview() == false && mProgramScroling == false && mDisabledScroling == false && mXStep != 0 && mPixels != 0) {
@@ -1009,23 +1103,35 @@ public class Wallpaper extends WallpaperService {
 						float step2 = (bm.getWidth() - mWidth) * mXStep;
 						dX = (float) mPixels * (step2 / step1);
 					}
+					
+//					SDHelper.appendLog("dx1=" + Float.toString(dX));
+					
 					// если предварительный просмотр
 					if (isPreview() || mDisabledScroling) {
 						// всегда центруем
 						dX = (mWidth - bm.getWidth()) / 2;
 					}
+
+//					SDHelper.appendLog("dx2=" + Float.toString(dX));
+					
 					// если не превью и программный скролинг включен
 					if (isPreview() == false && mDisabledScroling == false && mProgramScroling) {
-						dX = (float) (mWidth - (bm.getWidth())) * mOffset;
+						dX = (float) (mWidth - bm.getWidth()) * mOffset;
 					}
 					
+//					SDHelper.appendLog("dx3=" + Float.toString(dX));
+					
+					float dY = (mHeight - bm.getHeight()) / 2;
+					//float dY = 0;
 					//Log.d(TAG, String.format("dX = %f", dX));
-					if (dX != 0) {
-						c.translate(dX, 0f);
+					if (dX != 0 || dY != 0) {
+						c.translate(dX, dY);
 					}
 
 					try {
 						c.drawBitmap(bm, matrix, null);
+//						SDHelper.appendLog("drawFrame draw...");
+//						SDHelper.appendLog("drawFrame finished...");
 					} catch (OutOfMemoryError e) {
 						System.gc();
 						c.drawText(getText(R.string.error).toString(), mWidth / 2, 100, mPaint);
@@ -1099,6 +1205,9 @@ public class Wallpaper extends WallpaperService {
 				} catch (Exception e) {
 				}
 				setNumVirtualScreens(intVal);
+			} else if (key.equals(Constants.WIDTH_SCALE)) {
+				widthRescaling = preferences.getBoolean(Constants.WIDTH_SCALE, false);
+				ReadFile(false);
 			}						
 		}
 		
@@ -1133,7 +1242,7 @@ public class Wallpaper extends WallpaperService {
 				} catch (Exception e) {
 				}
 				mTouchMove = new ZTouchMove();
-				mTouchMove.init(wp, intVal);
+				mTouchMove.init(wp, intVal, mWidth);
 				mTouchMove.addMovingListener(this);
 			}
 			else
@@ -1199,5 +1308,4 @@ public class Wallpaper extends WallpaperService {
 			wp.StartUpdate();
 		}
 	}
-
 }

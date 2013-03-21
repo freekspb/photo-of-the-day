@@ -3,17 +3,12 @@ package hram.android.PhotoOfTheDay;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Point;
-import android.os.Build;
 import android.os.Handler;
 //import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
-import android.view.WindowManager;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
@@ -73,9 +68,7 @@ public class ZTouchMove {
     private int mWidth;
     private int mNumVirtualScreens = 7;
     
-    @SuppressLint("NewApi")
-    @SuppressWarnings("deprecation")
-    public void init(Context ctx, int numVirtualScreens) {
+    public void init(Context ctx, int numVirtualScreens, int width) {
         mScroller = new Scroller(ctx, new ZInterpolator());
         
         final ViewConfiguration configuration = ViewConfiguration.get(ctx);
@@ -83,20 +76,13 @@ public class ZTouchMove {
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
         mNumVirtualScreens = Math.max(1, numVirtualScreens);
 
-        WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-
-        // API Level 13
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            Point size = new Point();
-            display.getSize(size); 
-            mWidth = size.x;			
-        } else {
-            // API Level <13
-            mWidth = display.getWidth();			
-        }
+        initWidth(width);
     }
     
+    public void initWidth(int width)
+    {
+    	mWidth = width;
+    }
     /*
      * Возвращает новое смещение картинки в зависимости от режима springMode
      */
