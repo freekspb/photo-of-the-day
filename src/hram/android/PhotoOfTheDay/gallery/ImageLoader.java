@@ -1,13 +1,11 @@
 package hram.android.PhotoOfTheDay.gallery;
 
-import hram.android.PhotoOfTheDay.Constants;
 import hram.android.PhotoOfTheDay.R;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Map;
@@ -22,7 +20,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
-import android.util.Log;
+//import android.util.Log;
 import android.widget.ImageView;
 
 public class ImageLoader 
@@ -48,7 +46,7 @@ public class ImageLoader
         Bitmap bitmap = memoryCache.get(url);
         if(bitmap != null)
         {
-        	Log.d("ImageLoader", "Картинка в MemoryCache");
+        	//Log.d("ImageLoader", "Картинка в MemoryCache");
             imageView.setImageBitmap(bitmap);
         }
         else
@@ -77,14 +75,14 @@ public class ImageLoader
         Bitmap b = decodeFile(f);
         if(b != null)
         {
-        	Log.d("ImageLoader", "Картинка в FileCache");
+        	//Log.d("ImageLoader", "Картинка в FileCache");
             return b;
         }
         
         //from MediaStore
         try 
         {
-        	Log.d("ImageLoader", "Картинки нет, читаем из MediaStore");
+        	//Log.d("ImageLoader", "Картинки нет, читаем из MediaStore");
         	
         	// ������ ������
     		//System.gc();
@@ -92,7 +90,7 @@ public class ImageLoader
         	Bitmap bm = MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(), Integer.parseInt(id), MediaStore.Images.Thumbnails.MINI_KIND, null);
         	if(bm != null)
         	{
-        		Log.d("ImageLoader", "Сохранение кеша на SD: " + f.getAbsolutePath());
+        		//Log.d("ImageLoader", "Сохранение кеша на SD: " + f.getAbsolutePath());
         		OutputStream fos = new FileOutputStream(f);
         		try
         		{
@@ -105,7 +103,7 @@ public class ImageLoader
         	}
         	return bm;
         } catch (Exception ex){
-        	Log.e("ImageLoader", "Ошибка MediaStore: " + ex.getMessage());
+        	//Log.e("ImageLoader", "Ошибка MediaStore: " + ex.getMessage());
         	//BugSenseHandler.log("ImageLoader", ex);
         	return null;
         }
@@ -143,7 +141,7 @@ public class ImageLoader
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
             */
         } catch (FileNotFoundException e) {
-        	Log.e("ImageLoader", "Ошибка чтения из файла: " + e.getMessage());
+        	//Log.e("ImageLoader", "Ошибка чтения из файла: " + e.getMessage());
         }
         finally{
         	try {
@@ -216,7 +214,7 @@ public class ImageLoader
 
     public void clearCache() 
     {
-    	Log.d("ImageLoader", "Очистка кеша");
+    	//Log.d("ImageLoader", "Очистка кеша");
         memoryCache.clear();
         //fileCache.clear();
     }
