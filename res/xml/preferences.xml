@@ -65,6 +65,11 @@
        		android:defaultValue="1"
        		android:dependency="programScrolingPref">
        </ListPreference>
+		<CheckBoxPreference android:title="@string/wideWidthPref"
+            android:summary="@string/wideWidthPrefSummary"
+            android:key="wideWidthPref"
+            android:dependency="disableScrolingPref">
+       </CheckBoxPreference>
        <EditTextPreference
 			android:key="numVirtualScreens"
 			android:title="@string/numVirtualScreens"

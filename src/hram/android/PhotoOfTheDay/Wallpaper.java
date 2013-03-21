@@ -71,6 +71,7 @@ public class Wallpaper extends WallpaperService {
 	private int currentParser = -1;
 	private int currentHeight = -1;
 	private int currentWidth = -1;
+	private boolean widthRescaling = false;
 
 	@Override
 	public void onCreate() {
@@ -93,7 +94,7 @@ public class Wallpaper extends WallpaperService {
 				// если ширина дисплея больше высоты (для планшетов)
 				if (displayWidth > displayHeight) {
 					// NG - так как там почти все изображения альбомные
-					parser = 3;
+					parser = 8;
 				} else {
 					parser = 1;
 				}
@@ -105,6 +106,8 @@ public class Wallpaper extends WallpaperService {
 			SetCurrentParser(1, true);
 		}
 
+		widthRescaling = preferences.getBoolean(Constants.WIDTH_SCALE, false);
+		
 		ReadFile(true);
 	}
 
@@ -154,9 +157,17 @@ public class Wallpaper extends WallpaperService {
         	return new Point(display.getWidth(), display.getHeight());
         }
 	}
-	
-	double widthScale = 1.2;
 
+    private float getWidthScale()
+    {
+    	if (widthRescaling)
+    	{
+    		return 1.2f;
+    	}
+    	return 1;
+    	
+    }
+    
 	/**
 	 * Сохраняет указатель на картинку
 	 * 
@@ -195,7 +206,7 @@ public class Wallpaper extends WallpaperService {
 			if (newBmWidth < displayWidth) {
 				// то масштабируем по ширине
 				// коэффициент, чтобы обои скролились
-				newBmWidth = (int)(displayWidth * widthScale);
+				newBmWidth = (int)(displayWidth * getWidthScale());
 				rescaling = (float) newBmWidth / bmWidth;
 				newBmHeight = (int) (bmHeight * rescaling);
 			}
@@ -1067,7 +1078,7 @@ public class Wallpaper extends WallpaperService {
 						if (newBmWidth < mWidth) {
 							// то масштабируем по ширине
 							// коэффициент, чтобы обои скролились
-							newBmWidth = (int)(mWidth * widthScale);
+							newBmWidth = (int)(mWidth * getWidthScale());
 							rescaling = (float) newBmWidth / bm.getWidth();
 						}
 						
@@ -1110,9 +1121,11 @@ public class Wallpaper extends WallpaperService {
 					
 					SDHelper.appendLog("dx3=" + Float.toString(dX));
 					
+					float dY = (mHeight - bm.getHeight()) / 2;
+					//float dY = 0;
 					//Log.d(TAG, String.format("dX = %f", dX));
-					if (dX != 0) {
-						c.translate(dX, 0f);
+					if (dX != 0 || dY != 0) {
+						c.translate(dX, dY);
 					}
 
 					try {
@@ -1192,6 +1205,9 @@ public class Wallpaper extends WallpaperService {
 				} catch (Exception e) {
 				}
 				setNumVirtualScreens(intVal);
+			} else if (key.equals(Constants.WIDTH_SCALE)) {
+				widthRescaling = preferences.getBoolean(Constants.WIDTH_SCALE, false);
+				ReadFile(false);
 			}						
 		}
 		
