@@ -56,21 +56,16 @@
             android:summary="@string/programScrolingPrefSummary"
             android:key="programScrolingPref"
             android:dependency="disableScrolingPref">
-       </CheckBoxPreference>
-       <ListPreference android:key="scrollingEffect" 
+		</CheckBoxPreference>
+		<ListPreference android:key="scrollingEffect" 
        		android:title="@string/scrollingEffect" 
        		android:summary="@string/scrollingEffectSummary" 
        		android:entries="@array/scrollingEffectArray" 
        		android:entryValues="@array/scrollingEffectValues"
        		android:defaultValue="1"
        		android:dependency="programScrolingPref">
-       </ListPreference>
-		<CheckBoxPreference android:title="@string/wideWidthPref"
-            android:summary="@string/wideWidthPrefSummary"
-            android:key="wideWidthPref"
-            android:dependency="disableScrolingPref">
-       </CheckBoxPreference>
-       <EditTextPreference
+		</ListPreference>
+		<EditTextPreference
 			android:key="numVirtualScreens"
 			android:title="@string/numVirtualScreens"
        		android:summary="@string/numVirtualScreensSummary"            
@@ -78,7 +73,12 @@
 			android:maxLength="2"
 			android:defaultValue="7"
 			android:dependency="programScrolingPref"/>
-	</PreferenceCategory>
+		<CheckBoxPreference android:title="@string/wideWidthPref"
+            android:summary="@string/wideWidthPrefSummary"
+            android:key="wideWidthPref"
+            android:dependency="disableScrolingPref">
+		</CheckBoxPreference>
+    </PreferenceCategory>
 	<PreferenceCategory android:title="@string/networkSettings">
 		<CheckBoxPreference android:key="wifiOnly" 
 			android:summary="@string/wifiOnlySummary" android:title="@string/wifiOnly">
