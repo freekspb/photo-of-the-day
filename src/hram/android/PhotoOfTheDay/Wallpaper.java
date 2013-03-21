@@ -13,7 +13,7 @@ import hram.android.PhotoOfTheDay.Parsers.NationalGeographic;
 import hram.android.PhotoOfTheDay.Parsers.TestParser;
 import hram.android.PhotoOfTheDay.Parsers.Wikipedia;
 import hram.android.PhotoOfTheDay.Parsers.Yandex;
-import hram.android.PhotoOfTheDay.appwidget.SDHelper;
+//import hram.android.PhotoOfTheDay.appwidget.SDHelper;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastEnum;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastReceiver;
 
@@ -176,7 +176,7 @@ public class Wallpaper extends WallpaperService {
     public void SetBitmap(Bitmap value) {
 		// Log.d(TAG, "Сохранение указателя картинки");
 
-    	SDHelper.appendLog("SetBitmap started...");
+//    	SDHelper.appendLog("SetBitmap started...");
     	
 		if (value == null) {
 			bm = null;
@@ -191,8 +191,8 @@ public class Wallpaper extends WallpaperService {
 		int displayWidth = displaySize.x;
 		int displayHeight = displaySize.y;
 		
-		SDHelper.appendLog("bmHeight=" + Integer.toString(bmHeight) + "; displayHeight=" + Integer.toString(displayHeight) 
-				+ "; bmWidth=" + Integer.toString(bmWidth) + "; displayWidth=" + Integer.toString(displayWidth));
+//		SDHelper.appendLog("bmHeight=" + Integer.toString(bmHeight) + "; displayHeight=" + Integer.toString(displayHeight) 
+//				+ "; bmWidth=" + Integer.toString(bmWidth) + "; displayWidth=" + Integer.toString(displayWidth));
 		
 		if (bmWidth != displayWidth || bmHeight != displayHeight) {
 			// Log.d(TAG,String.format("Изменились размеры, изменяем размер: %d->%d, %d->%d",
@@ -211,7 +211,7 @@ public class Wallpaper extends WallpaperService {
 				newBmHeight = (int) (bmHeight * rescaling);
 			}
 
-			SDHelper.appendLog("rescaling=" + Float.toString(rescaling));
+//			SDHelper.appendLog("rescaling=" + Float.toString(rescaling));
 					
 			// если рассчиталось что-то неверно, то берем начальный размер
 			if (newBmHeight <= 0 || newBmHeight <= 0)
@@ -231,7 +231,7 @@ public class Wallpaper extends WallpaperService {
 				currentWidth = newBmWidth;
 				currentHeight = newBmHeight;
 				
-				SDHelper.appendLog("currentHeight=" + Integer.toString(currentHeight) + "; currentWidth=" + Integer.toString(currentWidth)); 
+//				SDHelper.appendLog("currentHeight=" + Integer.toString(currentHeight) + "; currentWidth=" + Integer.toString(currentWidth)); 
 				
 			}
 			catch(OutOfMemoryError e)
@@ -241,7 +241,7 @@ public class Wallpaper extends WallpaperService {
 				currentHeight = bm.getHeight();
 			}
 			
-			SDHelper.appendLog("SetBitmap finished1...");
+//			SDHelper.appendLog("SetBitmap finished1...");
 			
 			return;
 		}
@@ -254,8 +254,8 @@ public class Wallpaper extends WallpaperService {
 		currentWidth = bm.getWidth();
 		currentHeight = bm.getHeight();
 		
-		SDHelper.appendLog("currentHeight=" + Integer.toString(currentHeight) + "; currentWidth=" + Integer.toString(currentWidth)); 
-		SDHelper.appendLog("SetBitmap finished2...");		
+//		SDHelper.appendLog("currentHeight=" + Integer.toString(currentHeight) + "; currentWidth=" + Integer.toString(currentWidth)); 
+//		SDHelper.appendLog("SetBitmap finished2...");		
 	}
 
 	/**
@@ -857,7 +857,7 @@ public class Wallpaper extends WallpaperService {
 				int width, int height) {
 			super.onSurfaceChanged(holder, format, width, height);
 
-			SDHelper.appendLog("onSurfaceChanged: width=" + Integer.toString(width) + "; height=" + Integer.toString(height) + "; mWidth=" + Integer.toString(mWidth) + "; mHeight=" + Integer.toString(mHeight));
+//			SDHelper.appendLog("onSurfaceChanged: width=" + Integer.toString(width) + "; height=" + Integer.toString(height) + "; mWidth=" + Integer.toString(mWidth) + "; mHeight=" + Integer.toString(mHeight));
 			
 			// Log.d(TAG, "Вызов MyEngine.onSurfaceChanged()");
 
@@ -879,7 +879,7 @@ public class Wallpaper extends WallpaperService {
 			{
 				mTouchMove.initWidth(mWidth);
 			}
-			SDHelper.appendLog("onSurfaceChanged: mTouchMove is null=" + Boolean.toString(mTouchMove == null));
+//			SDHelper.appendLog("onSurfaceChanged: mTouchMove is null=" + Boolean.toString(mTouchMove == null));
 			// рисуем
 			drawFrame();
 		}
@@ -898,10 +898,10 @@ public class Wallpaper extends WallpaperService {
 			// Log.d(TAG, String.format("xStep: %f, xPixels: %d", xStep,
 			// xPixels));
 
-			SDHelper.appendLog("onOffsetsChanged: xStep=" + Float.toString(xStep) + "; mXStep=" + Float.toString(mXStep) 
-					+ "; xPixels=" + Integer.toString(xPixels) + "; mPixels=" + Integer.toString(mPixels)
-					+ "; xOffset=" + Float.toString(xOffset) + "; mOffset=" + Float.toString(mOffset)
-					+ "; mProgramScroling=" + Boolean.toString(mProgramScroling));
+//			SDHelper.appendLog("onOffsetsChanged: xStep=" + Float.toString(xStep) + "; mXStep=" + Float.toString(mXStep) 
+//					+ "; xPixels=" + Integer.toString(xPixels) + "; mPixels=" + Integer.toString(mPixels)
+//					+ "; xOffset=" + Float.toString(xOffset) + "; mOffset=" + Float.toString(mOffset)
+//					+ "; mProgramScroling=" + Boolean.toString(mProgramScroling));
 			
 			mXStep = xStep;
 			mPixels = xPixels;
@@ -919,8 +919,8 @@ public class Wallpaper extends WallpaperService {
 		
 		public void onTouchOffsetChanged(float xOffset) {
 			
-			SDHelper.appendLog("onTouchOffsetChanged: xOffset=" + Float.toString(xOffset) + "; mOffset=" + Float.toString(mOffset)
-					+ "; mProgramScroling=" + Boolean.toString(mProgramScroling));
+//			SDHelper.appendLog("onTouchOffsetChanged: xOffset=" + Float.toString(xOffset) + "; mOffset=" + Float.toString(mOffset)
+//					+ "; mProgramScroling=" + Boolean.toString(mProgramScroling));
 			
 			// если сколинг выключен
 			// либо центральный экран - отработает onOffsetsChanged - для отработки возвращения на центральный экран по кнопке Home
@@ -959,7 +959,7 @@ public class Wallpaper extends WallpaperService {
 		@Override
 		public void onTouchEvent(MotionEvent event) {
 			
-			SDHelper.appendLog("onTouchEvent: mProgramScroling=" + Boolean.toString(mProgramScroling));
+//			SDHelper.appendLog("onTouchEvent: mProgramScroling=" + Boolean.toString(mProgramScroling));
 
 			if (mProgramScroling == false)
 			{
@@ -1058,9 +1058,9 @@ public class Wallpaper extends WallpaperService {
 
 					float rescaling = 1;
 
-					SDHelper.appendLog("drawFrame started...");
-					SDHelper.appendLog("mHeight=" + Integer.toString(mHeight) + "; currentHeight=" + Float.toString(currentHeight) 
-							+ "; mWidth=" + Integer.toString(mWidth) + "; currentWidth=" + Integer.toString(currentWidth));
+//					SDHelper.appendLog("drawFrame started...");
+//					SDHelper.appendLog("mHeight=" + Integer.toString(mHeight) + "; currentHeight=" + Float.toString(currentHeight) 
+//							+ "; mWidth=" + Integer.toString(mWidth) + "; currentWidth=" + Integer.toString(currentWidth));
 					
 					if (mHeight != currentHeight || mWidth != currentWidth) {
 						// Log.d(TAG,String.format("Изменились размеры, изменяем размер: %d->%d, %d->%d",
@@ -1082,8 +1082,8 @@ public class Wallpaper extends WallpaperService {
 							rescaling = (float) newBmWidth / bm.getWidth();
 						}
 						
-						SDHelper.appendLog("bmHeight=" + Integer.toString(bm.getHeight()) + "; bmWidth=" + Integer.toString(bm.getWidth())
-								+ "; rescaling=" + Float.toString(rescaling));
+//						SDHelper.appendLog("bmHeight=" + Integer.toString(bm.getHeight()) + "; bmWidth=" + Integer.toString(bm.getWidth())
+//								+ "; rescaling=" + Float.toString(rescaling));
 												
 					}
 
@@ -1091,10 +1091,10 @@ public class Wallpaper extends WallpaperService {
 					Matrix matrix = new Matrix();
 					matrix.setScale(rescaling, rescaling);
 
-					SDHelper.appendLog("drawFrame calculate dX...");
-					SDHelper.appendLog("isPreview=" + Boolean.toString(isPreview()) + "; mProgramScroling=" + Boolean.toString(mProgramScroling) 
-							+ "; mDisabledScroling=" + Boolean.toString(mDisabledScroling)
-							+ "; mXStep=" + Float.toString(mXStep)  + "; mPixels=" + Float.toString(mPixels));
+//					SDHelper.appendLog("drawFrame calculate dX...");
+//					SDHelper.appendLog("isPreview=" + Boolean.toString(isPreview()) + "; mProgramScroling=" + Boolean.toString(mProgramScroling) 
+//							+ "; mDisabledScroling=" + Boolean.toString(mDisabledScroling)
+//							+ "; mXStep=" + Float.toString(mXStep)  + "; mPixels=" + Float.toString(mPixels));
 					
 					float dX = 0;
 					// смещение для устройств со скролингом
@@ -1104,7 +1104,7 @@ public class Wallpaper extends WallpaperService {
 						dX = (float) mPixels * (step2 / step1);
 					}
 					
-					SDHelper.appendLog("dx1=" + Float.toString(dX));
+//					SDHelper.appendLog("dx1=" + Float.toString(dX));
 					
 					// если предварительный просмотр
 					if (isPreview() || mDisabledScroling) {
@@ -1112,14 +1112,14 @@ public class Wallpaper extends WallpaperService {
 						dX = (mWidth - bm.getWidth()) / 2;
 					}
 
-					SDHelper.appendLog("dx2=" + Float.toString(dX));
+//					SDHelper.appendLog("dx2=" + Float.toString(dX));
 					
 					// если не превью и программный скролинг включен
 					if (isPreview() == false && mDisabledScroling == false && mProgramScroling) {
 						dX = (float) (mWidth - bm.getWidth()) * mOffset;
 					}
 					
-					SDHelper.appendLog("dx3=" + Float.toString(dX));
+//					SDHelper.appendLog("dx3=" + Float.toString(dX));
 					
 					float dY = (mHeight - bm.getHeight()) / 2;
 					//float dY = 0;
@@ -1130,8 +1130,8 @@ public class Wallpaper extends WallpaperService {
 
 					try {
 						c.drawBitmap(bm, matrix, null);
-						SDHelper.appendLog("drawFrame draw...");
-						SDHelper.appendLog("drawFrame finished...");
+//						SDHelper.appendLog("drawFrame draw...");
+//						SDHelper.appendLog("drawFrame finished...");
 					} catch (OutOfMemoryError e) {
 						System.gc();
 						c.drawText(getText(R.string.error).toString(), mWidth / 2, 100, mPaint);

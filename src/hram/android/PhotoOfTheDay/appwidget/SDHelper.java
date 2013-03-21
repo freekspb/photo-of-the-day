@@ -181,6 +181,7 @@ public class SDHelper {
 	    contect.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 	}
 	
+	/*
 	public static void appendLog(String text)
 	{       
 	   File logFile = new File("sdcard/photo-of-the-day-log.txt");
@@ -209,5 +210,6 @@ public class SDHelper {
 	      // TODO Auto-generated catch block
 	      e.printStackTrace();
 	   }
-	}	
+	}
+	*/	
 }
