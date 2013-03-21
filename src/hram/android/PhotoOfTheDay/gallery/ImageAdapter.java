@@ -17,20 +17,20 @@ import android.widget.TextView;
 
 public class ImageAdapter extends BaseAdapter 
 {
-	private Context context;
 	private Cursor cursor;
 	private int _idColumnIndex;
 	private int _dateColumnIndex;
 	LayoutInflater inflater;
+	ImageLoader imageLoader;
 
 	public ImageAdapter(Context context, Cursor cursor) 
 	{
-		this.context = context;
 		this.cursor = cursor;
 		if (cursor == null)
 		{
 			return;
 		}
+		 imageLoader = new ImageLoader(context);
 		_idColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
 		_dateColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED);
 		inflater = LayoutInflater.from(context);
@@ -70,13 +70,16 @@ public class ImageAdapter extends BaseAdapter
 		else 
 		{
 			holder = (ViewHolder)convertView.getTag();
+			//holder.image.setImageResource(0);
+			holder.image.setImageDrawable(null);
 		}
 		
 		// заполнение
 		cursor.moveToPosition(position);
 		// картинка
 		int _id = cursor.getInt(_idColumnIndex);
-		holder.image.setImageBitmap(MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(), _id, MediaStore.Images.Thumbnails.MINI_KIND, null));
+		imageLoader.DisplayImage(_id, holder.image);
+		//holder.image.setImageBitmap(MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(), _id, MediaStore.Images.Thumbnails.MINI_KIND, null));
 		// дата картинки
 		String date_added = cursor.getString(_dateColumnIndex);
 		Date d = new Date(Long.parseLong(date_added) * 1000);
@@ -87,5 +90,11 @@ public class ImageAdapter extends BaseAdapter
 		convertView.setTag(R.id.imageID, _id);
 		
 		return convertView;
+	}
+	
+	public void clean() {
+		imageLoader.clearCache();
+		imageLoader = null;
+		inflater = null;
 	}
 }

@@ -27,6 +27,9 @@
 	    android:layout_height="match_parent"
 	    android:layout_weight="1"
 	    android:scaleType="center"
+        android:background="@drawable/appwidget_button_left"
+        android:clickable="true"
+        android:focusable="true"	    
 	    android:contentDescription="@string/openGallery"
 	    />
 
@@ -43,6 +46,9 @@
         android:layout_height="match_parent"
 	    android:layout_weight="1"
         android:scaleType="center"
+        android:background="@drawable/appwidget_button_center"
+        android:clickable="true"
+        android:focusable="true"        
         android:contentDescription="@string/saveImage"
         />
 
@@ -59,7 +65,10 @@
         android:layout_height="match_parent"
 	    android:layout_weight="1"
         android:scaleType="center"
-        android:contentDescription="@string/openSettings"
+        android:background="@drawable/appwidget_button_center"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="@string/nextParser"
         />
 
     <ImageView
@@ -75,6 +84,9 @@
         android:layout_height="match_parent"
 	    android:layout_weight="1"
         android:scaleType="center"
+        android:background="@drawable/appwidget_button_right"
+        android:clickable="true"
+        android:focusable="true"
         android:contentDescription="@string/openSettings"
         />
 </LinearLayout>

@@ -12,6 +12,8 @@ public abstract class Constants
 	public static final String FAVORITE_SOURCES = "favoriteSources";
 	public static final String WIFI_ONLY = "wifiOnly";
 	public static final String AUTO_CHANGE_SOURCE = "autoChangeSource";
+	public static final String WIDTH_SCALE = "wideWidthPref";
+	public static final String CACHE_DIR = "PhotoOfTheDayCache";
 	
 	public static final long UPDATE_INTERVAL = 60 * 60 * 1000;
 	

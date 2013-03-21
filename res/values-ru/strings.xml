@@ -61,4 +61,6 @@
     <string name="openSettings">Настройки</string>
     <string name="favoriteSources">Избранные источники</string>
     <string name="favoriteSourcesSummary">Выберите источники обев для автоматической смены и смены источника в виджете</string>
+    <string name="wideWidthPref">Скролинг в планшетном режиме</string>
+    <string name="wideWidthPrefSummary">Установите для активации скролинга в альбомной орентации (для устройств с поддержкой поворота рабочего стола)</string>
 </resources>

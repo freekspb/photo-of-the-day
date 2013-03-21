@@ -11,7 +11,8 @@
         android:layout_height="@dimen/album_img_size"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
+        android:src="@drawable/ic_gallery_picture"
         custom:fixedAlong="width" />
 
     <LinearLayout
