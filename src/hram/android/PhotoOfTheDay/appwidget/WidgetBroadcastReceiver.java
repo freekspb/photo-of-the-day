@@ -173,7 +173,14 @@ public class WidgetBroadcastReceiver extends BroadcastReceiver
         	return list;
         }
         for (int i = 0; i < strings.length; i++) {
-        	list.add(Integer.parseInt(strings[i]));
+        	try
+        	{
+        		list.add(Integer.parseInt(strings[i]));
+        	}
+        	catch (NumberFormatException e)
+        	{
+        		continue;
+        	}
         }
         return list;
 	}
