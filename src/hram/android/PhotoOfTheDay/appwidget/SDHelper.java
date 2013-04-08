@@ -128,7 +128,7 @@ public class SDHelper {
 				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 				try
 				{
-					wp.GetBitmap().compress(Bitmap.CompressFormat.JPEG, 80, bytes);
+					wp.GetBitmap().compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 					
 					String filename = getFilename(wp.GetCurrentUrl());
 					if (filename == null) {
