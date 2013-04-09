@@ -830,12 +830,14 @@ public class Wallpaper extends WallpaperService {
 				@Override
 				public void run() {
 					try {
-						if (IsNeedAutoChangeSource() && (IsOnline() == false)) {
+						boolean needAutoChangeSource = IsNeedAutoChangeSource();
+						
+						if (needAutoChangeSource && (IsOnline() == false)) {
 							changeImage();
 							return;
 						}
 
-						if (IsNeedAutoChangeSource() && IsOnline() ) {
+						if (needAutoChangeSource && IsOnline() ) {
 							wp.sendBroadcast(new Intent(WidgetBroadcastEnum.AUTO_NEXT_PARSER_ACTION));
 							return;
 						}
@@ -1398,7 +1400,7 @@ public class Wallpaper extends WallpaperService {
 			}
 
 			if (wp.IsOnline() == false) {
-				if (preferences.getBoolean(Constants.AUTO_CHANGE_SOURCE, false) == true)
+				if (preferences.getBoolean(Constants.LOAD_FROM_SD, true) == true)
 				{
 					changeImage();
 				}

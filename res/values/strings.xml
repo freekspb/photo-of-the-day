@@ -64,4 +64,6 @@
     <string name="favoriteSourcesSummary">Select sources for source auto change mode</string>
     <string name="wideWidthPref">Landscape scrolling</string>
     <string name="wideWidthPrefSummary">Set to activate scrolling on landscape orientation (only tablet)</string>
+    <string name="loadFromSDPrefSummary">Load image from gallery when network is not accessible (for source auto change and widget button)</string>
+    <string name="loadFromSDPref">Images from gallery</string>
 </resources>

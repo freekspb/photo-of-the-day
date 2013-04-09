@@ -32,7 +32,12 @@
 		    android:summary="@string/favoriteSourcesSummary"
 		    android:entries="@array/sourcesArray"
 		    android:entryValues="@array/sourcesValues"/>
-       <CheckBoxPreference android:key="tagPhotoEnable" 
+       <CheckBoxPreference android:key="loadFromSD" 
+       		android:summary="@string/loadFromSDPrefSummary" 
+       		android:title="@string/loadFromSDPref"
+       		android:defaultValue="true">
+       </CheckBoxPreference>
+	   <CheckBoxPreference android:key="tagPhotoEnable" 
        		android:summary="@string/tagPhotoEnableSummary" 
        		android:title="@string/tagPhotoEnable"
        		android:dependency="autoChangeSource">

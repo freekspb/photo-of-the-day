@@ -12,6 +12,7 @@ public abstract class Constants
 	public static final String FAVORITE_SOURCES = "favoriteSources";
 	public static final String WIFI_ONLY = "wifiOnly";
 	public static final String AUTO_CHANGE_SOURCE = "autoChangeSource";
+	public static final String LOAD_FROM_SD = "loadFromSD";
 	public static final String WIDTH_SCALE = "wideWidthPref";
 	public static final String CACHE_DIR = "PhotoOfTheDayCache";
 	
