@@ -36,7 +36,7 @@ public class NationalGeographic extends BaseParser
 				return null;
 			}
 			
-			return src.attr("src");
+			return "http:" + src.attr("src");
 		}catch (OutOfMemoryError e) {
 			//try{
 			//	BugSenseHandler.sendExceptionMessage("NationalGeographic.GetUrl", "constant url", new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
