@@ -18,7 +18,7 @@ public abstract class Constants
 	
 	public static final long UPDATE_INTERVAL = 60 * 60 * 1000;
 	
-	public static final String BUG_SENSE_APIKEY = "ab3f3ed5";
+	public static final String BUG_SENSE_APIKEY = "fed55f2b";
 	
 	public static final String KEY_HELP_VERSION_SHOWN = "helpVersionShown";
 }
