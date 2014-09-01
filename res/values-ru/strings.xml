@@ -63,4 +63,6 @@
     <string name="favoriteSourcesSummary">Выберите источники обев для автоматической смены и смены источника в виджете</string>
     <string name="wideWidthPref">Скролинг в планшетном режиме</string>
     <string name="wideWidthPrefSummary">Установите для активации скролинга в альбомной орентации (для устройств с поддержкой поворота рабочего стола)</string>
+    <string name="loadFromSDPref">Изображения из галереи</string>
+    <string name="loadFromSDPrefSummary">Использование изображений из галереи сохраненных, когда сеть недоступна (для режима автосмены источника и кнопки виджета)</string>
 </resources>

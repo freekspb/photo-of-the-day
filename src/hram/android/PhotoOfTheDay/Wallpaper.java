@@ -13,17 +13,21 @@ import hram.android.PhotoOfTheDay.Parsers.NationalGeographic;
 import hram.android.PhotoOfTheDay.Parsers.TestParser;
 import hram.android.PhotoOfTheDay.Parsers.Wikipedia;
 import hram.android.PhotoOfTheDay.Parsers.Yandex;
-//import hram.android.PhotoOfTheDay.appwidget.SDHelper;
+import hram.android.PhotoOfTheDay.appwidget.SDHelper;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastEnum;
 import hram.android.PhotoOfTheDay.appwidget.WidgetBroadcastReceiver;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
@@ -37,6 +41,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -47,8 +52,10 @@ import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.service.wallpaper.WallpaperService;
 //import android.util.Log;
 import android.view.Display;
@@ -108,7 +115,7 @@ public class Wallpaper extends WallpaperService {
 
 		widthRescaling = preferences.getBoolean(Constants.WIDTH_SCALE, false);
 		
-		ReadFile(true);
+		ReadFile(true, false);
 	}
 
 	@Override
@@ -420,13 +427,13 @@ public class Wallpaper extends WallpaperService {
 	/**
 	 * Чтение сохраненной картинки из файла
 	 */
-	public void ReadFile(boolean updateUrl) {
+	public void ReadFile(boolean updateUrl, boolean updateFromSD) {
 		// Log.d(TAG, "Чтение картинки из файла");
 
 		FileInputStream stream = null;
 		try {
 			long lastUpdate = preferences.getLong(Constants.LAST_UPDATE, 0);
-			if (lastUpdate == 0) {
+			if (updateFromSD == false && lastUpdate == 0) {
 				return;
 			}
 
@@ -435,18 +442,22 @@ public class Wallpaper extends WallpaperService {
 				SetCurrentUrl(preferences.getString(Constants.LAST_URL, ""));
 			}
 
-			Calendar c = Calendar.getInstance();
-			c.setTimeInMillis(lastUpdate);
-			SetCurrentDay(c.get(Calendar.DATE));
+			if (updateFromSD == false)
+			{
+				Calendar c = Calendar.getInstance();
+				c.setTimeInMillis(lastUpdate);
+				SetCurrentDay(c.get(Calendar.DATE));
+			}
+			if (updateFromSD == false && GetCurrentUrl().length() <= 0) {
+				return;
+			}
 
-			if (GetCurrentUrl().length() > 0) {
-				stream = openFileInput(Constants.FILE_NAME);
-				Bitmap readBm = BitmapFactory.decodeStream(stream);
-				SetBitmap(readBm);
-				if (GetBitmap() != readBm)
-				{
-					readBm.recycle();
-				}
+			stream = openFileInput(Constants.FILE_NAME);
+			Bitmap readBm = BitmapFactory.decodeStream(stream);
+			SetBitmap(readBm);
+			if (GetBitmap() != readBm)
+			{
+				readBm.recycle();
 			}
 
 		} catch (Exception e) {
@@ -474,7 +485,7 @@ public class Wallpaper extends WallpaperService {
 					Context.MODE_PRIVATE);
 			try {
 				// PNG which is lossless, will ignore the quality setting
-				bm.compress(Bitmap.CompressFormat.PNG, 100, fos);
+				bm.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 			} finally {
 				fos.close();	
 			}
@@ -722,6 +733,93 @@ public class Wallpaper extends WallpaperService {
 		}
 
 		/**
+		 * Берет следующую случайную картинку из галереи сохраненных и устанавливает на обои.
+		 */
+		private void changeImage()
+		{
+			String[] imagesColumns = new String[] { MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA };
+			Uri imagesUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+			String imagesQuery = MediaStore.Images.Media.DESCRIPTION + " like ? ";
+			
+			String path = "";
+			Cursor cursor = getContentResolver().query(imagesUri, imagesColumns, imagesQuery, new String[] {SDHelper.MEDIA_TAG}, null);
+			try {
+				int count = cursor.getCount();
+				if (count <= 0)
+				{
+					return;
+				}
+				
+				Random r = new Random();
+				int position = r.nextInt(count);
+				
+				cursor.moveToPosition(position);
+				int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+				path = cursor.getString(columnIndex);				
+			} finally {
+				cursor.close();
+			}
+			if (path == "")
+			{
+				return;
+			}
+			
+	        File source = new File(path);
+	        if (source.exists()) {
+	        	FileInputStream fis = null;
+	            FileOutputStream fos = null;
+	        	FileChannel src = null;
+	        	FileChannel dst = null;
+				try {
+					fis = new FileInputStream(source);
+		            src = fis.getChannel();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+				try {
+					fos = openFileOutput(Constants.FILE_NAME, Context.MODE_PRIVATE);
+		            dst = fos.getChannel();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+				if (src == null || dst == null)
+				{
+					return;
+				}
+	            try
+	            {
+	            	dst.transferFrom(src, 0, src.size());
+	            } catch (IOException e) {
+					e.printStackTrace();
+				}
+	            finally
+	            {
+	            	try {
+			            src.close();										
+					} catch (Exception e) {
+					}
+	            	try {
+			            dst.close();
+					} catch (Exception e) {
+					}
+	            	try {
+			            fis.close();										
+					} catch (Exception e) {
+					}
+	            	try {
+			            fos.close();
+					} catch (Exception e) {
+					}
+	            }
+	            ReadFile(false, true);
+				for (MyEngine info : engines) {
+					// Log.d(TAG, "Вызов drawFrame()");
+					info.drawFrame();
+				}
+	        }										
+		}
+		
+		/**
 		 * Таймер обновления фотографии. Проверяет смену дня. В случае если
 		 * наступил след. день запускает обновление.
 		 */
@@ -732,7 +830,14 @@ public class Wallpaper extends WallpaperService {
 				@Override
 				public void run() {
 					try {
-						if (IsNeedAutoChangeSource() && IsOnline() ) {
+						boolean needAutoChangeSource = IsNeedAutoChangeSource();
+						
+						if (needAutoChangeSource && (IsOnline() == false)) {
+							changeImage();
+							return;
+						}
+
+						if (needAutoChangeSource && IsOnline() ) {
 							wp.sendBroadcast(new Intent(WidgetBroadcastEnum.AUTO_NEXT_PARSER_ACTION));
 							return;
 						}
@@ -867,7 +972,7 @@ public class Wallpaper extends WallpaperService {
 			{
 				mHeight = height;
 				mWidth = width;
-				ReadFile(false);
+				ReadFile(false, false);
 			}
 			else
 			{
@@ -1207,7 +1312,7 @@ public class Wallpaper extends WallpaperService {
 				setNumVirtualScreens(intVal);
 			} else if (key.equals(Constants.WIDTH_SCALE)) {
 				widthRescaling = preferences.getBoolean(Constants.WIDTH_SCALE, false);
-				ReadFile(false);
+				ReadFile(false, false);
 			}						
 		}
 		
@@ -1294,6 +1399,14 @@ public class Wallpaper extends WallpaperService {
 				return;
 			}
 
+			if (wp.IsOnline() == false) {
+				if (preferences.getBoolean(Constants.LOAD_FROM_SD, true) == true)
+				{
+					changeImage();
+				}
+				return;
+			}
+			
 //			Toast.makeText(wp, getString(R.string.updateStarted),
 //					Toast.LENGTH_SHORT).show();
 

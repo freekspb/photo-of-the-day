@@ -94,7 +94,7 @@ public class DieselStation extends BaseParser
 				.userAgent(userAgent)
 				.get();
 	        
-			Element content = doc0.select("div[class=article_content]").first();
+			Element content = doc0.select("div[class=article]").first();
 			if(content == null)
 			{
 				throw new IncorrectDataFormat(doc0.ownText());
@@ -126,16 +126,18 @@ public class DieselStation extends BaseParser
 	        Document doc2 = Jsoup.connect(url)
 				.userAgent(userAgent)
 				.get();
-	        String str = doc2.html();
-	        int startPosition = str.indexOf("img id=\"wallpaper\" class=\"img_resize\" src=\"");
-	        if (startPosition < 0)
-	        {
-	        	return null;
-	        }
-	        startPosition += 43;
-    		int endPosition = str.indexOf("\"", startPosition);
-    		String image = new String(str.substring(startPosition, endPosition));
-			return image;
+			Element img = doc2.select("img[id=wallpaper]").first();
+			if(img == null)
+			{
+				return null;
+			}
+			String imageUrl;
+			try {
+				imageUrl = img.attr("src");
+			} catch (Exception e) {
+				return null;
+			}
+			return imageUrl;
 		}catch (OutOfMemoryError e) {}
 		return null;
 	}

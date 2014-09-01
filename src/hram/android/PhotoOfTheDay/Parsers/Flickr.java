@@ -42,7 +42,7 @@ public class Flickr extends BaseParser
 		}
 		
 		String imageUrl = null;
-		String url = "http://www.flickr.com/explore/";
+		String url = "https://www.flickr.com/explore/";
 		
 		try{
 			// чистка памяти
@@ -74,17 +74,20 @@ public class Flickr extends BaseParser
 				throw new IncorrectDataFormat(doc.ownText());
 			}
 			
-			//Element href = photo.select("a[href]").first();
-			Element src = photo.select("img[data-defer-src]").first();
-			//if(href == null || src == null)
-			if(src == null)
+			Element photo_a = photo.select("a[class=rapidnofollow photo-click]").first();
+			if(photo_a == null)
 			{
 				throw new IncorrectDataFormat(doc.ownText());
 			}
 			
-			//str = href.attr("href");
-			imageUrl = src.attr("data-defer-src");
-			imageUrl = imageUrl.substring(0,imageUrl.length() - 5) + "b.jpg";
+			Element photo_img = photo_a.select("img").first();
+			if(photo_img == null)
+			{
+				throw new IncorrectDataFormat(doc.ownText());
+			}
+
+			imageUrl = photo_img.attr("data-defer-src");
+			imageUrl = imageUrl.replace(".jpg", "_b.jpg");
 		}catch (OutOfMemoryError e) {
 			//try{
 			//	BugSenseHandler.sendExceptionMessage("Flickr.GetUrl", url, new hram.android.PhotoOfTheDay.Exceptions.OutOfMemoryError(e.getMessage()));
